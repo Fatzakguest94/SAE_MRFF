@@ -21,11 +21,20 @@ public class HelloController implements Initializable {
     private void creerTerrain() {
         int[][] grille = terrain.grille;
 
-        int tailleTuile = 28;
-        map.setPrefColumns(21);
-        map.setPrefRows(15);
-        Image parquet = new Image(getClass().getResourceAsStream("vmur.jpeg"));
-        Image mur = new Image(getClass().getResourceAsStream("mur.png"));
+        int tailleTuile = 36;
+        map.setPrefColumns(31);
+        map.setPrefRows(19);
+
+        map.setPrefTileWidth(tailleTuile);
+        map.setPrefTileHeight(tailleTuile);
+
+        Image solnoir = new Image(getClass().getResourceAsStream("solblanc.png"));
+        Image sol = new Image(getClass().getResourceAsStream("tapisrose.png"));
+        Image entrer = new Image(getClass().getResourceAsStream("entrer.jpg"));
+        Image sortie = new Image(getClass().getResourceAsStream("door.png"));
+        Image barrage5 = new Image(getClass().getResourceAsStream("barrage5.png"));
+        Image barrage6 = new Image(getClass().getResourceAsStream("barrage6.png"));
+        Image panneau8 = new Image(getClass().getResourceAsStream("panneau8.png"));
 
         for (int i = 0; i < grille.length; i++) {
             for (int j = 0; j < grille[i].length; j++) {
@@ -35,20 +44,37 @@ public class HelloController implements Initializable {
                 int t = grille[i][j];
                 switch (t) {
                     case 0:
-                        cases.setImage(mur);
+                        cases.setImage(solnoir);
                         break;
                     case 1:
-                        cases.setImage(mur);
+                        cases.setImage(sol);
+                        break;
                     case 2:
-                        cases.setImage(parquet);
+                        cases.setImage(solnoir);
                         break;
 
                     case 3:
+                        cases.setImage(entrer);
+                        break;
 
+                    case 4:
+                        cases.setImage(sortie);
+                        break;
+
+                    case 5:
+                        cases.setImage(barrage5);
+                        break;
+
+                    case 6:
+                        cases.setImage(barrage6);
+                        break;
+
+                    case 8:
+                        cases.setImage(panneau8);
                         break;
 
                     default:
-
+                        cases.setImage(solnoir);
                         break;
                 }
                 map.getChildren().add(cases);
