@@ -1,20 +1,131 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.shape.Circle?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<BorderPane prefHeight="400.0" prefWidth="600.0"
-            xmlns="http://javafx.com/javafx/8.0.111"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="universite_paris8.iut.fzekraoui.saedev.controller.Controller">
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.layout.VBox?>
+
+<?import java.net.URL?>
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.sae_dev.HelloController"
+            prefWidth="1280"
+            prefHeight="720"
+            styleClass="root">
+    <stylesheets>
+        <URL value="@Style.css"/>
+    </stylesheets>
+
+    <!-- ===================== CENTRE ===================== -->
+
     <center>
-        <Pane prefHeight="400.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-            <children>
-                <Circle fx:id="leCercle" fill="DODGERBLUE" layoutX="400.0" layoutY="200.0" radius="32.0" stroke="BLACK" strokeType="INSIDE" />
-                <Circle fx:id="leCercle1" fill="green" layoutX="100.0" layoutY="200.0" radius="10.0" stroke="BLACK" strokeType="CENTERED" />
-                <Button onAction="#reactionBouton" text="lancer" />
-            </children>
-        </Pane>
+
+        <StackPane alignment="CENTER" styleClass="center-container">
+
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <TilePane fx:id="map"
+                      prefColumns="21"
+                      prefRows="13"
+                      prefWidth="588"
+                      prefHeight="364"
+                      hgap="0"
+                      vgap="0"
+                      alignment="CENTER"
+                      styleClass="map"/>
+
+        </StackPane>
+
     </center>
+
+    <!-- ===================== DROITE ===================== -->
+
+    <right>
+
+        <VBox spacing="20"
+              alignment="TOP_CENTER"
+              prefWidth="250"
+              styleClass="sidebar">
+
+            <padding>
+                <Insets top="20" right="15" bottom="20" left="15"/>
+            </padding>
+
+            <Label text="Tours" styleClass="title"/>
+
+            <HBox spacing="15" alignment="CENTER">
+
+                <VBox alignment="CENTER" spacing="5">
+                    <Button prefWidth="70" prefHeight="70" text="Prix"/>
+                    <Label text="Nom Tour"/>
+                </VBox>
+
+                <VBox alignment="CENTER" spacing="5">
+                    <Button prefWidth="70" prefHeight="70" text="Prix"/>
+                    <Label text="Nom Tour"/>
+                </VBox>
+
+            </HBox>
+
+            <HBox spacing="15" alignment="CENTER">
+
+                <VBox alignment="CENTER" spacing="5">
+                    <Button prefWidth="70" prefHeight="70" text="Prix"/>
+                    <Label text="Nom Tour"/>
+                </VBox>
+
+                <VBox alignment="CENTER" spacing="5">
+                    <Button prefWidth="70" prefHeight="70" text="Prix"/>
+                    <Label text="Nom Tour"/>
+                </VBox>
+
+            </HBox>
+
+            <HBox spacing="15" alignment="CENTER">
+
+                <VBox alignment="CENTER" spacing="5">
+                    <Button prefWidth="70" prefHeight="70" text="Prix"/>
+                    <Label text="Nom Tour"/>
+                </VBox>
+
+                <VBox alignment="CENTER" spacing="5">
+                    <Button prefWidth="70" prefHeight="70" text="Prix"/>
+                    <Label text="Nom Tour"/>
+                </VBox>
+
+            </HBox>
+
+        </VBox>
+
+    </right>
+
+    <!-- ===================== BAS ===================== -->
+
+    <bottom>
+
+        <HBox alignment="CENTER_LEFT"
+              spacing="40"
+              prefHeight="100"
+              styleClass="bottom-bar">
+
+            <padding>
+                <Insets top="10" right="20" bottom="10" left="20"/>
+            </padding>
+
+            <Label text="Vie (pizza) x100"/>
+            <Label text="Ticket Resto (monnaie)"/>
+            <Label text="Vague"/>
+
+            <Button text="Réglage" styleClass="btn"/>
+            <Button text="Lancer" styleClass="btn"/>
+
+        </HBox>
+
+    </bottom>
+
 </BorderPane>
