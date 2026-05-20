@@ -1,23 +1,31 @@
-package universite_paris8.iut.fabdelrahim.sae;
+package universite_paris8.iut.fzekraoui.saedev;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-import java.io.IOException;
+public class MainApp extends Application {
 
-public class HelloApplication extends Application {
-    @Override
-    public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("vue0.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1341, 784);
-        stage.setTitle("pizzattack!");
-        stage.setScene(scene);
-        stage.show();
-    }
+	@Override
+	public void start(Stage primaryStage) {
+		try {
+			BorderPane root = FXMLLoader.load(getClass().getResource("/universite_paris8/iut/fzekraoui/saedev/vue.fxml"));
+			Scene scene = new Scene(root);
+			scene.getStylesheets().add(getClass().getResource("/universite_paris8/iut/fzekraoui/saedev/Style.css").toExternalForm());
+			primaryStage.setScene(scene);
+			primaryStage.show();
 
-    public static void main(String[] args) {
-        launch();
-    }
+
+
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void main(String[] args) {
+		launch(args);
+	}
 }
