@@ -6,36 +6,36 @@ import java.util.*;
 
 public class Bfs {
 
-    private static final int[][] DIRS = {
+    private static final int[][] direction = {
             {1, 0},
             {-1, 0},
             {0, 1},
             {0, -1}
     };
 
-    public static List<Point> bfs(int[][] grille, Point start, Point end) {
+    public static List<Point> bfs(int[][] grille, Point debut, Point fin) {
 
         int rows = grille.length;
         int cols = grille[0].length;
 
         boolean[][] visited = new boolean[rows][cols];
-        Point[][] parent = new Point[rows][cols];
+        Point[][] caseavant = new Point[rows][cols];
 
         Queue<Point> queue = new LinkedList<>();
 
-        queue.add(start);
-        visited[start.x][start.y] = true;
+        queue.add(debut);
+        visited[debut.x][debut.y] = true;
 
         while (!queue.isEmpty()) {
 
             Point p = queue.poll();
 
             // arrivée
-            if (p.x == end.x && p.y == end.y) {
-                return reconstruireChemin(parent, end);
+            if (p.x == fin.x && p.y == fin.y) {
+                return reconstruireChemin(caseavant, fin);
             }
 
-            for (int[] d : DIRS) {
+            for (int[] d : direction) {
 
                 int nx = p.x + d[0];
                 int ny = p.y + d[1];
@@ -51,7 +51,7 @@ public class Bfs {
 
                     visited[nx][ny] = true;
 
-                    parent[nx][ny] = p;
+                    caseavant[nx][ny] = p;
                 }
             }
         }
