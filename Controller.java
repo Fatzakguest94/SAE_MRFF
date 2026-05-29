@@ -4,97 +4,119 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
-
+import javafx.util.Duration;
+import universite_paris8.iut.fabdelrahim.sae.vue.TerrainVue;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.fxml.Initializable;
-import javafx.util.Duration;
-import universite_paris8.iut.fabdelrahim.sae.modele.Terrain;
-import universite_paris8.iut.fabdelrahim.sae.vue.TerrainVue;
 
-public class Controller  implements Initializable {
-    @FXML
-    private Label welcomeText;
-
+public class Controller implements Initializable {
+   
     @FXML
     private TilePane map;
+    @FXML
+    private Pane panneauJeu;
 
-    private universite_paris8.iut.fabdelrahim.sae.vue.TerrainVue TerrainVue;
-
-    private Timeline gameLoop;
+    // Les 4 vues des zombies
     @FXML
     private ImageView zombie;
     @FXML
     private ImageView zombie1;
-    private int temps;
     @FXML
-    private Pane panneauJeu;
+    private ImageView zombie2;
+    @FXML
+    private ImageView zombie3;
 
-    private Terrain terrain;
+    private TerrainVue terrainVue;
+    private Timeline gameLoop;
 
+
+    private Environnement env;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        Image img = new Image(getClass().getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/zombie.jpg"));
-        zombie.setImage(img);
-        zombie1.setImage(img);
-
-        TerrainVue = new TerrainVue();
-        TerrainVue.map = map;
-        // création du terrain
-        TerrainVue.creerTerrain();
-        terrain= new Terrain();
-
-        System.out.println(terrain.grille.length);
-        System.out.println(terrain.grille[0].length);
+        // Initialisation de l'environnement 
+        this.env = new Environnement();
 
 
+        zombie.setVisible(false);
+        zombie1.setVisible(false);
+        zombie2.setVisible(false);
+        zombie3.setVisible(false);
+
+
+        Image zombienormal = new Image(getClass().getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/zombie.png"));
+        Image zombiegros = new Image(getClass().getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/zombiegros.png"));
+        Image zombierapide = new Image(getClass().getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/zombierapide.png"));
+        Image zombiefamille = new Image(getClass().getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/zombiefamille.png"));
+
+        zombie.setImage(zombienormal);
+        zombie1.setImage(zombiegros);
+        zombie2.setImage(zombierapide);
+        zombie3.setImage(zombiefamille);
+
+
+        terrainVue = new TerrainVue();
+        terrainVue.map = map;
+        terrainVue.creerTerrain();
+
+        System.out.println("Grille: " + env.getTerrain().grille.length + " x " + env.getTerrain().grille[0].length);
+
+        if (env.getChemin().isEmpty()) {
+            System.out.println("Aucun chemin trouvé !");
+            return;
+        }
+
+        //Initialisation animation
         initAnimation();
     }
 
     @FXML
     public void reactionBouton(ActionEvent event) {
+        zombie.setVisible(true);
+        zombie1.setVisible(true);
+        zombie2.setVisible(true);
+        zombie3.setVisible(true);
         gameLoop.play();
         System.out.println("lancement du parcours");
     }
 
     private void initAnimation() {
         gameLoop = new Timeline();
-        temps=0;
         gameLoop.setCycleCount(Timeline.INDEFINITE);
 
         KeyFrame kf = new KeyFrame(
-                // on définit le FPS (nbre de frame par seconde)
                 Duration.seconds(0.017),
-                // on définit ce qui se passe à chaque frame
-                // c'est un eventHandler d'ou le lambda
-                (ev ->{
-                    if(temps==100){
-                        System.out.println("fini");
-                        gameLoop.stop();
-                    }
-                    else if (temps%5==0){
+                ev -> {
+                    // On fait progresser le temps dans le modèle
+                    env.unTourDeJeu();
+                    int tempsActuel = env.getTemps();
+
+                    // Synchronisation de la vue avec le modèle selon les modulos
+                    if (tempsActuel % 35 == 0) {
                         System.out.println("un tour");
-                        zombie.setLayoutX(zombie.getLayoutX()+1);
-                        zombie.setLayoutY(zombie.getLayoutY()+1);
-
-                        zombie1.setLayoutX(zombie1.getLayoutX()+1);
-                        zombie1.setLayoutY(zombie1.getLayoutY()+1);
-
-
-
+                        env.getZombies().get(0).update(zombie, 36);
                     }
-                    temps++;
-                })
+
+                    if (tempsActuel % 50 == 0) {
+                        env.getZombies().get(1).update(zombie1, 36);
+                    }
+
+                    if (tempsActuel % 25 == 0) {
+                        env.getZombies().get(2).update(zombie2, 36);
+                    }
+
+                    if (tempsActuel % 45 == 0) {
+                        env.getZombies().get(3).update(zombie3, 36);
+                    }
+                }
         );
+
         gameLoop.getKeyFrames().add(kf);
     }
-
-
 }
