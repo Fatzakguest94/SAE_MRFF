@@ -7,7 +7,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="856.0" prefWidth="1377.0" styleClass="root" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="universite_paris8.iut.fabdelrahim.sae.controller.Controller">
+<BorderPane prefHeight="856.0" prefWidth="1377.0" styleClass="root" xmlns="http://javafx.com/javafx/8.0.40"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="universite_paris8.iut.fabdelrahim.sae.controller.Controller">
     <stylesheets>
         <URL value="@Style.css" />
     </stylesheets>
@@ -90,16 +91,16 @@
         </HBox>
 
     </bottom>
-   <center>
-      <Pane BorderPane.alignment="CENTER">
-         <children>
+    <center>
+        <Pane>
             <TilePane fx:id="map" />
-             <Pane fx:id="panneauJeu" style="-fx-background-color: transparent; -fx-pointer-events: none;">
-                 <ImageView fx:id="zombie" fitHeight="64" fitWidth="64" layoutX="400.0" layoutY="200.0" />
-                 <ImageView fx:id="zombie1" fitHeight="64" fitWidth="64" layoutX="100.0" layoutY="200.0" />
-             </Pane>
-         </children>
-      </Pane>
-   </center>
+            <Pane fx:id="panneauJeu" style="-fx-background-color: transparent;">
+                <ImageView fx:id="zombie" fitHeight="35" fitWidth="35" />
+                <ImageView fx:id="zombie1" fitHeight="50" fitWidth="50" />
+                <ImageView fx:id="zombie2" fitHeight="35" fitWidth="35" />
+                <ImageView fx:id="zombie3" fitHeight="45" fitWidth="45" />
+            </Pane>
+        </Pane>
+    </center>
 
 </BorderPane>
