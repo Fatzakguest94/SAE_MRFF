@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      spacing="20" alignment="CENTER"
+      prefWidth="300" prefHeight="400">
+
+    <Label text="Son"/>
+    <Label text="Langues"/>
+    <Label text="Crédit : MRFF"/>
+    <Label text ="Objectif : Le but etant de proteger la pizzeria "/>
+
+</VBox>
