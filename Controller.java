@@ -1,4 +1,4 @@
-package universite_paris8.iut.fzekraoui.saedev.controller;
+package universite_paris8.iut.fabdelrahim.sae.controller;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -7,177 +7,200 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
-import javafx.util.Duration;
-import universite_paris8.iut.fzekraoui.saedev.modele.Point;
-import universite_paris8.iut.fzekraoui.saedev.modele.Terrain;
-import universite_paris8.iut.fzekraoui.saedev.modele.TerrainVue;
-
-import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
 import javafx.stage.Stage;
-import java.io.IOException;
+import javafx.util.Duration;
+import universite_paris8.iut.fabdelrahim.sae.modele.Environnement;
+import universite_paris8.iut.fabdelrahim.sae.modele.Zombie;
+import universite_paris8.iut.fabdelrahim.sae.vue.TerrainVue;
 
+import javafx.scene.control.Label;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
 
     @FXML
     private TilePane map;
-
-    @FXML
-    private Pane menu1;
-
-    private Timeline gameLoop;
-
-    private TerrainVue TerrainVue;
-
-    @FXML
-    private ImageView zombie;
-
-    @FXML
-    private ImageView zombie1;
-
-    @FXML
-    private ImageView affame;
-
     @FXML
     private Pane panneauJeu;
 
+    // Les 4 vues des zombies
+    @FXML
+    private ImageView zombie;
+    @FXML
+    private ImageView zombie1;
+    @FXML
+    private ImageView zombie2;
+    @FXML
+    private ImageView zombie3;
 
-    private int temps;
+    private TerrainVue terrainVue;
+    private Timeline gameLoop;
 
-    private int money = 200; // UNE seule déclaration, argent de départ
+
+    private Environnement env;
 
     @FXML
-    private Label labelMoney;
+    public Label labelArgent;
 
-    private Terrain terrain;
+    private int argent = 200;
 
-    private Zombie zombieModel;
-    private Zombie zombieModel1;
+    private void metAjour() {
+        labelArgent.setText(String.valueOf(this.argent));
 
-    private List<Point> chemin;
-
-    private void updateLabelMoney() {
-        labelMoney.setText(String.valueOf(this.money));
     }
 
-
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize(URL location, ResourceBundle resources){
+            // Initialisation de l'environnement
+            this.env = new Environnement();
+
 
         zombie.setVisible(false);
         zombie1.setVisible(false);
+        zombie2.setVisible(false);
+        zombie3.setVisible(false);
 
-        updateLabelMoney(); // afficher l'argent de départ
 
-        Image img = new Image(getClass().getResourceAsStream("/universite_paris8/iut/fzekraoui/saedev/vue/zombie.png"));
-        zombie.setImage(img);
-        zombie1.setImage(img);
+        Image zombienormal = new Image(getClass().getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/zombie.png"));
+        Image zombiegros = new Image(getClass().getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/zombiegros.png"));
+        Image zombierapide = new Image(getClass().getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/zombierapide.png"));
+        Image zombiefamille = new Image(getClass().getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/zombiefamille.png"));
 
-        // TERRAIN
-        TerrainVue = new TerrainVue();
-        TerrainVue.map = map;
-        TerrainVue.creerTerrain();
-        terrain = new Terrain();
+        zombie.setImage(zombienormal);
+        zombie1.setImage(zombiegros);
+        zombie2.setImage(zombierapide);
+        zombie3.setImage(zombiefamille);
 
-        System.out.println("Grille: " + terrain.grille.length + " x " + terrain.grille[0].length);
 
-        // BFS (CHEMIN ZOMBIE)
-        List<Point> chemin = Bfs.bfs(
-                terrain.grille,
-                new Point(12, 0),
-                new Point(10, 31)
-        );
+        terrainVue = new TerrainVue();
+        terrainVue.map = map;
+        terrainVue.creerTerrain();
 
-        if (chemin.isEmpty()) {
+        System.out.println("Grille: " + env.getTerrain().grille.length + " x " + env.getTerrain().grille[0].length);
+
+        if (env.getChemin().isEmpty()) {
             System.out.println("Aucun chemin trouvé !");
             return;
+
         }
 
-        // ZOMBIES (MODELE MVC)
-        zombieModel = new Zombie();
-        zombieModel.setChemin(chemin);
-
-        zombieModel1 = new Zombie();
-        zombieModel1.setChemin(chemin);
-
+        //Initialisation animation
         initAnimation();
+        metAjour();
     }
 
     @FXML
-    public void reactionBouton(ActionEvent event) {
+    public void lancerJeu(ActionEvent event) {
         zombie.setVisible(true);
         zombie1.setVisible(true);
+        zombie2.setVisible(true);
+        zombie3.setVisible(true);
+
+        if (gameLoop.getStatus() != Timeline.Status.RUNNING) {
+            gameLoop.play();
+        }
+
+        System.out.println("Lancement du jeu");
+    }
+
+    @FXML
+    public void recommencerJeu(ActionEvent event) {
+
+        //arrete l'animation
+        if (gameLoop != null) {
+            gameLoop.stop();
+        }
+
+        //Reset modèle
+        this.env = new Environnement();
+
+        // 3. Reset visibilité zombies
+        zombie.setVisible(true);
+        zombie1.setVisible(true);
+        zombie2.setVisible(true);
+        zombie3.setVisible(true);
+
+        // 4. Recréer animation proprement
+        initAnimation();
+
+        // 5. Relancer
         gameLoop.play();
-        System.out.println("lancement du parcours");
+
+        System.out.println("Jeu recommencé");
     }
 
-    public void dragdrop(ActionEvent event) {
-        Image img = new Image(getClass().getResourceAsStream("/universite_paris8/iut/fzekraoui/saedev/vue/panneau8.png"));
-        affame.setImage(img);
-        System.out.println("Payer");
-    }
+    @FXML
+    public void arreterJeu(ActionEvent event) {
+        if (gameLoop != null) {
+            gameLoop.pause();
+        }
 
-    public void reglage(ActionEvent event) throws IOException {
-        Stage stage = new Stage();
-        FXMLLoader fxmlLoader = new FXMLLoader(Controller.class.getResource("/universite_paris8/iut/fzekraoui/saedev/reglage.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        stage.setScene(scene);
-        stage.show();
+        System.out.println("Jeu arrêté");
     }
 
     // +50 quand un zombie meurt (une seule fois par zombie)
-    public void money(Zombie zombie) {
+    public void argenT(Zombie zombie) {
         if (zombie.prendreRecompense()) {
-            this.money += 50;
-            updateLabelMoney();
-            System.out.println("Money: " + this.money);
+            this.argent += 50;
+            metAjour();
+            System.out.println("Argent: " + this.argent);
         }
     }
 
     // Acheter une tour : à appeler depuis gestionargent()
     public void gestionargent(ActionEvent event) {
-        if (this.money >= 100) {
-            this.money = this.money - 100;
-            updateLabelMoney();
-            System.out.println("acheter" + this.money);
+
+        if (this.argent >= 100) {
+            this.argent = this.argent - 100;
+            metAjour();
+            System.out.println("acheter" + this.argent);
         } else {
             System.out.println("manque d'argent");
         }
     }
 
-    // temporaire
-    public void rerun(ActionEvent event) {
-        gameLoop.stop();
+    public void reglage(ActionEvent event) throws IOException {
+        Stage stage = new Stage();
+        FXMLLoader fxmlLoader = new FXMLLoader(Controller.class.getResource("/universite_paris8/iut/fabdelrahim/sae/reglage.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setScene(scene);
+        stage.show();
     }
 
     private void initAnimation() {
         gameLoop = new Timeline();
-        temps = 0;
         gameLoop.setCycleCount(Timeline.INDEFINITE);
 
         KeyFrame kf = new KeyFrame(
                 Duration.seconds(0.017),
                 ev -> {
-                    if (temps % 5 == 0) {
+                    // On fait progresser le temps dans le modèle
+                    env.unTourDeJeu();
+                    int tempsActuel = env.getTemps();
+
+                    // Synchronisation de la vue avec le modèle selon les modulos
+                    if (tempsActuel % 35 == 0) {
                         System.out.println("un tour");
-
-                        // Mouvement des zombies
-                        zombieModel.update(zombie, 36);
-                        zombieModel1.update(zombie1, 36);
-
-                        // Vérifier récompense après chaque update
-                        money(zombieModel);
-                        money(zombieModel1);
+                        env.getZombies().get(0).update(zombie, 36);
                     }
 
-                    temps++;
+                    if (tempsActuel % 50 == 0) {
+                        env.getZombies().get(1).update(zombie1, 36);
+                    }
+
+                    if (tempsActuel % 25 == 0) {
+                        env.getZombies().get(2).update(zombie2, 36);
+                    }
+
+                    if (tempsActuel % 45 == 0) {
+                        env.getZombies().get(3).update(zombie3, 36);
+                    }
                 }
         );
 
