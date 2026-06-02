@@ -1,0 +1,18 @@
+public int DegatSubi(Enemie enemie,Enemie enemie2){
+
+        int degsubi = enemie2.getDegat();
+
+        this.hp = enemie.getHp() - degsubi;
+
+        return this.hp;
+    }
+
+    public boolean spawn(Enemie e, int [][]grille){
+        boolean spawn = true;
+        if(grille[this.x][this.y] != 3) {
+            spawn = false;
+        }
+        return spawn;
+    }
+
+}
