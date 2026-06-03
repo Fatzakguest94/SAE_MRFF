@@ -1,22 +1,19 @@
-package universite_paris8.iut.fabdelrahim.sae.modele;
+package universite_paris8.iut.rissamou.sae_td.modele;
 
 import java.util.List;
 
 public class Enemie {
-    // PASSAGE EN DOUBLE ICI
-    private double x;
-    private double y;
-    private double vitesse;
 
+    private int x;
+    private int y;
+    private double vitesse;
     private int hp;
     private int degat;
     private String identite;
     private List<Point> chemin;
     private int etapeActuelle = 0;
-    private boolean recompenseDonnee = false;
 
-    
-    public Enemie(double x, double y, double vitesse, String identite) {
+    public Enemie(int x, int y, double vitesse, String identite) {
         this.x = x;
         this.y = y;
         this.vitesse = vitesse;
@@ -24,26 +21,33 @@ public class Enemie {
         this.degat = 1;
         this.identite = identite;
     }
-
-    
-    public double getX() { return this.x; }
-    public double getY() { return this.y; }
-    public int getHp() { return this.hp; }
-    public String getIdentite() { return this.identite; }
-
-    public void subirDegat(int montant) {
-        this.hp -= montant;
-        if (this.hp < 0) this.hp = 0;
+    public int getX() {
+        return this.x;
+    }
+    public int getY() {
+        return this.y;
     }
 
-    public boolean estMort() { return this.hp <= 0; }
+    public int getHp() {
+        return hp;
+    }
+    public double getVitesse() {
+        return vitesse;
+    } 
+    public int getDegat() {
+        return degat;
+    }
 
-    public boolean prendreRecompense() {
-        if (estMort() && !recompenseDonnee) {
-            recompenseDonnee = true;
-            return true;
-        }
-        return false;
+    public int DegatSubi(Enemie enemie,Enemie enemie2){
+
+        int degsubi = enemie2.getDegat();
+
+        this.hp = enemie.getHp() - degsubi;
+
+        return this.hp;
+    }
+    public String getIdentite() {
+        return identite;
     }
 
     public void setChemin(List<Point> chemin) {
@@ -52,27 +56,50 @@ public class Enemie {
     }
 
     public void avancer() {
-        if (chemin == null || etapeActuelle >= chemin.size() || estMort()) {
+        // 1. Si on a fini le chemin, on arrête la méthode
+        if (chemin == null || etapeActuelle >= chemin.size()) {
             return;
         }
 
+        // 2. On calcule la position en pixels de la case visée
         Point caseCible = chemin.get(etapeActuelle);
-        double cibleX = caseCible.y * 36;
-        double cibleY = caseCible.x * 36;
+        int cibleX = caseCible.y * 36;
+        int cibleY = caseCible.x * 36;
 
-        // Déplacement horizontal
-        if (this.x < cibleX) this.x += Math.min(vitesse, cibleX - this.x);
-        else if (this.x > cibleX) this.x -= Math.min(vitesse, this.x - cibleX);
-
-        // Déplacement vertical
-        if (this.y < cibleY) this.y += Math.min(vitesse, cibleY - this.y);
-        else if (this.y > cibleY) this.y -= Math.min(vitesse, this.y - cibleY);
-
-        // Astuce BUT 1 pour les doubles : si l'écart est inférieur à 0.01, on considère qu'on est arrivé
-        if (Math.abs(this.x - cibleX) < 0.01 && Math.abs(this.y - cibleY) < 0.01) {
-            this.x = cibleX; // On recale parfaitement sur le pixel pile
-            this.y = cibleY;
-            etapeActuelle++; // Case suivante !
+        // 3. Déplacement horizontal (X)
+        if (this.x < cibleX) {
+            this.x += vitesse; // Va à droite
+        } else if (this.x > cibleX) {
+            this.x -= vitesse; // Va à gauche
         }
+
+        // 4. Déplacement vertical (Y)
+        if (this.y < cibleY) {
+            this.y += vitesse; // Descend
+        } else if (this.y > cibleY) {
+            this.y -= vitesse; // Monte
+        }
+
+        // 5. On passe à la case suivante seulement si on est arrivé pile dessus
+        if (this.x == cibleX && this.y == cibleY) {
+            etapeActuelle++;
+        }
+    }
+    public boolean spawn(Enemie e, int [][]grille){
+        boolean spawn = true;
+        if(grille[this.x][this.y] != 3) {
+            spawn = false;
+        }
+        return spawn;
+    }
+
+    public boolean estMort() {
+        // <= 0 est plus sûr que == 0 (au cas où une tour fait beaucoup de dégâts d'un coup)
+        return this.hp <= 0;
+    }
+
+    public boolean estArrive() {
+        // Il est arrivé si son chemin n'est pas vide ET qu'il a atteint la dernière étape
+        return chemin != null && etapeActuelle >= chemin.size();
     }
 }
