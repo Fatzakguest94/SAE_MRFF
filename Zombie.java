@@ -1,150 +1,78 @@
-package universite_paris8.iut.mlatiaoui.saedevmoha;
-
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-
-public class Zombie {
-    private IntegerProperty x;
-    private IntegerProperty y;
-    private int vitesse;
-
-    public Zombie(int x, int y,int vitesse){
-        this.x=new SimpleIntegerProperty(0);
-        this.y=new SimpleIntegerProperty(0);
-        this.vitesse=vitesse;
-    }
-
-    //l prop
-    public IntegerProperty px(){
-        return x;
-    }
-
-    public IntegerProperty py(){
-        return y;
-    }
-
-    public int getX(){
-        return x.getValue();
-    }
-
-    public int getY(){
-        return y.getValue();
-    }
-
-    public void setX(int n){
-        x.setValue(n);
-    }
-
-    public void setY(int n){
-        y.setValue(n);
-    }
-
-    //test mvt que de la gauche vers la droite tp1, puis demande s'il peut avancer pour etre sur que sa depasse pas la limite du terrain
-    public void seDeplace(TerrainProvisoire terrain){
-        int prX=this.getX()+(this.vitesse);
-        //int prY=this.getY()+(this.vitesse);
-
-        if (terrain.limite(prX,this.getY())){
-            this.setX(prX);
-        }else {
-            System.out.println("Un des zombies est arrivé jusqu'au bout de la salle");
-        }
-    }
-
-
-}
- 
- 
- 
- 
- 
-package universite_paris8.iut.mlatiaoui.saedevmoha;
-
-public class TerrainProvisoire {
-    public int hauteur=500;
-    public int largeur=700;
-
-    public boolean limite(int prX, int prY){
-        return(prX>=0 && prX <= largeur && prY>=0 && prY<= hauteur);
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-package universite_paris8.iut.fzekraoui.saedev.controller;
+package universite_paris8.iut.fabdelrahim.sae.modele;
 
 import java.util.List;
-import javafx.scene.image.ImageView;
-import universite_paris8.iut.fzekraoui.saedev.modele.Point;
 
-public class Zombie {
+public class Enemie {
+    // PASSAGE EN DOUBLE ICI
+    private double x;
+    private double y;
+    private double vitesse;
+
+    private int hp;
+    private int degat;
+    private String identite;
     private List<Point> chemin;
-    private int indexChemin = 0;
-    private int pv;
-    private boolean recompenseDonnee = false; // flag pour ne payer qu'une fois
+    private int etapeActuelle = 0;
+    private boolean recompenseDonnee = false;
 
-    public Zombie() {
+
+    public Enemie(double x, double y, double vitesse, String identite) {
+        this.x = x;
+        this.y = y;
+        this.vitesse = vitesse;
+        this.hp = 20;
+        this.degat = 1;
+        this.identite = identite;
+    }
+
+
+    public double getX() { return this.x; }
+    public double getY() { return this.y; }
+    public int getHp() { return this.hp; }
+    public String getIdentite() { return this.identite; }
+
+    public void subirDegat(int montant) {
+        this.hp -= montant;
+        if (this.hp < 0) this.hp = 0;
+    }
+
+    public boolean estMort() { return this.hp <= 0; }
+
+    public boolean prendreRecompense() {
+        if (estMort() && !recompenseDonnee) {
+            recompenseDonnee = true;
+            return true;
+        }
+        return false;
     }
 
     public void setChemin(List<Point> chemin) {
         this.chemin = chemin;
-        this.indexChemin = 0;
+        this.etapeActuelle = 0;
     }
 
-    public void update(ImageView view, int tileSize) {
-        if (this.chemin != null && !this.chemin.isEmpty()) {
-            if (this.indexChemin < this.chemin.size()) {
-                Point p = (Point) this.chemin.get(this.indexChemin);
-                view.setLayoutX((double) (p.y * tileSize));
-                view.setLayoutY((double) (p.x * tileSize));
-                ++this.indexChemin;
-            }
+    public void avancer() {
+        if (chemin == null || etapeActuelle >= chemin.size() || estMort()) {
+            return;
         }
-    }
 
-    public void mort() {
-        this.pv = 0;
-    }
+        Point caseCible = chemin.get(etapeActuelle);
+        double cibleX = caseCible.y * 36;
+        double cibleY = caseCible.x * 36;
 
-    public boolean vie() {
-        return this.pv > 0;
-    }
+        // Déplacement horizontal
+        if (this.x < cibleX) this.x += Math.min(vitesse, cibleX - this.x);
+        else if (this.x > cibleX) this.x -= Math.min(vitesse, this.x - cibleX);
 
-    public boolean estMort() {
-        return !this.vie();
-    }
+        // Déplacement vertical
+        if (this.y < cibleY) this.y += Math.min(vitesse, cibleY - this.y);
+        else if (this.y > cibleY) this.y -= Math.min(vitesse, this.y - cibleY);
 
-    public boolean prendreRecompense() {
-            if (estMort() && this.recompenseDonnee != false) {
-            this.recompenseDonnee = true;
-            return true;
+        // Astuce BUT 1 pour les doubles : si l'écart est inférieur à 0.01, on considère qu'on est arrivé
+        if (Math.abs(this.x - cibleX) < 0.01 && Math.abs(this.y - cibleY) < 0.01) {
+            this.x = cibleX; // On recale parfaitement sur le pixel pile
+            this.y = cibleY;
+            etapeActuelle++; // Case suivante !
         }
-        return false;
     }
 }
