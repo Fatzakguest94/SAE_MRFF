@@ -1,4 +1,4 @@
-package universite_paris8.iut.rissamou.sae_td;
+package universite_paris8.iut.fabdelrahim.sae.vue;
 
 import javafx.scene.image.Image;
 import java.util.HashMap;
@@ -8,7 +8,11 @@ public class GestionImage {
     private static final Map<String, Image> sprites = new HashMap<>();
 
     public static void loadAssets() {
-        sprites.put("Zombie", new Image(GestionImage.class.getResourceAsStream("/universite_paris8/iut/rissamou/sae_td/vue/zombie.png")));
+        // Centralisation des chargements d'images
+        sprites.put("ZombieNormal", new Image(GestionImage.class.getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/zombie.png")));
+        sprites.put("ZombieGros", new Image(GestionImage.class.getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/zombiegros.png")));
+        sprites.put("ZombieRapide", new Image(GestionImage.class.getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/zombierapide.png")));
+        sprites.put("ZombieFamille", new Image(GestionImage.class.getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/zombiefamille.png")));
     }
 
     public static Image getImage(String key) {
