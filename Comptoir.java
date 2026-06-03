@@ -1,4 +1,5 @@
-package universite_paris8.iut.rissamou.sae_td.modele;
+package universite_paris8.iut.fabdelrahim.sae.modele;
+
 
 public class Comptoir {
     private int x;
