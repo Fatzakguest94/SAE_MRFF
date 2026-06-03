@@ -1,14 +1,12 @@
-package universite_paris8.iut.fabdelrahim.sae.controller;
+package universite_paris8.iut.fabdelrahim.sae.modele;
 
-import universite_paris8.iut.fabdelrahim.sae.modele.Point;
-import universite_paris8.iut.fabdelrahim.sae.modele.Terrain;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Environnement {
 
     private Terrain terrain;
-    private List<Zombie> zombies;
+    private List<Enemie> zombies;
     private List<Point> chemin;
     private int temps;
 
@@ -17,11 +15,11 @@ public class Environnement {
         this.zombies = new ArrayList<>();
         this.temps = 0;
         this.initialiserChemin();
-        this.initialiserZombies();
+        this.initialiserZombies(); // C'est ici que la méthode est appelée au lancement !
     }
 
     private void initialiserChemin() {
-        // Calcul du chemin unique avec le bfs
+        // Calcul le seul chemin du bfs
         this.chemin = Bfs.bfs(
                 terrain.grille,
                 new Point(12, 0),   // entrée
@@ -33,26 +31,44 @@ public class Environnement {
         }
     }
 
+    // TU METS LA MÉTHODE ICI :
     private void initialiserZombies() {
-        // On fait 4 zombies et on leur donne le chemin
-        for (int i = 0; i < 4; i++) {
-            Zombie z = new Zombie();
+        // La ligne de départ reste la ligne 12
+        double startY = 12 * 36;
+
+        
+        
+        Enemie normal = new Enemie(0, startY, 1.0, "ZombieNormal");       // Part direct, vitesse normale
+        Enemie gros   = new Enemie(-45, startY, 0.7, "ZombieGros");      // Pop juste après, avance lentement
+        Enemie rapide = new Enemie(-90, startY, 1.8, "ZombieRapide");    // Pop encore après, avance très vite
+        Enemie famille= new Enemie(-135, startY, 0.8, "ZombieFamille");  // Ferme la marche
+
+        // Ajout à la liste
+        this.zombies.add(normal);
+        this.zombies.add(gros);
+        this.zombies.add(rapide);
+        this.zombies.add(famille);
+
+        // donne le chemin
+        for (Enemie z : this.zombies) {
             z.setChemin(this.chemin);
-            this.zombies.add(z);
         }
     }
 
-
     public void unTourDeJeu() {
         this.temps++;
+        // À chaque tour, on demande à TOUS les zombies de la liste d'avancer
+        for (Enemie z : zombies) {
+            z.avancer();
+        }
     }
 
-
+    // Getters pour que le Controller et la Vue puissent récupérer les infos
     public Terrain getTerrain() {
         return this.terrain;
     }
 
-    public List<Zombie> getZombies() {
+    public List<Enemie> getZombies() {
         return this.zombies;
     }
 
