@@ -29,112 +29,130 @@ public class Controller implements Initializable {
     @FXML
     private Pane panneauJeu;
     @FXML
-    public Label labelArgent;
+    private Label labelArgent;
+    @FXML
+    private Label welcomeText;
 
     private TerrainVue terrainVue;
     private EntiteVue entiteVue;
     private Timeline gameLoop;
     private Environnement env;
-    private int argent = 200;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //Chargement des images
+        // Chargement des assets graphiques
         GestionImage.loadAssets();
 
-        // Initialisation du Terrain
-        terrainVue = new TerrainVue();
-        terrainVue.map = map;
-        terrainVue.creerTerrain();
+        // Création et affichage du décor (la map de tuiles)
+        this.terrainVue = new TerrainVue();
+        this.terrainVue.map = map;
+        this.terrainVue.creerTerrain();
 
-        //Initialisation des entités et de la boucle de jeu
-        initJeu();
+        // Lancement initial de la configuration du jeu
+        this.initJeu();
     }
 
     private void initJeu() {
         this.env = new Environnement();
         this.entiteVue = new EntiteVue(panneauJeu);
 
-        // On injecte les zombies du modèle dans la vue des entités
-        for (Enemie z : env.getZombies()) {
-            entiteVue.afficherEnnemie(z);
+        // Affichage du comptoir au début
+        if (this.env.getBase() != null) {
+            this.entiteVue.afficherComptoir(this.env.getBase());
         }
 
-        initAnimation();
-        metAjour();
+        this.initAnimation();
+        this.metAjourInterface();
     }
 
     private void initAnimation() {
-        gameLoop = new Timeline();
-        gameLoop.setCycleCount(Timeline.INDEFINITE);
+        this.gameLoop = new Timeline();
+        this.gameLoop.setCycleCount(Timeline.INDEFINITE);
 
         KeyFrame kf = new KeyFrame(
-                Duration.seconds(0.017),
+                Duration.seconds(0.017), // Correspond à environ 60 rafraîchissements par seconde
                 ev -> {
+                    // 1. Met à jour les calculs dans la logique (Modèle)
+                    this.env.unTourDeJeu();
 
-                    env.unTourDeJeu();
+                    // 2. Met à jour les positions des images existantes (Vue)
+                    this.entiteVue.mettreAJourAffichage();
 
-                    // Vérification des récompenses de mort
-                    for (Enemie z : env.getZombies()) {
-                        if (z.prendreRecompense()) {
-                            this.argent += 50;
-                            metAjour();
-                        }
+                    // 3. Demande à la vue d'afficher les nouveaux zombies s'il y en a
+                    for (int i = 0; i < this.env.getZombies().size(); i++) {
+                        Enemie z = this.env.getZombies().get(i);
+                        this.entiteVue.afficherEnnemie(z);
                     }
 
-                    // Rafraîche les positions des images sur l'écran
-                    entiteVue.mettreAJourAffichage();
+                    // 4. Met à jour les textes affichés à l'écran
+                    this.metAjourInterface();
                 }
         );
-        gameLoop.getKeyFrames().add(kf);
+        this.gameLoop.getKeyFrames().add(kf);
     }
 
-    public void metAjour() {
-        labelArgent.setText("Ticket Resto : " + argent);
+    public void metAjourInterface() {
+        if (this.labelArgent != null) {
+            this.labelArgent.setText("Ticket Resto : " + this.env.getArgent());
+        }
+
+        if (this.welcomeText != null) {
+            if (this.env.getBase() != null && this.env.getBase().estDetruit()) {
+                this.welcomeText.setText("GAME OVER !");
+                this.gameLoop.stop();
+            } else {
+                this.welcomeText.setText("Vague : " + this.env.getNumeroVague());
+            }
+        }
     }
 
     @FXML
     public void lancerJeu(ActionEvent event) {
-        if (gameLoop != null && gameLoop.getStatus() != Timeline.Status.RUNNING) {
-            gameLoop.play();
-            System.out.println("Lancement du jeu");
+        if (this.gameLoop != null && this.gameLoop.getStatus() != Timeline.Status.RUNNING) {
+            // Si on est avant la première vague, on la génère
+            if (this.env.getNumeroVague() == 0) {
+                this.env.preparerNouvelleVague();
+            }
+            this.gameLoop.play();
+            System.out.println("Jeu lancé");
         }
     }
 
     @FXML
     public void recommencerJeu(ActionEvent event) {
-        if (gameLoop != null) {
-            gameLoop.stop();
+        if (this.gameLoop != null) {
+            this.gameLoop.stop();
         }
-        entiteVue.nettoyer(); // Retire les anciennes images 
-        initJeu();            // Recrée l'environnement tout neuf
-        gameLoop.play();
+        this.entiteVue.nettoyer(); // On efface tout l'ancien visuel
+        this.initJeu();            // On remet un modèle tout neuf
+        this.env.preparerNouvelleVague();
+        this.gameLoop.play();
         System.out.println("Jeu recommencé");
     }
 
     @FXML
     public void arreterJeu(ActionEvent event) {
-        if (gameLoop != null) {
-            gameLoop.pause();
-            System.out.println("Jeu arrêté");
+        if (this.gameLoop != null) {
+            this.gameLoop.pause();
+            System.out.println("Jeu mis en pause");
         }
     }
 
     @FXML
     public void gestionargent(ActionEvent event) {
-        if (this.argent >= 100) {
-            this.argent -= 100;
-            metAjour();
-            System.out.println("Achat effectué, reste : " + this.argent);
+        // Exemple simple : on achète une action/un objet pour 100 tickets resto
+        if (this.env.payerAchat(100)) {
+            this.metAjourInterface();
+            System.out.println("Achat réussi");
         } else {
-            System.out.println("Pas assez de Tickets Resto !");
+            System.out.println("Fonds insuffisants !");
         }
     }
 
     @FXML
     public void reglage(ActionEvent event) throws IOException {
         Stage stage = new Stage();
-        FXMLLoader fxmlLoader = new FXMLLoader(Controller.class.getResource("/universite_paris8/iut/fabdelrahim/sae/reglage.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Controller.class.getResource("/universite_paris8/iut/rissamou/sae_td/reglage.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
         stage.show();
