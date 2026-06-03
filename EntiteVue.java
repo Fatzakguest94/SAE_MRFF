@@ -1,69 +1,88 @@
-package universite_paris8.iut.rissamou.sae_td.vue;
+package universite_paris8.iut.fabdelrahim.sae.vue;
+
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import universite_paris8.iut.rissamou.sae_td.modele.Comptoir;
-import universite_paris8.iut.rissamou.sae_td.modele.Enemie;
+import universite_paris8.iut.fabdelrahim.sae.modele.Comptoir;
+import universite_paris8.iut.fabdelrahim.sae.modele.Enemie;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class EntiteVue {
-    private Pane paneauJeu;
-    // Le dictionnaire magique qui relie un ennemi à son image à l'écran
-    private Map<Enemie, ImageView> dictionnaireImages = new HashMap<>();
+
+    private Pane panneauJeu;
+    private Map<Enemie, ImageView> dictionnaireImages;
+    private ImageView imageComptoir;
 
     public EntiteVue(Pane terrain) {
-        this.paneauJeu = terrain;
+        this.panneauJeu = terrain;
+        this.dictionnaireImages = new HashMap<Enemie, ImageView>();
     }
 
     public void afficherEnnemie(Enemie e) {
-        var image = GestionImage.getImage(e.getIdentite());
-        ImageView imageView = new ImageView(image);
+        // Si l'ennemi a déjà une image affichée, on ne la recrée pas !
+        if (this.dictionnaireImages.containsKey(e)) {
+            return;
+        }
 
+        Image img = GestionImage.getImage(e.getIdentite());
+        if (img == null) return;
+
+        ImageView imageView = new ImageView(img);
         imageView.setFitWidth(36);
         imageView.setFitHeight(36);
-
         imageView.setLayoutX(e.getX());
         imageView.setLayoutY(e.getY());
 
-        paneauJeu.getChildren().add(imageView);
-
-        // On mémorise le lien !
-        dictionnaireImages.put(e, imageView);
+        this.panneauJeu.getChildren().add(imageView);
+        this.dictionnaireImages.put(e, imageView);
     }
+
     public void afficherComptoir(Comptoir base) {
-        var image = GestionImage.getImage(base.getIdentite());
-        ImageView imageView = new ImageView(image);
+        Image img = GestionImage.getImage(base.getIdentite());
+        if (img == null) return;
 
-        imageView.setFitWidth(36);
-        imageView.setFitHeight(36);
+        this.imageComptoir = new ImageView(img);
+        this.imageComptoir.setFitWidth(36);
+        this.imageComptoir.setFitHeight(36);
+        this.imageComptoir.setLayoutX(base.getX());
+        this.imageComptoir.setLayoutY(base.getY());
 
-        imageView.setLayoutX(base.getX());
-        imageView.setLayoutY(base.getY());
-
-        paneauJeu.getChildren().add(imageView);
+        this.panneauJeu.getChildren().add(this.imageComptoir);
     }
 
-    // Nouvelle méthode pour actualiser l'écran !
     public void mettreAJourAffichage() {
-        for (Map.Entry<Enemie, ImageView> entree : dictionnaireImages.entrySet()) {
-            Enemie enemie = entree.getKey();
-            ImageView imageVisuelle = entree.getValue();
+        // On crée une liste des clés pour pouvoir faire un parcours simple sans bug de modification
+        Object[] cles = this.dictionnaireImages.keySet().toArray();
 
-            // On aligne l'image sur les nouvelles coordonnées de l'objet
-            imageVisuelle.setLayoutX(enemie.getX());
-            imageVisuelle.setLayoutY(enemie.getY());
+        for (int i = 0; i < cles.length; i++) {
+            Enemie zombie = (Enemie) cles[i];
+            ImageView imageVisuelle = this.dictionnaireImages.get(zombie);
+
+            // Si le zombie doit disparaître (mort ou arrivé)
+            if (zombie.estMort() || zombie.estArrive()) {
+                this.panneauJeu.getChildren().remove(imageVisuelle);
+                this.dictionnaireImages.remove(zombie);
+            } else {
+                // Sinon, on le déplace visuellement
+                imageVisuelle.setLayoutX(zombie.getX());
+                imageVisuelle.setLayoutY(zombie.getY());
+            }
         }
     }
 
-    // Méthode pour effacer un ennemi de l'écran
-    public void retirerEnnemie(Enemie e) {
-        ImageView imageAEnlever = dictionnaireImages.get(e);
+    public void nettoyer() {
+        // Enlève tous les zombies de l'écran
+        for (ImageView iv : this.dictionnaireImages.values()) {
+            this.panneauJeu.getChildren().remove(iv);
+        }
+        this.dictionnaireImages.clear();
 
-        if (imageAEnlever != null) {
-            paneauJeu.getChildren().remove(imageAEnlever); // On l'efface de l'écran
-            dictionnaireImages.remove(e); // On l'efface de notre dictionnaire
+        // Enlève le comptoir
+        if (this.imageComptoir != null) {
+            this.panneauJeu.getChildren().remove(this.imageComptoir);
+            this.imageComptoir = null;
         }
     }
 }
-
