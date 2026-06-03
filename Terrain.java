@@ -1,4 +1,4 @@
-package universite_paris8.iut.fabdelrahim.sae.modele;
+package universite_paris8.iut.rissamou.sae_td.modele;
 
 public class Terrain {
 
@@ -26,4 +26,27 @@ public class Terrain {
             {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 50, 50, 50},
             {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 50, 50, 50}
     };
+    // Cherche le point de départ
+    public Point trouverEntree() {
+        for (int i = 0; i < grille.length; i++) {
+            for (int j = 0; j < grille[i].length; j++) {
+                if (grille[i][j] == 3) {
+                    return new Point(i, j);
+                }
+            }
+        }
+        return new Point(0, 0); //au cas où on oublie de mettre un 3
+    }
+
+    // Cherche le point d'arrivée
+    public Point trouverSortie() {
+        for (int i = 0; i < grille.length; i++) {
+            for (int j = 0; j < grille[i].length; j++) {
+                if (grille[i][j] == 4) {
+                    return new Point(i, j);
+                }
+            }
+        }
+        return new Point(0, 0);
+    }
 }
