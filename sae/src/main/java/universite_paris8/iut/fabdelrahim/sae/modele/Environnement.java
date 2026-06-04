@@ -1,150 +1,84 @@
 package universite_paris8.iut.fabdelrahim.sae.modele;
 
-
 import java.util.ArrayList;
 import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 
 public class Environnement {
 
     private Terrain terrain;
-    private List<Enemie> zombies;
     private List<Point> chemin;
     private Comptoir base;
-
     private List<Tour> tours;
 
+    // --- PROPRIÉTÉS OBSERVABLES (Demandées par le prof) ---
+    private ObservableList<Enemie> zombies;
+    private IntegerProperty argent;
+    private IntegerProperty numeroVague;
+    private BooleanProperty vagueEnCours;
+
     private int temps;
-    private int argent;
-    private int numeroVague;
     private int zombiesAFaireApparaitre;
     private int delaiAvantProchainZombie;
-    private boolean vagueEnCours;
     private int tempsAvantProchaineVague;
 
     public Environnement() {
         this.terrain = new Terrain();
-        this.zombies = new ArrayList<Enemie>();
+
+        // Initialisation des observables
+        this.zombies = FXCollections.observableArrayList();
+        this.argent = new SimpleIntegerProperty(200); // Argent de départ
+        this.numeroVague = new SimpleIntegerProperty(0);
+        this.vagueEnCours = new SimpleBooleanProperty(false);
+
+        this.tours = new ArrayList<>();
         this.temps = 0;
-        this.argent = 200; // Argent de départ
-        this.numeroVague = 0;
-        this.vagueEnCours = false;
-        this.tours = new ArrayList<Tour>();
         this.initialiserCheminAndBase();
     }
 
     private void initialiserCheminAndBase() {
-        Point depart = this.terrain.trouverEntree();
+        Point debut = this.terrain.trouverEntree();
         Point arrivee = this.terrain.trouverSortie();
-
-        // Calcul du chemin avec le BFS
-        this.chemin = Bfs.bfs(this.terrain.grille, depart, arrivee);
+        this.chemin = Bfs.bfs(this.terrain.grille, debut, arrivee);
 
         if (this.chemin.isEmpty()) {
             System.out.println("Aucun chemin trouvé !");
         }
-
-
         this.base = new Comptoir((int)(arrivee.y * 36), (int)(arrivee.x * 36), "SuperComptoir");
     }
 
+    // --- GETTERS DES PROPRIÉTÉS (Pour les liaisons / Bindings dans le contrôleur) ---
+    public ObservableList<Enemie> getZombies() { return this.zombies; }
+
+    public IntegerProperty argentProperty() { return this.argent; }
+    public int getArgent() { return this.argent.get(); }
+
+    public IntegerProperty numeroVagueProperty() { return this.numeroVague; }
+    public int getNumeroVague() { return this.numeroVague.get(); }
+
+    public BooleanProperty vagueEnCoursProperty() { return this.vagueEnCours; }
+
     public void preparerNouvelleVague() {
-        this.numeroVague++;
-        this.vagueEnCours = true;
-        // Exemple simple : 5 zombies vague 1, 10 vague 2...
-        this.zombiesAFaireApparaitre = 5 * this.numeroVague;
+        this.numeroVague.set(this.numeroVague.get() + 1);
+        this.vagueEnCours.set(true);
+        this.zombiesAFaireApparaitre = 5 * this.getNumeroVague();
         this.delaiAvantProchainZombie = 0;
     }
 
-    public void faireApparaitreZombie() {
-        Point depart = this.terrain.trouverEntree();
-
-        String typeZombie = "ZombieNormal";
-        double vitesse = 2;
-
-        if (this.zombiesAFaireApparaitre % 3 == 0) {
-            typeZombie = "ZombieRapide";
-            vitesse = 4;
-        }
-
-
-        Enemie zombie = new Enemie((int)(depart.y * 36), (int)(depart.x * 36), vitesse, typeZombie);
-        zombie.setChemin(this.chemin);
-        this.zombies.add(zombie);
-    }
-
-    public void unTourDeJeu() {
-        this.temps++;
-
-        // Ralentisseur de logique (comme ton temps % 5 == 0 de base)
-        if (this.temps % 5 == 0) {
-
-            //Apparition des zombies un par un
-            if (this.zombiesAFaireApparaitre > 0) {
-                this.delaiAvantProchainZombie--;
-                if (this.delaiAvantProchainZombie <= 0) {
-                    this.faireApparaitreZombie();
-                    this.zombiesAFaireApparaitre--;
-                    this.delaiAvantProchainZombie = 10; // Temps d'attente avant le prochain
-                }
-            }
-            // Faire attaquer toutes les tours construites
-            for (int i = 0; i < this.tours.size(); i++) {
-                this.tours.get(i).attaquer(this.zombies);
-            }
-
-            //Déplacement et vérification des dégâts / récompenses
-            for (int i = 0; i < this.zombies.size(); i++) {
-                Enemie z = this.zombies.get(i);
-                z.avancer();
-
-                // Si le zombie touche le comptoir
-                if (z.estArrive() && this.base != null) {
-                    this.base.recevoirDegats(10);
-                }
-
-                // Si le zombie vient de mourir, on récupère les sous
-                if (z.prendreRecompense()) {
-                    this.argent += 50;
-                }
-            }
-
-            //Nettoyage de la liste (on retire les morts ou arrivés)
-            List<Enemie> poubelle = new ArrayList<Enemie>();
-            for (int i = 0; i < this.zombies.size(); i++) {
-                Enemie z = this.zombies.get(i);
-                if (z.estMort() || z.estArrive()) {
-                    poubelle.add(z);
-                }
-            }
-            //On applique le retrait de la liste logique
-            this.zombies.removeAll(poubelle);
-
-            // 4. Gestion des transitions de vagues
-            if (this.vagueEnCours && this.zombiesAFaireApparaitre == 0 && this.zombies.isEmpty()) {
-                this.vagueEnCours = false;
-                this.tempsAvantProchaineVague = 60; // Pause avant la suite
-            }
-
-            //Lancement auto de la vague suivante après la pause
-            if (!this.vagueEnCours && this.numeroVague > 0) {
-                this.tempsAvantProchaineVague--;
-                if (this.tempsAvantProchaineVague <= 0) {
-                    this.preparerNouvelleVague();
-                }
-            }
-        }
-    }
-
     public boolean payerAchat(int montant) {
-        if (this.argent >= montant) {
-            this.argent -= montant;
+        if (this.getArgent() >= montant) {
+            this.argent.set(this.getArgent() - montant);
             return true;
         }
         return false;
     }
 
     public void ajouterTour(int pixelX, int pixelY) {
-        // On utilise ta méthode payerAchat existante ! Une tour coûte par exemple 100 tickets
         if (this.payerAchat(100)) {
             this.tours.add(new Tour(pixelX, pixelY));
             System.out.println("Tour achetée et placée !");
@@ -153,13 +87,75 @@ public class Environnement {
         }
     }
 
+    public void faireApparaitreZombie() {
+        Point depart = this.terrain.trouverEntree();
+        String typeZombie = (this.zombiesAFaireApparaitre % 3 == 0) ? "ZombieRapide" : "ZombieNormal";
+        double vitesse = typeZombie.equals("ZombieRapide") ? 4 : 2;
+
+        Enemie zombie = new Enemie((int)(depart.y * 36), (int)(depart.x * 36), vitesse, typeZombie);
+        zombie.setChemin(this.chemin);
+
+        // L'ajout dans la liste déclenche automatiquement l'affichage dans la Vue
+        this.zombies.add(zombie);
+    }
+
+    public void unTourDeJeu() {
+        this.temps++;
+
+        if (this.temps % 5 == 0) {
+            // Gestion des apparitions
+            if (this.zombiesAFaireApparaitre > 0) {
+                this.delaiAvantProchainZombie--;
+                if (this.delaiAvantProchainZombie <= 0) {
+                    this.faireApparaitreZombie();
+                    this.zombiesAFaireApparaitre--;
+                    this.delaiAvantProchainZombie = 10;
+                }
+            }
+
+            // Attaque des tours
+            for (Tour t : this.tours) {
+                t.attaquer(this.zombies);
+            }
+
+            // Déplacement et gestion des états des zombies
+            // (On parcourt à l'envers pour pouvoir supprimer en toute sécurité pendant la boucle)
+            for (int i = this.zombies.size() - 1; i >= 0; i--) {
+                Enemie z = this.zombies.get(i);
+                z.avancer();
+
+                if (z.estArrive() && this.base != null) {
+                    this.base.recevoirDegats(10);
+                }
+
+                if (z.prendreRecompense()) {
+                    this.argent.set(this.getArgent() + 50); // Met à jour l'argent (le label suivra tout seul)
+                }
+
+                // Plus besoin de liste "poubelle". On remove directement de l'ObservableList.
+                if (z.estMort() || z.estArrive()) {
+                    this.zombies.remove(i);
+                }
+            }
+
+            // Gestion de la transition des vagues
+            if (this.vagueEnCours.get() && this.zombiesAFaireApparaitre == 0 && this.zombies.isEmpty()) {
+                this.vagueEnCours.set(false);
+                this.tempsAvantProchaineVague = 60;
+            }
+
+            if (!this.vagueEnCours.get() && this.getNumeroVague() > 0) {
+                this.tempsAvantProchaineVague--;
+                if (this.tempsAvantProchaineVague <= 0) {
+                    this.preparerNouvelleVague();
+                }
+            }
+        }
+    }
 
     public Terrain getTerrain() { return this.terrain; }
-    public List<Enemie> getZombies() { return this.zombies; }
-    public int getArgent() { return this.argent; }
-    public int getNumeroVague() { return this.numeroVague; }
-    public Comptoir getBase() { return this.base; }
     public List<Tour> getTours() { return this.tours; }
-
-
+    public Comptoir getBase() {
+        return this.base;
+    }
 }

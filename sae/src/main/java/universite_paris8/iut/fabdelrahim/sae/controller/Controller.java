@@ -14,7 +14,6 @@ import javafx.scene.layout.TilePane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import universite_paris8.iut.fabdelrahim.sae.modele.Environnement;
-import universite_paris8.iut.fabdelrahim.sae.modele.Enemie;
 import universite_paris8.iut.fabdelrahim.sae.modele.Tour;
 import universite_paris8.iut.fabdelrahim.sae.vue.TerrainVue;
 import universite_paris8.iut.fabdelrahim.sae.vue.EntiteVue;
@@ -26,14 +25,10 @@ import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
 
-    @FXML
-    private TilePane map;
-    @FXML
-    private Pane panneauJeu;
-    @FXML
-    private Label labelArgent;
-    @FXML
-    private Label welcomeText;
+    @FXML private TilePane map;
+    @FXML private Pane panneauJeu;
+    @FXML private Label labelArgent;
+    @FXML private Label welcomeText;
 
     private TerrainVue terrainVue;
     private EntiteVue entiteVue;
@@ -43,45 +38,32 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Chargement des assets graphiques
+        this.env = new Environnement();
         GestionImage.loadAssets();
 
-        // Création et affichage du décor (la map de tuiles)
-        this.terrainVue = new TerrainVue();
-        this.terrainVue.map = map;
+        this.terrainVue = new TerrainVue(env.getTerrain(), map);
         this.terrainVue.creerTerrain();
 
-        // Détecter un clic de souris sur l'écran pour fabriquer une tour
-        this.panneauJeu.setOnMouseClicked(event -> {
-            // On récupère les coordonnées de la souris lors du clic
-            int xClic = (int) event.getX();
-            int yClic = (int) event.getY();
+        // --- DATA BINDING (Fait disparaître metAjourInterface) ---
+        if (this.labelArgent != null) {
+            this.labelArgent.textProperty().bind(env.argentProperty().asString("Ticket Resto : %d"));
+        }
+        if (this.welcomeText != null) {
+            this.welcomeText.textProperty().bind(env.numeroVagueProperty().asString("Vague : %d"));
+        }
 
-            // On arrondit le clic aux multiples de 36 pixels
-            // pour caler la tour parfaitement au centre d'une case de la grille
-            int xAjuste = (xClic / 36) * 36;
-            int yAjuste = (yClic / 36) * 36;
-
-            // On demande à la logique du modèle de créer la tour
-            this.env.ajouterTour(xAjuste, yAjuste);
-        });
-
-        // Lancement initial de la configuration du jeu
         this.initJeu();
-
     }
 
     private void initJeu() {
-        this.env = new Environnement();
-        this.entiteVue = new EntiteVue(panneauJeu);
+        // On passe 'env' pour que la vue puisse attacher son écouteur de liste
+        this.entiteVue = new EntiteVue(panneauJeu, env);
 
-        // Affichage du comptoir au début
         if (this.env.getBase() != null) {
             this.entiteVue.afficherComptoir(this.env.getBase());
         }
 
         this.initAnimation();
-        this.metAjourInterface();
     }
 
     private void initAnimation() {
@@ -89,52 +71,30 @@ public class Controller implements Initializable {
         this.gameLoop.setCycleCount(Timeline.INDEFINITE);
 
         KeyFrame kf = new KeyFrame(
-                Duration.seconds(0.017), // Correspond à environ 60 rafraîchissements par seconde
+                Duration.seconds(0.017),
                 ev -> {
-                    //Met à jour les calculs dans la logique (Modèle)
                     this.env.unTourDeJeu();
 
-                    //Met à jour les positions des images existantes (Vue)
-                    this.entiteVue.mettreAJourAffichage();
+                    // MODIFICATION ICI : On transmet 'env' à la méthode
+                    this.entiteVue.mettreAJourAffichage(this.env);
 
-                    //Demande à la vue d'afficher les nouveaux zombies s'il y en a
-                    for (int i = 0; i < this.env.getZombies().size(); i++) {
-                        Enemie z = this.env.getZombies().get(i);
-                        this.entiteVue.afficherEnnemie(z);
+                    for (Tour t : this.env.getTours()) {
+                        this.entiteVue.afficherTour(t);
                     }
 
-                    //Met à jour les textes affichés à l'écran
-                    this.metAjourInterface();
-
-                    // Demande à la vue d'afficher les tours
-                    for (int i = 0; i < this.env.getTours().size(); i++) {
-                        Tour t = this.env.getTours().get(i);
-                        this.entiteVue.afficherTour(t);
+                    if (this.env.getBase() != null && this.env.getBase().estDetruit()) {
+                        this.gameLoop.stop();
+                        this.welcomeText.textProperty().unbind();
+                        this.welcomeText.setText("GAME OVER !");
                     }
                 }
         );
         this.gameLoop.getKeyFrames().add(kf);
     }
 
-    public void metAjourInterface() {
-        if (this.labelArgent != null) {
-            this.labelArgent.setText("Ticket Resto : " + this.env.getArgent());
-        }
-
-        if (this.welcomeText != null) {
-            if (this.env.getBase() != null && this.env.getBase().estDetruit()) {
-                this.welcomeText.setText("GAME OVER !");
-                this.gameLoop.stop();
-            } else {
-                this.welcomeText.setText("Vague : " + this.env.getNumeroVague());
-            }
-        }
-    }
-
     @FXML
     public void lancerJeu(ActionEvent event) {
         if (this.gameLoop != null && this.gameLoop.getStatus() != Timeline.Status.RUNNING) {
-            // Si on est avant la première vague, on la génère
             if (this.env.getNumeroVague() == 0) {
                 this.env.preparerNouvelleVague();
             }
@@ -148,8 +108,15 @@ public class Controller implements Initializable {
         if (this.gameLoop != null) {
             this.gameLoop.stop();
         }
-        this.entiteVue.nettoyer(); // On efface tout l'ancien visuel
-        this.initJeu();            // On remet un modèle tout neuf
+
+        this.entiteVue.viderTout(); // On efface le visuel
+
+        // On réinitialise un tout nouvel environnement propre et on recrée les Binds
+        this.env = new Environnement();
+        this.labelArgent.textProperty().bind(env.argentProperty().asString("Ticket Resto : %d"));
+        this.welcomeText.textProperty().bind(env.numeroVagueProperty().asString("Vague : %d"));
+
+        this.initJeu();
         this.env.preparerNouvelleVague();
         this.gameLoop.play();
         System.out.println("Jeu recommencé");
@@ -165,42 +132,32 @@ public class Controller implements Initializable {
 
     @FXML
     public void gestionargent(ActionEvent event) {
-        this.achatTour = true; // On passe en mode "j'ai sélectionné le Burger"
+        this.achatTour = true;
         System.out.println("Mode placement activé ! Cliquez sur le terrain.");
     }
 
     @FXML
     public void clicSurTerrain(MouseEvent event) {
-        // Si l'interrupteur est éteint, on s'arrête direct, on ne pose rien !
-        if (this.achatTour == false) {
-            return;
-        }
+        if (!this.achatTour) return;
 
-        //On récupère la position exacte de la souris lors du clic
-        int xClic = (int) event.getX();
-        int yClic = (int) event.getY();
+        int xAjuste = ((int) event.getX() / 36) * 36;
+        int yAjuste = ((int) event.getY() / 36) * 36;
 
-        //Arrondi magique pour caler la tour pile sur ta grille de 36x36 pixels
-        int xAjuste = (xClic / 36) * 36;
-        int yAjuste = (yClic / 36) * 36;
-
-        //  On demande au modèle (Environnement) de créer et payer le burger
         this.env.ajouterTour(xAjuste, yAjuste);
-
-        //On rafraîchit l'affichage de ton argent
-        this.metAjourInterface();
-
-        //On éteint l'interrupteur pour pas poser des burgers partout au prochain clic
-        this.achatTour = false;
-
+        this.achatTour = false; // Désactive le mode placement après la pose
     }
 
-    @FXML
     public void reglage(ActionEvent event) throws IOException {
+        if (gameLoop != null) gameLoop.stop();
+
         Stage stage = new Stage();
-        FXMLLoader fxmlLoader = new FXMLLoader(Controller.class.getResource("/universite_paris8/iut/rissamou/sae_td/reglage.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Controller.class.getResource("/universite_paris8/iut/fabdelrahim/sae/reglage.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void reprendre(ActionEvent event) throws IOException {
+        if (gameLoop != null) gameLoop.play();
     }
 }

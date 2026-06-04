@@ -9,6 +9,8 @@ public class Tour {
     private int degats;
     private int cooldown; // Temps restant avant le prochain tir
     private int vitesseTir; // Délai d'attente imposé entre deux tirs
+    private static int compteur = 0;
+    private String idUnique;
 
     public Tour(int x, int y) {
         this.x = x;
@@ -17,6 +19,7 @@ public class Tour {
         this.degats = 5;       // Dégâts infligés par tir
         this.cooldown = 0;
         this.vitesseTir = 5;   // Attaque tous les 5 cycles de logique
+        this.idUnique = "tour_" + compteur++;
     }
 
     // Méthode appelée à chaque tour de jeu pour chercher un zombie à attaquer
@@ -51,4 +54,5 @@ public class Tour {
     // Getters simples pour la vue
     public int getX() { return this.x; }
     public int getY() { return this.y; }
+    public String getIdUnique() {return this.idUnique;}
 }

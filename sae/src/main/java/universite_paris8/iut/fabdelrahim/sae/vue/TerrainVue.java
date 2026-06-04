@@ -9,10 +9,16 @@ import universite_paris8.iut.fabdelrahim.sae.modele.Terrain;
 
 public class TerrainVue {
 
-    public Terrain terrain = new Terrain();
+    private Terrain terrain;
+    private TilePane map;
 
-    @FXML
-    public TilePane map;
+    public TerrainVue(Terrain t,TilePane map){
+        this.terrain = t;
+        this.map = map;
+    }
+
+
+
 
     @FXML
     public void creerTerrain() {

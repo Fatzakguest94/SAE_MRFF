@@ -8,9 +8,10 @@
       spacing="20" alignment="CENTER"
       prefWidth="300" prefHeight="400">
 
-    <Label text="Son"/>
+    <Button styleClass="btn" text="Reprendre" />
+    <Button styleClass="btn" text="Quitter" />
+    <Slider fx:id="sonlogo" />
     <Label text="Langues"/>
     <Label text="Crédit : MRFF"/>
-    <Label text ="Objectif : Le but etant de proteger la pizzeria "/>
 
 </VBox>

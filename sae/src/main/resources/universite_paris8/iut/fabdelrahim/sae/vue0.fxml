@@ -120,6 +120,8 @@
             <Region HBox.hgrow="ALWAYS"/>
 
             <Button text="⚙ Réglages" onAction="#reglage" styleClass="btn"/>
+
+
         </HBox>
     </bottom>
 

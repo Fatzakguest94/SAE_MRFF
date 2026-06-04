@@ -16,6 +16,8 @@ public class Enemie {
     private List<Point> chemin;
     private int etapeActuelle;
     private boolean recompenseDonnee;
+    private static int compteur = 0;
+    private String idUnique;
 
     public Enemie(int x, int y, double vitesse, String identite) {
         this.x = x;
@@ -26,6 +28,7 @@ public class Enemie {
         this.identite = identite;
         this.etapeActuelle = 0;
         this.recompenseDonnee = false;
+        this.idUnique = "zombie_" + compteur++;
     }
 
 
@@ -101,4 +104,6 @@ public class Enemie {
     public double getVitesse() { return this.vitesse; }
     public int getDegat() { return this.degat; }
     public String getIdentite() { return this.identite; }
+    public String getIdUnique() {return this.idUnique; }
+
 }

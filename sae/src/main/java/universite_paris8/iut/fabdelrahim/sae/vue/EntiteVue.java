@@ -1,33 +1,45 @@
 package universite_paris8.iut.fabdelrahim.sae.vue;
 
+import javafx.collections.ListChangeListener;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import universite_paris8.iut.fabdelrahim.sae.modele.Comptoir;
 import universite_paris8.iut.fabdelrahim.sae.modele.Enemie;
 import universite_paris8.iut.fabdelrahim.sae.modele.Tour;
-
-import java.util.HashMap;
-import java.util.Map;
+import universite_paris8.iut.fabdelrahim.sae.modele.Environnement;
 
 public class EntiteVue {
 
     private Pane panneauJeu;
-    private Map<Enemie, ImageView> dictionnaireImages;
     private ImageView imageComptoir;
-    private Map<Tour, ImageView> dictionnaireTours = new HashMap<Tour, ImageView>();
 
-    public EntiteVue(Pane terrain) {
+    public EntiteVue(Pane terrain, Environnement env) {
         this.panneauJeu = terrain;
-        this.dictionnaireImages = new HashMap<Enemie, ImageView>();
+
+        // --- ÉCOUTE AUTOMATIQUE DE LA LISTE DE ZOMBIES (SANS MAP) ---
+        env.getZombies().addListener((ListChangeListener<Enemie>) change -> {
+            while (change.next()) {
+                if (change.wasAdded()) {
+                    for (Enemie nouveauZombie : change.getAddedSubList()) {
+                        creerImageZombie(nouveauZombie);
+                    }
+                }
+                if (change.wasRemoved()) {
+                    for (Enemie zombieRetire : change.getRemoved()) {
+                        // On cherche le composant graphique directement par son ID dans le panneau !
+                        Node imgView = this.panneauJeu.lookup("#" + zombieRetire.getIdUnique());
+                        if (imgView != null) {
+                            this.panneauJeu.getChildren().remove(imgView);
+                        }
+                    }
+                }
+            }
+        });
     }
 
-    public void afficherEnnemie(Enemie e) {
-        // Si l'ennemi a déjà une image affichée, on ne la recrée pas !
-        if (this.dictionnaireImages.containsKey(e)) {
-            return;
-        }
-
+    private void creerImageZombie(Enemie e) {
         Image img = GestionImage.getImage(e.getIdentite());
         if (img == null) return;
 
@@ -37,8 +49,40 @@ public class EntiteVue {
         imageView.setLayoutX(e.getX());
         imageView.setLayoutY(e.getY());
 
+        // C'est ici la magie : on injecte l'ID unique du modèle dans le composant FX !
+        imageView.setId(e.getIdUnique());
+
         this.panneauJeu.getChildren().add(imageView);
-        this.dictionnaireImages.put(e, imageView);
+    }
+
+    // Déplace les images en les cherchant dynamiquement par leur ID unique
+    public void mettreAJourAffichage(Environnement env) {
+        for (Enemie zombie : env.getZombies()) {
+            Node imgView = this.panneauJeu.lookup("#" + zombie.getIdUnique());
+            if (imgView != null) {
+                imgView.setLayoutX(zombie.getX());
+                imgView.setLayoutY(zombie.getY());
+            }
+        }
+    }
+
+    public void afficherTour(Tour t) {
+        // Si l'image existe déjà sur le terrain, on ne fait rien
+        if (this.panneauJeu.lookup("#" + t.getIdUnique()) != null) return;
+
+        Image img = GestionImage.getImage("SuperComptoir");
+        if (img == null) return;
+
+        ImageView imageView = new ImageView(img);
+        imageView.setFitWidth(36);
+        imageView.setFitHeight(36);
+        imageView.setLayoutX(t.getX());
+        imageView.setLayoutY(t.getY());
+
+        // Attribuer l'ID unique de la tour à l'image
+        imageView.setId(t.getIdUnique());
+
+        this.panneauJeu.getChildren().add(imageView);
     }
 
     public void afficherComptoir(Comptoir base) {
@@ -54,64 +98,8 @@ public class EntiteVue {
         this.panneauJeu.getChildren().add(this.imageComptoir);
     }
 
-    public void mettreAJourAffichage() {
-        // On crée une liste des clés pour pouvoir faire un parcours simple sans bug de modification
-        Object[] cles = this.dictionnaireImages.keySet().toArray();
-
-        for (int i = 0; i < cles.length; i++) {
-            Enemie zombie = (Enemie) cles[i];
-            ImageView imageVisuelle = this.dictionnaireImages.get(zombie);
-
-            // Si le zombie doit disparaître (mort ou arrivé)
-            if (zombie.estMort() || zombie.estArrive()) {
-                this.panneauJeu.getChildren().remove(imageVisuelle);
-                this.dictionnaireImages.remove(zombie);
-            } else {
-                // Sinon, on le déplace visuellement
-                imageVisuelle.setLayoutX(zombie.getX());
-                imageVisuelle.setLayoutY(zombie.getY());
-            }
-        }
-    }
-
-    public void nettoyer() {
-        // Enlève tous les zombies de l'écran
-        for (ImageView iv : this.dictionnaireImages.values()) {
-            this.panneauJeu.getChildren().remove(iv);
-        }
-        this.dictionnaireImages.clear();
-
-        // Enlève le comptoir
-        if (this.imageComptoir != null) {
-            this.panneauJeu.getChildren().remove(this.imageComptoir);
-            this.imageComptoir = null;
-        }
-
-        for (ImageView iv : this.dictionnaireTours.values()) {
-            this.panneauJeu.getChildren().remove(iv);
-        }
-        this.dictionnaireTours.clear();
-    }
-
-
-    public void afficherTour(Tour t) {
-        // Si la tour a déjà son image affichée, inutile de la recréer
-        if (this.dictionnaireTours.containsKey(t)) {
-            return;
-        }
-
-        // Ici, on récupère une image. Pour faire simple au début, on peut utiliser "SuperComptoir"
-        // ou n'importe quelle clé valide de ta classe GestionImage
-        Image img = GestionImage.getImage("SuperComptoir");
-        if (img == null) return;
-
-        ImageView imageView = new ImageView(img);
-        imageView.setFitWidth(36);
-        imageView.setFitHeight(36);
-        imageView.setLayoutX(t.getX());
-        imageView.setLayoutY(t.getY());
-
-        this.panneauJeu.getChildren().add(imageView);
-        this.dictionnaireTours.put(t, imageView);
+    public void viderTout() {
+        this.panneauJeu.getChildren().clear();
+        this.imageComptoir = null;
     }
 }
