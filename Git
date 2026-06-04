@@ -1,5 +1,0 @@
-git clone -b Dev https://github.com/Fatzakguest94/SAE_MRFF.git /tmp/SAE_MRFF_temp && \
-cp -r /tmp/SAE_MRFF_temp/vue/* "/home/etudiants/info/fzekraoui/prive/SAÉ/SAEdev/src/main/resources/universite_paris8/iut/fzekraoui/saedev/vue/" && \
-rm -rf /tmp/SAE_MRFF_temp
-
-// les fichiers du dossier vue dans le dossier vue de l'ordinateur ( git clone + rm et rf )
