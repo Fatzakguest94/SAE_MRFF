@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="universite_paris8.iut.fabdelrahim.sae.controller.ecranController"
+           prefWidth="1377"
+           prefHeight="856">
+
+    <VBox alignment="CENTER" spacing="30"
+          style="-fx-background-color: #6E2934;">
+
+        <Label text="🍕 PIZZA ATTACK 🍕"
+               style="-fx-font-size: 96px; -fx-font-weight: bold; -fx-text-fill: #e87800;"/>
+
+        <Label text="SAUVONS LA PIZZARIA"
+               style="-fx-font-size: 24px; -fx-text-fill: #f5e6c8;"/>
+
+        <Button fx:id="playBtn"
+                text="▶  JOUER"
+                onAction="#handlePlay"
+                style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-background-color: #e87800; -fx-text-fill: #1a0f04; -fx-padding: 16px 80px; -fx-cursor: hand; -fx-background-radius: 6px;"/>
+
+    </VBox>
+
+</StackPane>

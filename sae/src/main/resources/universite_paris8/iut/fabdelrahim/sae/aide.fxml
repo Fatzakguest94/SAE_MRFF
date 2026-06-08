@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      spacing="20" alignment="CENTER"
+      prefWidth="300" prefHeight="400">
+
+    <TextFlow GridPane.columnIndex="0" GridPane.rowIndex="0">
+        <children>
+            <Text fx:id="text1" strokeType="OUTSIDE" strokeWidth="0.0" text="L'histoire se déroule dans un monde frappé par le désespoir. Du jour au lendemain,
+    toute la nourriture sur Terre perdit son goût, devenant une bouillie et fade à en mourir.
+    Privée de saveurs, la population a perdu la tête et s'est transformée en zombies.
+    En effet, leur seule obsession est de retrouver la moindre sensation gustative. " />
+            <Text fx:id="text2"  text="Malheureusement pour vous, l'odeur de votre four à bois les a attirés. Vous incarnez donc les chefs cuistots de la pizzeria Hechik ,
+    l'unique pizzeria au monde à avoir conservé le secret des saveurs. Vous allez ainsi devoir affronter des hordes de zombies-clients affamés
+    qui s'introduisent dans le restaurant et avancent vers les cuisines.
+    Vous devez empêcher les zombies d'atteindre le bout de la salle pour dévorer vos pizzas. Pour cela, vous devrez utiliser des objets et placer de manière stratégique des tours et des pièges sur leur passage pour les repousser.
+" />
+        </children>
+    </TextFlow>
+</VBox>
+
