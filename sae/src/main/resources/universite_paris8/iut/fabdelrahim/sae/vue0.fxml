@@ -120,6 +120,7 @@
             <Region HBox.hgrow="ALWAYS"/>
 
             <Button text="⚙ Réglages" onAction="#reglage" styleClass="btn"/>
+            <Button onAction="#aide" styleClass="btn" text="?aide?" />
 
 
         </HBox>

@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -15,6 +16,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import universite_paris8.iut.fabdelrahim.sae.modele.Environnement;
 import universite_paris8.iut.fabdelrahim.sae.modele.Tour;
+import universite_paris8.iut.fabdelrahim.sae.pizzattackapplication;
 import universite_paris8.iut.fabdelrahim.sae.vue.TerrainVue;
 import universite_paris8.iut.fabdelrahim.sae.vue.EntiteVue;
 import universite_paris8.iut.fabdelrahim.sae.vue.GestionImage;
@@ -35,6 +37,10 @@ public class Controller implements Initializable {
     private Timeline gameLoop;
     private Environnement env;
     private boolean achatTour = false;
+
+    @FXML
+    private Button playBtn;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -159,5 +165,14 @@ public class Controller implements Initializable {
 
     public void reprendre(ActionEvent event) throws IOException {
         if (gameLoop != null) gameLoop.play();
+    }
+
+    public void aide(ActionEvent event) throws IOException {
+        if (gameLoop != null) gameLoop.stop();
+        Stage stage = new Stage();
+        FXMLLoader fxmlLoader = new FXMLLoader(Controller.class.getResource("/universite_paris8/iut/fabdelrahim/sae/aide.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setScene(scene);
+        stage.show();
     }
 }
