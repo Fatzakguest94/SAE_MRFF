@@ -18,7 +18,7 @@ public class EntiteVue {
     public EntiteVue(Pane terrain, Environnement env) {
         this.panneauJeu = terrain;
 
-        // --- ÉCOUTE AUTOMATIQUE DE LA LISTE DE ZOMBIES (SANS MAP) ---
+        //ÉCOUTE AUTOMATIQUE DE LA LISTE DE ZOMBIES (SANS MAP)
         env.getZombies().addListener((ListChangeListener<Enemie>) change -> {
             while (change.next()) {
                 if (change.wasAdded()) {
@@ -49,7 +49,7 @@ public class EntiteVue {
         imageView.setLayoutX(e.getX());
         imageView.setLayoutY(e.getY());
 
-        // C'est ici la magie : on injecte l'ID unique du modèle dans le composant FX !
+        // C'est ici la magie on injecte l'ID unique du modèle dans le composant FX !
         imageView.setId(e.getIdUnique());
 
         this.panneauJeu.getChildren().add(imageView);

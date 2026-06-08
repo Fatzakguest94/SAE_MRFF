@@ -16,7 +16,7 @@ public class Environnement {
     private Comptoir base;
     private List<Tour> tours;
 
-    // --- PROPRIÉTÉS OBSERVABLES (Demandées par le prof) ---
+    //PROPRIÉTÉS OBSERVABLES
     private ObservableList<Enemie> zombies;
     private IntegerProperty argent;
     private IntegerProperty numeroVague;

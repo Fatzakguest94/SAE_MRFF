@@ -28,7 +28,7 @@ public class Controller implements Initializable {
     @FXML private TilePane map;
     @FXML private Pane panneauJeu;
     @FXML private Label labelArgent;
-    @FXML private Label welcomeText;
+    @FXML private Label labelVague;
 
     private TerrainVue terrainVue;
     private EntiteVue entiteVue;
@@ -44,12 +44,12 @@ public class Controller implements Initializable {
         this.terrainVue = new TerrainVue(env.getTerrain(), map);
         this.terrainVue.creerTerrain();
 
-        // --- DATA BINDING (Fait disparaître metAjourInterface) ---
+        //DATA BINDING
         if (this.labelArgent != null) {
             this.labelArgent.textProperty().bind(env.argentProperty().asString("Ticket Resto : %d"));
         }
-        if (this.welcomeText != null) {
-            this.welcomeText.textProperty().bind(env.numeroVagueProperty().asString("Vague : %d"));
+        if (this.labelVague != null) {
+            this.labelVague.textProperty().bind(env.numeroVagueProperty().asString("Vague : %d"));
         }
 
         this.initJeu();
@@ -84,8 +84,8 @@ public class Controller implements Initializable {
 
                     if (this.env.getBase() != null && this.env.getBase().estDetruit()) {
                         this.gameLoop.stop();
-                        this.welcomeText.textProperty().unbind();
-                        this.welcomeText.setText("GAME OVER !");
+                        this.labelVague.textProperty().unbind();
+                        this.labelVague.setText("GAME OVER !");
                     }
                 }
         );
@@ -114,7 +114,7 @@ public class Controller implements Initializable {
         // On réinitialise un tout nouvel environnement propre et on recrée les Binds
         this.env = new Environnement();
         this.labelArgent.textProperty().bind(env.argentProperty().asString("Ticket Resto : %d"));
-        this.welcomeText.textProperty().bind(env.numeroVagueProperty().asString("Vague : %d"));
+        this.labelVague.textProperty().bind(env.numeroVagueProperty().asString("Vague : %d"));
 
         this.initJeu();
         this.env.preparerNouvelleVague();

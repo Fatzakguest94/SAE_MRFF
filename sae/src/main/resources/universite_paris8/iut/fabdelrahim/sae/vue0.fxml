@@ -115,7 +115,7 @@
 
             <Label fx:id="labelArgent" text="Tickets Resto : 0" styleClass="info-label"/>
 
-            <Label text="Vague : 1" styleClass="info-label"/>
+            <Label fx:id="labelVague" text="Vague : 1" styleClass="info-label"/>
 
             <Region HBox.hgrow="ALWAYS"/>
 
