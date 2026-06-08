@@ -18,7 +18,7 @@ public class EntiteVue {
     public EntiteVue(Pane terrain, Environnement env) {
         this.panneauJeu = terrain;
 
-        //ÉCOUTE AUTOMATIQUE DE LA LISTE DE ZOMBIES (SANS MAP)
+        // 1. ÉCOUTE AUTOMATIQUE DE LA LISTE DE ZOMBIES (Déjà fait)
         env.getZombies().addListener((ListChangeListener<Enemie>) change -> {
             while (change.next()) {
                 if (change.wasAdded()) {
@@ -28,7 +28,6 @@ public class EntiteVue {
                 }
                 if (change.wasRemoved()) {
                     for (Enemie zombieRetire : change.getRemoved()) {
-                        // On cherche le composant graphique directement par son ID dans le panneau !
                         Node imgView = this.panneauJeu.lookup("#" + zombieRetire.getIdUnique());
                         if (imgView != null) {
                             this.panneauJeu.getChildren().remove(imgView);
@@ -37,19 +36,34 @@ public class EntiteVue {
                 }
             }
         });
+
+        // 2. RÉSOLUTION DU BUG : ÉCOUTE AUTOMATIQUE DE LA LISTE DE TOURS !
+        env.getTours().addListener((ListChangeListener<Tour>) change -> {
+            while (change.next()) {
+                if (change.wasAdded()) {
+                    for (Tour nouvelleTour : change.getAddedSubList()) {
+                        // La vue détecte l'achat et dessine la tour TOUTE SEULE !
+                        this.afficherTour(nouvelleTour);
+                    }
+                }
+            }
+        });
     }
 
     private void creerImageZombie(Enemie e) {
+        // On demande à GestionImage de nous donner l'image brute
+        // en fonction du TYPE de zombie (ex: "ZombieRapide")
         Image img = GestionImage.getImage(e.getIdentite());
         if (img == null) return;
 
+        //On crée le composant visuel (le Node) qui va contenir cette image
         ImageView imageView = new ImageView(img);
         imageView.setFitWidth(36);
         imageView.setFitHeight(36);
         imageView.setLayoutX(e.getX());
         imageView.setLayoutY(e.getY());
 
-        // C'est ici la magie on injecte l'ID unique du modèle dans le composant FX !
+        //on injecte l'ID unique du modèle dans le composant fx
         imageView.setId(e.getIdUnique());
 
         this.panneauJeu.getChildren().add(imageView);
@@ -67,10 +81,10 @@ public class EntiteVue {
     }
 
     public void afficherTour(Tour t) {
-        // Si l'image existe déjà sur le terrain, on ne fait rien
         if (this.panneauJeu.lookup("#" + t.getIdUnique()) != null) return;
 
-        Image img = GestionImage.getImage("SuperComptoir");
+        // MODIFICATION ICI : On demande l'image correspondant à l'identité de la tour
+        Image img = GestionImage.getImage(t.getIdentite());
         if (img == null) return;
 
         ImageView imageView = new ImageView(img);
@@ -79,9 +93,7 @@ public class EntiteVue {
         imageView.setLayoutX(t.getX());
         imageView.setLayoutY(t.getY());
 
-        // Attribuer l'ID unique de la tour à l'image
         imageView.setId(t.getIdUnique());
-
         this.panneauJeu.getChildren().add(imageView);
     }
 

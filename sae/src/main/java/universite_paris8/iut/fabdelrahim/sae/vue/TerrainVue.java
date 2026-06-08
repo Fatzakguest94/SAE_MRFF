@@ -31,14 +31,13 @@ public class TerrainVue {
         map.setPrefTileWidth(tailleTuile);
         map.setPrefTileHeight(tailleTuile);
 
-        Image solnoir = new Image(getClass().getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/solblanc.png"));
+
         Image sol = new Image(getClass().getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/tapisrose.png"));
         Image entrer = new Image(getClass().getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/entrer.jpg"));
         Image sortie = new Image(getClass().getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/table.png"));
         Image barrage5 = new Image(getClass().getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/barrage5.png"));
         Image barrage6 = new Image(getClass().getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/barrage6.png"));
         Image panneau8 = new Image(getClass().getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/panneau8.png"));
-        Image mur = new Image(getClass().getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/murs.png"));
         Image solcasser = new Image(getClass().getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/solcasser.png"));
         Image c1 = new Image(getClass().getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/c1.png"));
         Image c2 = new Image(getClass().getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/c2.png"));
@@ -99,9 +98,7 @@ public class TerrainVue {
                         cases.setImage(barrage6);
                         break;
 
-                    case 7:
-                        cases.setImage(mur);
-                        break;
+
 
                     case 8:
                         cases.setImage(panneau8);
@@ -207,7 +204,7 @@ public class TerrainVue {
                         break;
 
                     default:
-                        cases.setImage(solnoir);
+                        cases.setImage(c50);
                         break;
                 }
                 map.getChildren().add(cases);

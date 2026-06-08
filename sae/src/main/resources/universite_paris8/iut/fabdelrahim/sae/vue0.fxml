@@ -34,15 +34,17 @@
                 <VBox alignment="CENTER" spacing="5">
                     <Button prefWidth="70" prefHeight="70"
                             text="100🎟"
-                            styleClass="tower-button" onAction="#gestionargent"/>
-                    <Label text="Burger"/>
+                            styleClass="tower-button"
+                            onAction="#clicBoutonMitrailletteFrite"/>
+                    <Label text="Frites"/>
                 </VBox>
 
                 <VBox alignment="CENTER" spacing="5">
                     <Button prefWidth="70" prefHeight="70"
                             text="150🎟"
-                            styleClass="tower-button"/>
-                    <Label text="Pizza"/>
+                            styleClass="tower-button"
+                            onAction="#clicBoutonLanceBurger"/>
+                    <Label text="Burger"/>
                 </VBox>
             </HBox>
 
@@ -50,14 +52,16 @@
                 <VBox alignment="CENTER" spacing="5">
                     <Button prefWidth="70" prefHeight="70"
                             text="200🎟"
-                            styleClass="tower-button"/>
-                    <Label text="Frites"/>
+                            styleClass="tower-button"
+                            onAction="#clicBoutonTour3"/>
+                    <Label text="Pizza"/>
                 </VBox>
 
                 <VBox alignment="CENTER" spacing="5">
                     <Button prefWidth="70" prefHeight="70"
                             text="300🎟"
-                            styleClass="tower-button"/>
+                            styleClass="tower-button"
+                            onAction="#clicBoutonTour4"/>
                     <Label text="Soda"/>
                 </VBox>
             </HBox>
@@ -111,16 +115,16 @@
                 <Insets top="10" right="20" bottom="10" left="20"/>
             </padding>
 
-            <Label text="Pizza : 100" styleClass="info-label"/>
+            <Label fx:id="labelHpBase"  styleClass="info-label"/>
 
-            <Label fx:id="labelArgent" text="Tickets Resto : 0" styleClass="info-label"/>
+            <Label fx:id="labelArgent"  styleClass="info-label"/>
 
-            <Label fx:id="labelVague" text="Vague : 1" styleClass="info-label"/>
+            <Label fx:id="labelVague"  styleClass="info-label"/>
 
             <Region HBox.hgrow="ALWAYS"/>
 
-            <Button text="⚙ Réglages" onAction="#reglage" styleClass="btn"/>
-            <Button onAction="#aide" styleClass="btn" text="?aide?" />
+            <Button text="Réglages" onAction="#reglage" styleClass="btn"/>
+            <Button onAction="#aide" styleClass="btn" text="aide?" />
 
 
         </HBox>

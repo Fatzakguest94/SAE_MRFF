@@ -16,7 +16,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import universite_paris8.iut.fabdelrahim.sae.modele.Environnement;
 import universite_paris8.iut.fabdelrahim.sae.modele.Tour;
-import universite_paris8.iut.fabdelrahim.sae.pizzattackapplication;
 import universite_paris8.iut.fabdelrahim.sae.vue.TerrainVue;
 import universite_paris8.iut.fabdelrahim.sae.vue.EntiteVue;
 import universite_paris8.iut.fabdelrahim.sae.vue.GestionImage;
@@ -31,12 +30,15 @@ public class Controller implements Initializable {
     @FXML private Pane panneauJeu;
     @FXML private Label labelArgent;
     @FXML private Label labelVague;
+    @FXML private Label labelHpBase;
 
     private TerrainVue terrainVue;
     private EntiteVue entiteVue;
     private Timeline gameLoop;
     private Environnement env;
     private boolean achatTour = false;
+
+    private String tourAcheteeEnCours = null; // null veut dire "aucune tour sélectionnée
 
     @FXML
     private Button playBtn;
@@ -67,6 +69,11 @@ public class Controller implements Initializable {
 
         if (this.env.getBase() != null) {
             this.entiteVue.afficherComptoir(this.env.getBase());
+        }
+        // Dans ton Controller.java (par exemple dans initJeu()) :
+        if (this.env.getBase() != null && this.labelHpBase != null) {
+            // Le texte du label va s'actualiser TOUT SEUL dès que la pizza prend des dégâts
+            this.labelHpBase.textProperty().bind(this.env.getBase().hpProperty().asString("Pizza : %d PV"));
         }
 
         this.initAnimation();
@@ -142,16 +149,7 @@ public class Controller implements Initializable {
         System.out.println("Mode placement activé ! Cliquez sur le terrain.");
     }
 
-    @FXML
-    public void clicSurTerrain(MouseEvent event) {
-        if (!this.achatTour) return;
 
-        int xAjuste = ((int) event.getX() / 36) * 36;
-        int yAjuste = ((int) event.getY() / 36) * 36;
-
-        this.env.ajouterTour(xAjuste, yAjuste);
-        this.achatTour = false; // Désactive le mode placement après la pose
-    }
 
     public void reglage(ActionEvent event) throws IOException {
         if (gameLoop != null) gameLoop.stop();
@@ -174,5 +172,45 @@ public class Controller implements Initializable {
         Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
         stage.show();
+    }
+
+    @FXML
+    public void clicBoutonMitrailletteFrite(ActionEvent event) {
+        this.tourAcheteeEnCours = "MitrailletteFrite";
+        System.out.println("Mode placement : MitrailletteFrite sélectionnée !");
+    }
+
+    @FXML
+    public void clicBoutonLanceBurger(ActionEvent event) {
+        this.tourAcheteeEnCours = "LanceBurger";
+        System.out.println("Mode placement : LanceBurger sélectionné !");
+    }
+
+    @FXML
+    public void clicBoutonTour3(ActionEvent event) {
+        this.tourAcheteeEnCours = "Tour3";
+        System.out.println("Mode placement : Tour 3 sélectionnée !");
+    }
+
+    @FXML
+    public void clicBoutonTour4(ActionEvent event) {
+        this.tourAcheteeEnCours = "Tour4";
+        System.out.println("Mode placement : Tour 4 sélectionnée !");
+    }
+
+    // 3. Modifie la méthode du clic sur le terrain pour envoyer le bon type
+    @FXML
+    public void clicSurTerrain(MouseEvent event) {
+        if (this.tourAcheteeEnCours == null) return;
+
+        int xAjuste = ((int) event.getX() / 36) * 36;
+        int yAjuste = ((int) event.getY() / 36) * 36;
+
+        // On ajoute simplement la tour dans le Modèle.
+        // L'écouteur qu'on vient de mettre dans EntiteVue va capter l'ajout
+        // et l'afficher INSTANTANÉMENT à l'écran !
+        this.env.ajouterTour(xAjuste, yAjuste, this.tourAcheteeEnCours);
+
+        this.tourAcheteeEnCours = null;
     }
 }

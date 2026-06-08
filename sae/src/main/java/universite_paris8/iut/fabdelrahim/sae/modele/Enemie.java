@@ -16,19 +16,37 @@ public class Enemie {
     private List<Point> chemin;
     private int etapeActuelle;
     private boolean recompenseDonnee;
-    private static int compteur = 0;
+    private static int compteur = 0; // Pour l'id unique demandé par le prof
     private String idUnique;
 
     public Enemie(int x, int y, double vitesse, String identite) {
         this.x = x;
         this.y = y;
         this.vitesse = vitesse;
-        this.hp = 20;
-        this.degat = 1;
         this.identite = identite;
         this.etapeActuelle = 0;
         this.recompenseDonnee = false;
+
+        // Génération automatique de l'ID unique pour la Vue
         this.idUnique = "zombie_" + compteur++;
+
+        //CONFIGURATION DES HP ET DÉGÂTS SELON LE TYPE DE ZOMBIE
+        if (identite.equals("ZombieRapide")) {
+            this.hp = 15;      // Moins de vie car il va vite
+            this.degat = 3;
+        }
+        else if (identite.equals("ZombieGros")) {
+            this.hp = 50;      // Beaucoup de vie car il est gros
+            this.degat = 10;    // Fait plus de dégâts s'il arrive au comptoir
+        }
+        else if (identite.equals("ZombieFamille")) {
+            this.hp = 30;
+            this.degat = 5;
+        }
+        else { // "ZombieNormal" (comportement par défaut)
+            this.hp = 20;
+            this.degat = 2;
+        }
     }
 
 
