@@ -69,6 +69,8 @@ public class Tour {
         System.out.println(this.identite + " tire ! HP restants : " + cible.getHp());
     }
 
+    public int getDegats(){return this.degats;}
+
     public int getX() { return this.x; }
     public int getY() { return this.y; }
     public String getIdUnique() { return this.idUnique; }
