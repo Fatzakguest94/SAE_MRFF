@@ -187,15 +187,15 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    public void clicBoutonTour3(ActionEvent event) {
-        this.tourAcheteeEnCours = "Tour3";
-        System.out.println("Mode placement : Tour 3 sélectionnée !");
+    public void clicBoutonBarbecue(ActionEvent event) {
+        this.tourAcheteeEnCours = "Barbecue";
+        System.out.println("Mode placement : Barbecue sélectionnée !");
     }
 
     @FXML
-    public void clicBoutonTour4(ActionEvent event) {
-        this.tourAcheteeEnCours = "Tour4";
-        System.out.println("Mode placement : Tour 4 sélectionnée !");
+    public void clicBoutonBacGlace(ActionEvent event) {
+        this.tourAcheteeEnCours = "BacGlace";
+        System.out.println("Mode placement : BacGlace sélectionnée !");
     }
 
     // 3. Modifie la méthode du clic sur le terrain pour envoyer le bon type

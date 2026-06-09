@@ -17,6 +17,8 @@ public class Enemie {
     private int etapeActuelle;
     private boolean recompenseDonnee;
     private static int compteur = 0; // Pour l'id unique demandé par le prof
+    private boolean ralenti=false;
+    private int brulure=0; //Pendant combien de secondes il va être en feu
     private String idUnique;
 
     public Enemie(int x, int y, double vitesse, String identite) {
@@ -101,6 +103,23 @@ public class Enemie {
         if (this.x == cibleX && this.y == sizeY) {
             this.etapeActuelle++;
         }
+
+        if (this.brulure>0){
+            this.recevoirDegats(2);//Perd 2pv en continu
+            this.brulure--;
+        }
+    }
+
+    public void ralentissement(){
+        if (!this.ralenti){
+            this.vitesse=this.vitesse /2; //Vitesse diviser par 2
+            this.ralenti=true;
+
+        }
+    }
+
+    public void bruler(){
+        this.brulure=10; //Le zombie est brulé pendant 10s
     }
 
     public boolean estMort() {

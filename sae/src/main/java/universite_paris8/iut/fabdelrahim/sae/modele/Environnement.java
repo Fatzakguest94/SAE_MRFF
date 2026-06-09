@@ -77,9 +77,9 @@ public class Environnement {
             cout = 150;
         } else if (type.equals("MitrailletteFrite")) {
             cout = 100;
-        } else if (type.equals("Tour3")) {
+        } else if (type.equals("Barbecue")) {
             cout = 200;
-        } else if (type.equals("Tour4")) {
+        } else if (type.equals("BacGlace")) {
             cout = 250;
         }
 
@@ -92,11 +92,11 @@ public class Environnement {
                 case "MitrailletteFrite":
                     this.tours.add(new MitrailletteFrite(pixelX, pixelY));
                     break;
-                case "Tour3":
-                    // this.tours.add(new Tour3(pixelX, pixelY));
+                case "Barbecue":
+                    this.tours.add(new Barbecue(pixelX, pixelY));
                     break;
-                case "Tour4":
-                    // this.tours.add(new Tour4(pixelX, pixelY));
+                case "BacGlace":
+                    this.tours.add(new BacGlace(pixelX, pixelY));
                     break;
                 default:
                     this.tours.add(new MitrailletteFrite(pixelX, pixelY));
