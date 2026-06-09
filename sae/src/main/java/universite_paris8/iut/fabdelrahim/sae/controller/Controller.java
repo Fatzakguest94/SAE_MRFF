@@ -41,6 +41,9 @@ public class Controller implements Initializable {
     @FXML
     private Button playBtn;
 
+    @FXML
+    private Button renomer;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -162,11 +165,6 @@ public class Controller implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
-
-    public void reprendre(ActionEvent event) throws IOException {
-        if (gameLoop != null) gameLoop.play();
-    }
-
     public void aide(ActionEvent event) throws IOException {
         if (gameLoop != null) gameLoop.stop();
         Stage stage = new Stage();
@@ -174,5 +172,11 @@ public class Controller implements Initializable {
         Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
         stage.show();
+    }
+    @FXML
+    private void rename(MouseEvent event) {
+
+        renomer.setText("Objets");
+        //FXMLLoader fxmlLoader = new FXMLLoader(Controller.class.getResource("/universite_paris8/iut/fabdelrahim/sae/menu.fxml"));
     }
 }
