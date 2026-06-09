@@ -37,7 +37,7 @@ public class Tour {
             Enemie zombie = listeZombies.get(i);
 
             if (!zombie.estMort()) {
-                // --- AJUSTEMENT GÉOMÉTRIQUE : TIR DEPUIS LE CENTRE DES CASES ---
+                //AJUSTEMENT GÉOMÉTRIQUE : TIR DEPUIS LE CENTRE DES CASES
                 double centreTourX = this.x + 18;
                 double centreTourY = this.y + 18;
                 double centreZombieX = zombie.getX() + 18;
