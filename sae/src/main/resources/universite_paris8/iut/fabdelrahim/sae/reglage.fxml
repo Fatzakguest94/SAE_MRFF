@@ -5,11 +5,12 @@
 
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
+      fx:controller="universite_paris8.iut.fabdelrahim.sae.controller.ecranController"
       spacing="20" alignment="CENTER"
       prefWidth="300" prefHeight="400">
 
     <Button styleClass="btn" text="Reprendre" />
-    <Button styleClass="btn" text="Quitter" />
+    <Button fx:id="leave" styleClass="btn" text="Quitter" onAction="#quitte"/>
     <Slider fx:id="sonlogo" />
     <Label text="Langues"/>
     <Label text="Crédit : MRFF"/>
