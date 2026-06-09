@@ -1,27 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!--
+    Fichier de vue pour l'interface de guide/aide sans barres de défilement inutiles.
+-->
+
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
 
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.text.TextFlow?>
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      spacing="20" alignment="CENTER"
-      prefWidth="300" prefHeight="400">
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="universite_paris8.iut.fabdelrahim.sae.controller.Controller"
+           prefWidth="1377"
+           prefHeight="856"
+           style="-fx-background-color: #4a151b;">
 
-    <TextFlow GridPane.columnIndex="0" GridPane.rowIndex="0">
-        <children>
-            <Text fx:id="text1" strokeType="OUTSIDE" strokeWidth="0.0" text="L'histoire se déroule dans un monde frappé par le désespoir. Du jour au lendemain,
-    toute la nourriture sur Terre perdit son goût, devenant une bouillie et fade à en mourir.
-    Privée de saveurs, la population a perdu la tête et s'est transformée en zombies.
-    En effet, leur seule obsession est de retrouver la moindre sensation gustative. " />
-            <Text fx:id="text2"  text="Malheureusement pour vous, l'odeur de votre four à bois les a attirés. Vous incarnez donc les chefs cuistots de la pizzeria Hechik ,
-    l'unique pizzeria au monde à avoir conservé le secret des saveurs. Vous allez ainsi devoir affronter des hordes de zombies-clients affamés
-    qui s'introduisent dans le restaurant et avancent vers les cuisines.
-    Vous devez empêcher les zombies d'atteindre le bout de la salle pour dévorer vos pizzas. Pour cela, vous devrez utiliser des objets et placer de manière stratégique des tours et des pièges sur leur passage pour les repousser.
-" />
-        </children>
-    </TextFlow>
-</VBox>
+    <VBox alignment="CENTER" spacing="35">
+        <padding>
+            <Insets top="40" right="60" bottom="40" left="60"/>
+        </padding>
 
+        <!-- Titre principal épuré -->
+        <Label text="PIZZATTACK - GUIDE DU JEU"
+               style="-fx-font-size: 42px; -fx-font-weight: bold; -fx-text-fill: #e87800; -fx-letter-spacing: 2px;"/>
+
+        <!-- Grille principale sur deux colonnes de tailles égales -->
+        <HBox spacing="30" alignment="CENTER" VBox.vgrow="ALWAYS" maxWidth="1260">
+
+            <!-- PANNEAU GAUCHE : CONTEXTE ET HISTOIRE (FIXE SANS BARRE DE DEFILEMENT) -->
+            <VBox spacing="20" prefWidth="610"
+                  style="-fx-background-color: #2b1114; -fx-padding: 30px; -fx-background-radius: 6px;">
+
+                <Label text="L'Univers"
+                       style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #e87800; -fx-border-color: transparent transparent #e87800 transparent; -fx-border-width: 0 0 2px 0; -fx-padding: 0 0 5px 0;"/>
+
+                <!-- Le texte est posé directement ici, ce qui supprime l'effet "glisser" -->
+                <TextFlow lineSpacing="8.0">
+                    <children>
+                        <Text text="L'histoire se déroule dans un monde frappé par le désespoir. Du jour au lendemain, toute la nourriture sur Terre perdit son goût, devenant une bouillie fade à en mourir. Privée de saveurs, la population a perdu la tête et s'est transformée en zombies. En effet, leur seule obsession est de retrouver la moindre sensation gustative.&#10;&#10;" style="-fx-fill: #ded0b6; -fx-font-size: 15px;"/>
+                        <Text text="Malheureusement pour vous, l'odeur de votre four à bois les a attirés. Vous incarnez donc les chefs cuistots de la pizzeria Hechik, l'unique pizzeria au monde à avoir conservé le secret des saveurs. Vous allez ainsi devoir affronter des hordes de zombies-clients affamés qui s'introduisent dans le restaurant et avancent vers les cuisines.&#10;&#10;" style="-fx-fill: #ded0b6; -fx-font-size: 15px;"/>
+                        <Text text="Vous devez empêcher les zombies d'atteindre le bout de la salle pour dévorer vos pizzas. Pour cela, vous devrez utiliser des objets et placer de manière stratégique des tours et des pièges sur leur passage pour les repousser." style="-fx-fill: #e87800; -fx-font-size: 15px; -fx-font-weight: bold;"/>
+                    </children>
+                </TextFlow>
+            </VBox>
+
+            <!-- PANNEAU DROITE : FICHES DE GAMEPLAY (ONGLETS) -->
+            <VBox spacing="20" prefWidth="610"
+                  style="-fx-background-color: #2b1114; -fx-padding: 30px; -fx-background-radius: 6px;">
+
+                <Label text="Comment Jouer ?"
+                       style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #e87800; -fx-border-color: transparent transparent #e87800 transparent; -fx-border-width: 0 0 2px 0; -fx-padding: 0 0 5px 0;"/>
+
+                <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS"
+                         style="-fx-tab-min-width: 160px; -fx-tab-max-width: 160px; -fx-tab-min-height: 35px; -fx-background-color: transparent;">
+                    <tabs>
+
+                        <!-- CATEGORIE DEFENSES -->
+                        <Tab text="Nos Défenses" style="-fx-background-color: #3d1a1e; -fx-text-base-color: #ded0b6;">
+                            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;" hbarPolicy="NEVER">
+                                <VBox spacing="14" style="-fx-padding: 20px 5px 10px 5px;">
+                                    <Text text="• Mitrafrite (100) : Tourelle de base, tire très vite avec une portée équilibrée mais de faibles dégâts (1 PV)." style="-fx-fill: #ded0b6; -fx-font-size: 14px;"/>
+                                    <Text text="• Lance-Burger (150) : Envoie des burgers explosifs. Gros dégâts de zone (10 PV) mais cadence lente." style="-fx-fill: #ded0b6; -fx-font-size: 14px;"/>
+                                    <Text text="• Barbecue (200) : Piège au sol. Brûle les zombies qui marchent dessus (2 PV/sec)." style="-fx-fill: #ded0b6; -fx-font-size: 14px;"/>
+                                    <Text text="• Bac à glace (300) : Portée très limitée mais ralentit fortement les ennemis." style="-fx-fill: #ded0b6; -fx-font-size: 14px;"/>
+                                </VBox>
+                            </ScrollPane>
+                        </Tab>
+
+                        <!-- CATEGORIE ENNEMIS -->
+                        <Tab text="Les Clients" style="-fx-background-color: #3d1a1e; -fx-text-base-color: #ded0b6;">
+                            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;" hbarPolicy="NEVER">
+                                <VBox spacing="14" style="-fx-padding: 20px 5px 10px 5px;">
+                                    <Text text="• Client de base : Vie faible (10 PV), vitesse normale. Fait perdre 1 PV à la base." style="-fx-fill: #ded0b6; -fx-font-size: 14px;"/>
+                                    <Text text="• L'Affamé : Court très vite (vitesse double). Enlève 2 PV s'il passe." style="-fx-fill: #ded0b6; -fx-font-size: 14px;"/>
+                                    <Text text="• Le Gourmand : Un vrai tank (25 PV) mais très lent. Enlève 5 PV à la base." style="-fx-fill: #ded0b6; -fx-font-size: 14px;"/>
+                                    <Text text="• La Famille : Se divise en 3 petits zombies rapides (7 PV chacun) à sa mort." style="-fx-fill: #ded0b6; -fx-font-size: 14px;"/>
+                                </VBox>
+                            </ScrollPane>
+                        </Tab>
+
+                        <!-- CATEGORIE EVOLUTION ET RESSOURCES -->
+                        <Tab text="Bonus et Argent" style="-fx-background-color: #3d1a1e; -fx-text-base-color: #ded0b6;">
+                            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;" hbarPolicy="NEVER">
+                                <VBox spacing="14" style="-fx-padding: 20px 5px 10px 5px;">
+                                    <Text text="• Économie : Tuer des zombies gagne des Tickets Restaurant. Utilisez ce budget pour poser des défenses ou réadapter votre stratégie." style="-fx-fill: #ded0b6; -fx-font-size: 14px;"/>
+                                    <Text text="• Rouleau à pizza : Objet bonus (5% de chance de drop). Il booste les dégâts de toutes tes tours de 20% pendant 30 secondes !" style="-fx-fill: #e87800; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+                                </VBox>
+                            </ScrollPane>
+                        </Tab>
+                    </tabs>
+                </TabPane>
+            </VBox>
+        </HBox>
+
+        <!-- Bouton de validation épuré -->
+        <Button fx:id="nextBtn"
+                text="COMMENCER LE COMBAT"
+                onAction="#aide"
+                style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-background-color: #e87800; -fx-text-fill: #2b1114; -fx-padding: 15px 60px; -fx-cursor: hand; -fx-background-radius: 4px;" />
+    </VBox>
+</StackPane>

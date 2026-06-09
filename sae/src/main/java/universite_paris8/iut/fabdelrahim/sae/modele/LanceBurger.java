@@ -11,7 +11,7 @@ public class LanceBurger extends Tour {
         super(x, y, 180, 15, 60, "LanceBurger"); // Portée augmentée à 180 !
     }
 
-    // --- LE POLYMORPHISME : On réécrit l'attaque pour faire des dégâts de zone ---
+    //LE POLYMORPHISME : On réécrit l'attaque pour faire des dégâts de zone
     @Override
     protected void infligerDegats(Enemie cible, List<Enemie> listeZombies) {
         System.out.println("Le Burger explose !");
@@ -27,7 +27,7 @@ public class LanceBurger extends Tour {
                 double dY = impactY - z.getY();
                 double distanceDeLExplosion = Math.sqrt(dX * dX + dY * dY);
 
-                // Si le zombie est dans le rayon de la bombe, il prend cher !
+                // Si le zombie est dans le rayon de la bombe, il prend
                 if (distanceDeLExplosion <= this.rayonExplosion) {
                     z.recevoirDegats(this.degats);
                 }
