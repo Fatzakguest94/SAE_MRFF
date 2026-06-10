@@ -123,33 +123,33 @@ public class Environnement {
             double hasard = Math.random(); // Génère un nombre entre 0.0 et 1.0
             if (hasard < 0.2) {
                 typeZombie = "ZombieGros";
-                vitesse = 2; // Très lent mais costaud
+                vitesse = 2.5; // Très lent mais costaud
             } else if (hasard < 0.4) {
                 typeZombie = "ZombieFamille";
                 vitesse = 3;
             } else if (hasard < 0.7) {
                 typeZombie = "ZombieRapide";
-                vitesse = 8;
+                vitesse = 12;
             } else {
                 typeZombie = "ZombieNormal";
-                vitesse = 4;
+                vitesse = 6;
             }
         }
         else if (vagueActuelle >= 3) {
             // Vagues 3 et 4 : Introduction du ZombieGros
             if (this.zombiesAFaireApparaitre % 4 == 0) {
                 typeZombie = "ZombieGros";
-                vitesse = 1;
+                vitesse = 3;
             } else if (this.zombiesAFaireApparaitre % 3 == 0) {
                 typeZombie = "ZombieRapide";
-                vitesse = 4;
+                vitesse = 8;
             }
         }
         else if (vagueActuelle >= 2) {
             // Vague 2 : Introduction du ZombieRapide
             if (this.zombiesAFaireApparaitre % 3 == 0) {
                 typeZombie = "ZombieRapide";
-                vitesse = 4;
+                vitesse = 8;
             }
         }
         // (Si vague 1 : aucune condition n'est vraie, il reste "ZombieNormal" à vitesse 2)

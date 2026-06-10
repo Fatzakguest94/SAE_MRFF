@@ -37,7 +37,8 @@ public class Controller implements Initializable {
     private Label labelVague;
     @FXML
     private Label labelHpBase;
-    
+    @FXML
+    private Button renomer;
 
     // Variables pour la gestion des vues et du moteur de jeu
     private TerrainVue terrainVue;
@@ -276,5 +277,11 @@ public class Controller implements Initializable {
         this.tourAcheteeEnCours = null;
     }
 
-
+    // Changement temporaire du texte du bouton de catégorie
+    @FXML
+    private void rename(MouseEvent event) {
+        if (renomer != null) {
+            renomer.setText("Objets");
+        }
+    }
 }

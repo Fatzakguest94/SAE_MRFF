@@ -36,11 +36,11 @@ public class Enemie {
             this.degat = 3;
         }
         else if (identite.equals("ZombieGros")) {
-            this.hp = 50;      // Beaucoup de vie car il est gros
+            this.hp = 70;      // Beaucoup de vie car il est gros
             this.degat = 10;    // Fait plus de dégâts s'il arrive au comptoir
         }
         else if (identite.equals("ZombieFamille")) {
-            this.hp = 30;
+            this.hp = 35;
             this.degat = 5;
         }
         else { // "ZombieNormal" (comportement par défaut)
@@ -50,8 +50,8 @@ public class Enemie {
     }
 
 
-    public void recevoirDegats(int montant) {
-        this.hp -= montant;
+    public void recevoirDegats(int degatprit) {
+        this.hp -= degatprit;
         if (this.hp < 0) {
             this.hp = 0;
         }
