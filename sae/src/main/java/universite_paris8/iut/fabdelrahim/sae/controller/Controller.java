@@ -221,8 +221,13 @@ public class Controller implements Initializable {
         // et l'afficher instantanement à l'écran
         this.env.ajouterTour(xAjuste, yAjuste, this.tourAcheteeEnCours);
         this.tourAcheteeEnCours = null;
+
     }
+    // Exemple dans ton gestionnaire de clic
+
     public void son (MouseEvent event){
+        // fxml : onMouseDragged="#son"
+        //            onMouseReleased="#son"
 
     }
 
@@ -232,4 +237,5 @@ public class Controller implements Initializable {
         // styliser les reglages avec des logos ( inspire toi de aide)
           
     }
+
 }

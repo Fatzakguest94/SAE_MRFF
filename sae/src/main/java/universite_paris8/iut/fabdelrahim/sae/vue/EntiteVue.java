@@ -108,10 +108,13 @@ public class EntiteVue {
         this.imageComptoir.setLayoutY(base.getY());
 
         this.panneauJeu.getChildren().add(this.imageComptoir);
+
+
     }
 
     public void viderTout() {
         this.panneauJeu.getChildren().clear();
         this.imageComptoir = null;
     }
+
 }

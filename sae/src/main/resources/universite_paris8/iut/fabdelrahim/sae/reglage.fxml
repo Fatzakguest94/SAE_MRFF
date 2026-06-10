@@ -10,12 +10,10 @@
       prefWidth="300" prefHeight="400"
       style="-fx-background-color: #6E2934;">
 
-    <Button styleClass="btn" text="Reprendre" />
-    <Button fx:id="leave" styleClass="btn" text="Quitter" onAction="#quitte"/>
+    <Button fx:id="leave" styleClass="btn" text="Reprendre" onAction="#quitte"/>
     <Slider fx:id="volume"
             min="0" max="100" value="50"
-            onMouseDragged="#son"
-            onMouseReleased="#son" />
+             />
     <Label text="Langues"/>
     <Label text="Crédit : MRFF"/>
 

@@ -68,6 +68,9 @@ public class Environnement {
         }
         return false;
     }
+    public void rembourserVente(int montant) {
+        this.argent.set(this.getArgent() + montant);
+    }
 
     public void ajouterTour(int pixelX, int pixelY, String type) {
         int cout = 100; // Prix par défaut
@@ -107,9 +110,6 @@ public class Environnement {
             System.out.println("Pas assez de Tickets Resto pour acheter : " + type);
         }
     }
-
-
-
     public void faireApparaitreZombie() {
         Point depart = this.terrain.trouverEntree();
 

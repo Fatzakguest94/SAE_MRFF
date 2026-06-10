@@ -29,6 +29,7 @@ public class ecranController {
     }
     public void quitte (ActionEvent event ) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Controller.class.getResource("/universite_paris8/iut/fabdelrahim/sae/ecran.fxml"));
+
     }
 
 

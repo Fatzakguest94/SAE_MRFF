@@ -8,7 +8,8 @@
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       spacing="20" alignment="CENTER"
-      prefWidth="300" prefHeight="400">
+      prefWidth="300" prefHeight="400"
+      style="-fx-background-color: #6E2934;" >
 
     <TextFlow GridPane.columnIndex="0" GridPane.rowIndex="0">
         <children>
@@ -22,6 +23,7 @@
     Vous devez empêcher les zombies d'atteindre le bout de la salle pour dévorer vos pizzas. Pour cela, vous devrez utiliser des objets et placer de manière stratégique des tours et des pièges sur leur passage pour les repousser.
 " />
         </children>
+
     </TextFlow>
 </VBox>
 
