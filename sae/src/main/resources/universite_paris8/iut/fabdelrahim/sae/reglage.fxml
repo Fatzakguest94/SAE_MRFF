@@ -12,7 +12,6 @@
     <Button styleClass="btn" text="Reprendre" />
     <Button fx:id="leave" styleClass="btn" text="Quitter" onAction="#quitte"/>
     <Slider fx:id="sonlogo" />
-    <Label text="Langues"/>
     <Label text="Crédit : MRFF"/>
 
 </VBox>

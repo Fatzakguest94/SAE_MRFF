@@ -36,7 +36,7 @@
                             text="100"
                             styleClass="tower-button"
                             onAction="#clicBoutonMitrailletteFrite"/>
-                    <Label text="Frites"/>
+                    <Label text="Mitra-Frites"/>
                 </VBox>
 
                 <VBox alignment="CENTER" spacing="5">
@@ -44,7 +44,7 @@
                             text="150"
                             styleClass="tower-button"
                             onAction="#clicBoutonLanceBurger"/>
-                    <Label text="Burger"/>
+                    <Label text="Lance-Burger"/>
                 </VBox>
             </HBox>
 
@@ -53,16 +53,16 @@
                     <Button prefWidth="70" prefHeight="70"
                             text="200"
                             styleClass="tower-button"
-                            onAction="#clicBoutonTour3"/>
-                    <Label text="Pizza"/>
+                            onAction="#clicBoutonBarbecue"/>
+                    <Label text="Barbecue"/>
                 </VBox>
 
                 <VBox alignment="CENTER" spacing="5">
                     <Button prefWidth="70" prefHeight="70"
                             text="300"
                             styleClass="tower-button"
-                            onAction="#clicBoutonTour4"/>
-                    <Label text="Soda"/>
+                            onAction="#clicBoutonBacGlace"/>
+                    <Label text="BacGlace"/>
                 </VBox>
             </HBox>
 
