@@ -1,114 +1,101 @@
 package universite_paris8.iut.fabdelrahim.sae.modele;
 
-
 import java.util.List;
 
 public class Enemie {
 
-    // Coordonnées en double pour permettre des déplacements précis avec la vitesse
+    private static final int TailleCase = 36;
+    private static int compteur = 0;
+
+    private final String idUnique;
+    private final String identite;
+
+    private double vitesse;
+    private final int degat;
+    private int hp;
+
     private double x;
     private double y;
-    private double vitesse;
-    private int hp;
-    private int degat;
-    private String identite;
 
     private List<Point> chemin;
     private int etapeActuelle;
-    private boolean recompenseDonnee;
-    private static int compteur = 0; // Pour l'id unique demandé par le prof
-    private String idUnique;
 
-    public Enemie(int x, int y, double vitesse, String identite) {
+    private boolean recompenseDonnee;
+
+    private int brulure = 0;
+    private boolean ralenti = false;
+
+    public Enemie(int x, int y, double vitesse, int hp, int degat, String identite) {
         this.x = x;
         this.y = y;
         this.vitesse = vitesse;
+        this.hp = hp;
+        this.degat = degat;
         this.identite = identite;
+
         this.etapeActuelle = 0;
         this.recompenseDonnee = false;
 
-        // Génération automatique de l'ID unique pour la Vue
-        this.idUnique = "zombie_" + compteur++;
-
-        //CONFIGURATION DES HP ET DÉGÂTS SELON LE TYPE DE ZOMBIE
-        if (identite.equals("ZombieRapide")) {
-            this.hp = 15;      // Moins de vie car il va vite
-            this.degat = 3;
-        }
-        else if (identite.equals("ZombieGros")) {
-            this.hp = 70;      // Beaucoup de vie car il est gros
-            this.degat = 10;    // Fait plus de dégâts s'il arrive au comptoir
-        }
-        else if (identite.equals("ZombieFamille")) {
-            this.hp = 35;
-            this.degat = 5;
-        }
-        else { // "ZombieNormal" (comportement par défaut)
-            this.hp = 20;
-            this.degat = 2;
-        }
-    }
-
-
-    public void recevoirDegats(int degatprit) {
-        this.hp -= degatprit;
-        if (this.hp < 0) {
-            this.hp = 0;
-        }
-    }
-
-
-    public boolean prendreRecompense() {
-        if (this.estMort() && !this.recompenseDonnee) {
-            this.recompenseDonnee = true;
-            return true; // Donne la récompense
-        }
-        return false; // Déjà donnée ou pas encore mort
+        this.idUnique = identite.toLowerCase() + "_" + compteur++;
     }
 
     public void avancer() {
-        // Si pas de chemin ou si on est arrivé au bout, on s'arrête
-        if (this.chemin == null || this.etapeActuelle >= this.chemin.size()) {
-            return;
+        if (chemin == null || etapeActuelle >= chemin.size()) return;
+
+        Point cible = chemin.get(etapeActuelle);
+
+        double cibleX = cible.y * TailleCase;
+        double cibleY = cible.x * TailleCase;
+
+        double vitesseEffective = vitesse;
+
+        if (ralenti) {
+            vitesseEffective = vitesseEffective / 2;
         }
 
-        // Récupération de la case cible actuelle
-        Point caseCible = this.chemin.get(this.etapeActuelle);
+        x = approcherValeur(x, cibleX, vitesseEffective);
+        y = approcherValeur(y, cibleY, vitesseEffective);
 
-
-        int cibleX = caseCible.y * 36; // Utilise .y (colonne) pour l'axe X global
-        int sizeY = caseCible.x * 36;  // Utilise .x (ligne) pour l'axe Y global
-
-        // Déplacement fluide vers la cible sur l'axe X
-        if (this.x < cibleX) {
-            this.x += this.vitesse;
-            if (this.x > cibleX) this.x = cibleX;
-        } else if (this.x > cibleX) {
-            this.x -= this.vitesse;
-            if (this.x < cibleX) this.x = cibleX;
+        if (x == cibleX && y == cibleY) {
+            etapeActuelle++;
         }
 
-        // Déplacement fluide vers la cible sur l'axe Y
-        if (this.y < sizeY) {
-            this.y += this.vitesse;
-            if (this.y > sizeY) this.y = sizeY;
-        } else if (this.y > sizeY) {
-            this.y -= this.vitesse;
-            if (this.y < sizeY) this.y = sizeY;
+        if (brulure > 0) {
+            recevoirDegats(2);
+            brulure--;
         }
+    }
 
-        // On passe à la case suivante dès qu'on a atteint le pixel de destination
-        if (this.x == cibleX && this.y == sizeY) {
-            this.etapeActuelle++;
+    private double approcherValeur(double valeur, double cible, double pas) {
+        if (valeur < cible) return Math.min(valeur + pas, cible);
+        if (valeur > cible) return Math.max(valeur - pas, cible);
+        return valeur;
+    }
+
+    public void bruler() {
+        this.brulure += 5;
+    }
+
+    public void ralentissement() {
+        if (!this.ralenti) {
+            this.ralenti = true;
         }
+    }
+
+    public void recevoirDegats(int degatsSubis) {
+        hp = Math.max(0, hp - degatsSubis);
     }
 
     public boolean estMort() {
-        return this.hp <= 0;
+        return hp <= 0;
     }
 
-    public boolean estArrive() {
-        return this.chemin != null && this.etapeActuelle >= this.chemin.size();
+    public boolean prendreRecompense() {
+        if (estMort() && !recompenseDonnee) {
+            recompenseDonnee = true;
+            return true;
+        }
+        return false;
     }
 
     public void setChemin(List<Point> chemin) {
@@ -116,12 +103,18 @@ public class Enemie {
         this.etapeActuelle = 0;
     }
 
-    public int getX() { return (int) this.x; }
-    public int getY() { return (int) this.y; }
-    public int getHp() { return this.hp; }
-    public double getVitesse() { return this.vitesse; }
-    public int getDegat() { return this.degat; }
-    public String getIdentite() { return this.identite; }
-    public String getIdUnique() {return this.idUnique; }
+    public boolean estArrive() {
+        return chemin != null && etapeActuelle >= chemin.size();
+    }
 
+    public int getX() { return (int) x; }
+    public int getY() { return (int) y; }
+    public int getHp() { return hp; }
+    public int getDegat() { return degat; }
+    public double getVitesse() { return vitesse; }
+    public String getIdentite() { return identite; }
+    public String getIdUnique() { return idUnique; }
+    public int getEtapeActuelle() { return etapeActuelle; }
+    public void setEtapeActuelle(int etapeActuelle) {this.etapeActuelle = etapeActuelle;}
+    public List<Point> getChemin() { return chemin; }
 }

@@ -194,7 +194,7 @@ public class Controller implements Initializable {
             // Identification du composant graphique à l'origine de l'événement
             Button boutonClique = (Button) event.getSource();
 
-            // Scénario 1 : Clic sur le bouton de validation de l'interface d'aide
+            //Clic sur le bouton de validation de l'interface d'aide
             if (boutonClique.getId() != null && boutonClique.getId().equals("nextBtn")) {
 
                 // Récupération de la fenêtre secondaire pour la fermer de manière isolée
@@ -207,7 +207,7 @@ public class Controller implements Initializable {
                 this.lancerJeu(null);
             }
 
-            // Scénario 2 : Clic sur le bouton d'appel à l'aide depuis le plateau de jeu
+            //Clic sur le bouton d'appel à l'aide depuis le plateau de jeu
             else {
                 // Suspension temporaire du timer de jeu (game loop) pendant la lecture
                 if (gameLoop != null) {
@@ -249,15 +249,15 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    public void clicBoutonTour3(ActionEvent event) {
-        this.tourAcheteeEnCours = "Tour3";
-        System.out.println("Mode placement : Tour 3 sélectionnée !");
+    public void clicBoutonBacGlace(ActionEvent event) {
+        this.tourAcheteeEnCours = "BacGlace";
+        System.out.println("Mode placement : BacGlace sélectionnée !");
     }
 
     @FXML
-    public void clicBoutonTour4(ActionEvent event) {
-        this.tourAcheteeEnCours = "Tour4";
-        System.out.println("Mode placement : Tour 4 sélectionnée !");
+    public void clicBoutonBarbecue(ActionEvent event) {
+        this.tourAcheteeEnCours = "Barbecue";
+        System.out.println("Mode placement : Barbecue sélectionnée !");
     }
 
     // Gestion du clic sur le terrain pour poser la tour sélectionnée

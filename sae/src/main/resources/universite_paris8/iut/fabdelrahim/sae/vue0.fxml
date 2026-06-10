@@ -53,16 +53,16 @@
                     <Button prefWidth="70" prefHeight="70"
                             text="200"
                             styleClass="tower-button"
-                            onAction="#clicBoutonTour3"/>
-                    <Label text="Pizza"/>
+                            onAction="#clicBoutonBacGlace"/>
+                    <Label text="Glace"/>
                 </VBox>
 
                 <VBox alignment="CENTER" spacing="5">
                     <Button prefWidth="70" prefHeight="70"
-                            text="300"
+                            text="250"
                             styleClass="tower-button"
-                            onAction="#clicBoutonTour4"/>
-                    <Label text="Soda"/>
+                            onAction="#clicBoutonBarbecue"/>
+                    <Label text="BBQ"/>
                 </VBox>
             </HBox>
 
