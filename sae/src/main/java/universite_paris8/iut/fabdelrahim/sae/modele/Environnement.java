@@ -108,6 +108,8 @@ public class Environnement {
         }
     }
 
+
+
     public void faireApparaitreZombie() {
         Point depart = this.terrain.trouverEntree();
 

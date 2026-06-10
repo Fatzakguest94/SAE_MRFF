@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
@@ -20,9 +21,13 @@ import universite_paris8.iut.fabdelrahim.sae.vue.TerrainVue;
 import universite_paris8.iut.fabdelrahim.sae.vue.EntiteVue;
 import universite_paris8.iut.fabdelrahim.sae.vue.GestionImage;
 
+
+import javax.sound.sampled.Clip;
+//import javafx.scene.
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
 
 public class Controller implements Initializable {
 
@@ -46,10 +51,17 @@ public class Controller implements Initializable {
     @FXML
     private Button renomer;
 
+    @FXML
+    private Slider volume;
+
+    private Clip mediaPlayer;
+    // quelle bibliotheque
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.env = new Environnement();
+        //this.mediaPlayer = new son ();
         GestionImage.loadAssets();
 
         this.terrainVue = new TerrainVue(env.getTerrain(), map);
@@ -206,16 +218,18 @@ public class Controller implements Initializable {
 
         // On ajoute simplement la tour dans le Modèle.
         // L'écouteur qu'on vient de mettre dans EntiteVue va capter l'ajout
-        // et l'afficher INSTANTANÉMENT à l'écran !
+        // et l'afficher instantanement à l'écran
         this.env.ajouterTour(xAjuste, yAjuste, this.tourAcheteeEnCours);
-
         this.tourAcheteeEnCours = null;
     }
+    public void son (MouseEvent event){
 
-    @FXML
-    private void rename(MouseEvent event) {
+    }
 
-        renomer.setText("Objets");
-        //FXMLLoader fxmlLoader = new FXMLLoader(Controller.class.getResource("/universite_paris8/iut/fabdelrahim/sae/menu.fxml"));
+
+    public void revente (ActionEvent event){
+        /// curseur appuie sur la tour enelve de la table + recuperer l'argent ou la moitier pour plus de difficulter + son mp3
+        // styliser les reglages avec des logos ( inspire toi de aide)
+          
     }
 }
