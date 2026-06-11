@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="universite_paris8.iut.fabdelrahim.sae.controller.Controller"
+           prefWidth="1377"
+           prefHeight="856"
+           style="-fx-background-color: #4a151b;">
+
+    <VBox alignment="CENTER" spacing="35">
+        <padding>
+            <Insets top="40" right="60" bottom="40" left="60"/>
+        </padding>
+
+        <Label text="Le Bestiaire"
+               style="-fx-font-size: 42px; -fx-font-weight: bold; -fx-text-fill: #e87800; -fx-letter-spacing: 2px;"/>
+
+        <HBox spacing="30" alignment="CENTER" VBox.vgrow="ALWAYS" maxWidth="1260">
+
+            <VBox spacing="20" prefWidth="610"
+                  style="-fx-background-color: #2b1114; -fx-padding: 30px; -fx-background-radius: 6px;">
+
+                <Label text="Les clients"
+                       style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #e87800; -fx-border-color: transparent transparent #e87800 transparent; -fx-border-width: 0 0 2px 0; -fx-padding: 0 0 5px 0;"/>
+
+                <HBox spacing="15" alignment="CENTER_LEFT">
+
+                    <Button style="-fx-background-color: transparent; -fx-cursor: hand;">
+                        <graphic>
+                            <ImageView fitWidth="80" fitHeight="80" preserveRatio="true">
+                                <image>
+                                    <Image url="@/universite_paris8/iut/fabdelrahim/sae/vue/zombie.png" />
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+
+                    <Button style="-fx-background-color: transparent; -fx-cursor: hand;">
+                        <graphic>
+                            <ImageView fitWidth="80" fitHeight="80" preserveRatio="true">
+                                <image>
+                                    <Image url="@/universite_paris8/iut/fabdelrahim/sae/vue/zombiegros.png" />
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+
+                    <Button style="-fx-background-color: transparent; -fx-cursor: hand;">
+                        <graphic>
+                            <ImageView fitWidth="80" fitHeight="80" preserveRatio="true">
+                                <image>
+                                    <Image url="@/universite_paris8/iut/fabdelrahim/sae/vue/zombierapide.png" />
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+
+                    <Button style="-fx-background-color: transparent; -fx-cursor: hand;">
+                        <graphic>
+                            <ImageView fitWidth="80" fitHeight="80" preserveRatio="true">
+                                <image>
+                                    <Image url="@/universite_paris8/iut/fabdelrahim/sae/vue/zombiefamille.png" />
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+
+                </HBox>
+
+            </VBox>
+            <VBox spacing="20" prefWidth="610"
+                  style="-fx-background-color: #2b1114; -fx-padding: 30px; -fx-background-radius: 6px;">
+
+                <Label text="Description"
+                       style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #e87800; -fx-border-color: transparent transparent #e87800 transparent; -fx-border-width: 0 0 2px 0; -fx-padding: 0 0 5px 0;"/>
+
+                <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS"
+                         style="-fx-tab-min-width: 160px; -fx-tab-max-width: 160px; -fx-tab-min-height: 35px; -fx-background-color: transparent;">
+                    <tabs>
+                        <Tab text="Statistiques">
+                            <VBox spacing="10" style="-fx-padding: 15px;">
+                                <TextFlow>
+                                    <Text fx:id="texteDescription" fill="WHITE" text="Cliquez sur l'image d'un client à gauche pour afficher ses détails." />
+                                </TextFlow>
+                            </VBox>
+                        </Tab>
+                    </tabs>
+                </TabPane>
+            </VBox>
+        </HBox>
+        <Button fx:id="nextBtn"
+                text="Reprendre"
+                onAction="#bestiaire"
+                style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-background-color: #e87800; -fx-text-fill: #2b1114; -fx-padding: 15px 60px; -fx-cursor: hand; -fx-background-radius: 4px;" />
+    </VBox>
+</StackPane>

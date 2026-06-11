@@ -34,8 +34,8 @@
 
 .tower-button {
 
-    -fx-pref-width: 70;
-    -fx-pref-height: 70;
+    -fx-pref-width: 100;
+    -fx-pref-height: 100;
 
     -fx-background-color: linear-gradient(to bottom, #d35400, #a84300);
 

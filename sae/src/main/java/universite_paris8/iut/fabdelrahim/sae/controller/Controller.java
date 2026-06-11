@@ -234,6 +234,36 @@ public class Controller implements Initializable {
         }
     }
 
+    @FXML
+    public void bestiaire(ActionEvent event) throws IOException{
+        try {
+            Button boutonClique = (Button) event.getSource();
+            if (boutonClique.getId() != null && boutonClique.getId().equals("nextBtn")) {
+                Stage stageAide = (Stage) boutonClique.getScene().getWindow();
+                if (stageAide != null) {
+                    stageAide.close();
+                }
+                this.lancerJeu(null);
+            }
+            else {
+                if (gameLoop != null) {
+                    gameLoop.pause();
+                }
+                Stage stage = new Stage();
+
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/universite_paris8/iut/fabdelrahim/sae/bestiaire.fxml"));
+                Scene scene = new Scene(fxmlLoader.load());
+
+                stage.setScene(scene);
+                stage.show();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     //SELECTION DES TOURS DANS LA BOUTIQUE
 
     @FXML
