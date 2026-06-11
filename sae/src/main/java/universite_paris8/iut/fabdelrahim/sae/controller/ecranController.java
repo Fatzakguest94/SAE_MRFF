@@ -34,14 +34,4 @@ public class ecranController {
             e.printStackTrace();
         }
     }
-
-    @FXML
-    public void quitte(ActionEvent event) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Controller.class.getResource(
-                "/universite_paris8/iut/fabdelrahim/sae/vue0.fxml"
-        ));
-        Scene scene = new Scene(fxmlLoader.load());
-        Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-    }
 }

@@ -18,6 +18,12 @@
             styleClass="btn-restart"
             prefWidth="180"
             prefHeight="40"/>
+    <HBox alignment="CENTER_LEFT" spacing="8" maxWidth="200">
+        <Label text="🔊"/>
+        <Slider fx:id="volume"
+                min="0" max="100" value="50"
+                HBox.hgrow="ALWAYS"/>
+    </HBox>
     <Label text="Crédit : MRFF"/>
 
 

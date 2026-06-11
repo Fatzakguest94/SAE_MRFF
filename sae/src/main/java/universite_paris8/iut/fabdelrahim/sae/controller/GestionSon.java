@@ -40,4 +40,15 @@ public class GestionSon {
             clip.start();
         }
     }
+    public void setVolume(double valeur) {
+        if (clip == null) return;
+        if (!clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
+            System.out.println("Erreur : Le contrôle du volume n'est pas supporté pour ce fichier audio.");
+            return;
+        }
+
+        FloatControl gain = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+        float dB = valeur == 0 ? -80.0f : (float) (Math.log10(valeur / 100.0) * 20);
+        gain.setValue(dB);
+    }
 }
