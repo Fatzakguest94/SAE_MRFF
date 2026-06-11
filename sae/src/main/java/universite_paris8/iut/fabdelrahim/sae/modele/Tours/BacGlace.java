@@ -7,7 +7,6 @@ import java.util.List;
 public class BacGlace extends Tour {
 
     public BacGlace(int x, int y) {
-        // portee: 50, degats: 0, vitesseTir: 12
         super(x, y, 50, 0, 12, "BacGlace");
     }
 
@@ -15,7 +14,7 @@ public class BacGlace extends Tour {
     protected void appliquerEffetImmediat(Enemie cible, List<Enemie> listeZombies) {
         System.out.println("Le Bac à Glace s'active et gèle la zone !");
 
-        // Effet de zone : on parcourt tous les zombies pour ralentir ceux à portée
+        // on parcourt tous les zombies pour ralentir ceux à portée
         for (Enemie z : listeZombies) {
             if (!z.estMort()) {
                 double dx = z.getX() - this.x;

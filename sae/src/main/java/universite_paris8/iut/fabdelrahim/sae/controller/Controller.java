@@ -64,7 +64,7 @@ public class Controller implements Initializable {
             this.entiteVue.afficherComptoir(this.env.getBase());
         }
 
-        // Maillage Vue-Modèle (Bindings)
+        // Bindings
         if (this.labelArgent != null) {
             this.labelArgent.textProperty().bind(env.argentProperty().asString("Ticket Resto : %d"));
         }
