@@ -6,6 +6,7 @@ public class GestionSon {
 
     private static GestionSon instance;
     private Clip clip;
+    private double volumeActuel = 50.0;
 
     private GestionSon() {}
 
@@ -24,31 +25,40 @@ public class GestionSon {
             );
             clip = AudioSystem.getClip();
             clip.open(audio);
+
+            setVolume(this.volumeActuel);
+
             clip.loop(Clip.LOOP_CONTINUOUSLY);
             clip.start();
         } catch (UnsupportedAudioFileException | LineUnavailableException | java.io.IOException e) {
             e.printStackTrace();
         }
     }
+
     public void pause() {
         if (clip != null && clip.isRunning()) clip.stop();
     }
 
     public void reprendre() {
         if (clip != null && !clip.isRunning()) {
+            setVolume(this.volumeActuel);
             clip.loop(Clip.LOOP_CONTINUOUSLY);
             clip.start();
         }
     }
-    public void setVolume(double valeur) {
-        if (clip == null) return;
-        if (!clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
-            System.out.println("Erreur : Le contrôle du volume n'est pas supporté pour ce fichier audio.");
-            return;
-        }
 
-        FloatControl gain = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-        float dB = valeur == 0 ? -80.0f : (float) (Math.log10(valeur / 100.0) * 20);
-        gain.setValue(dB);
+    public void setVolume(double valeur) {
+        this.volumeActuel = valeur;
+
+        if (clip == null) return;
+
+        if (clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
+            FloatControl gain = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            float dB = valeur == 0 ? -80.0f : (float) (Math.log10(valeur / 100.0) * 20);
+            gain.setValue(dB);
+        }
+    }
+    public double getVolumeActuel() {
+        return this.volumeActuel;
     }
 }

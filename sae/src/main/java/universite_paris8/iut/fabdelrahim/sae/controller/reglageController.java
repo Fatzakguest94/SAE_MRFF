@@ -13,7 +13,11 @@ public class reglageController {
 
     @FXML
     public void initialize() {
-        volume.setValue(50);
+
+        double vol = GestionSon.getInstance().getVolumeActuel();
+        volume.setValue(vol);
+
+
         volume.valueProperty().addListener((obs, oldVal, newVal) -> {
             GestionSon.getInstance().setVolume(newVal.doubleValue());
         });
@@ -22,9 +26,11 @@ public class reglageController {
     @FXML
     public void quitte(ActionEvent event) throws IOException {
         GestionSon.getInstance().reprendre();
+
         if (GestionJeu.getInstance().getController() != null) {
             GestionJeu.getInstance().getController().lancerJeu(null);
         }
+
         Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
