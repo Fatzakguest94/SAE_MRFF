@@ -3,19 +3,19 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="universite_paris8.iut.fabdelrahim.sae.controller.ecranController"
+      fx:controller="universite_paris8.iut.fabdelrahim.sae.controller.reglageController"
       spacing="20" alignment="CENTER"
       prefWidth="300" prefHeight="400"
       style="-fx-background-color: #6E2934;">
 
     <Button fx:id="leave" styleClass="btn" text="Reprendre" onAction="#quitte"/>
-    <Slider fx:id="volume"
-            min="0" max="100" value="50"
-             />
     <Label text="Langues"/>
     <Label text="Crédit : MRFF"/>
 
 
 </VBox>
+

@@ -168,3 +168,7 @@
 .btn-restart:hover {
     -fx-background-color: linear-gradient(to bottom, #f1c40f, #f39c12);
 }
+
+#sonlogo {
+    -fx-image: url("/universite_paris8/iut/fabdelrahim/sae/vue/sonlogo.png");
+}

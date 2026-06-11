@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
@@ -22,8 +23,12 @@ import universite_paris8.iut.fabdelrahim.sae.vue.EntiteVue;
 import universite_paris8.iut.fabdelrahim.sae.vue.GestionImage;
 
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 //import javafx.scene.
+import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -51,11 +56,12 @@ public class Controller implements Initializable {
     @FXML
     private Button renomer;
 
-    @FXML
-    private Slider volume;
 
-    private Clip mediaPlayer;
-    // quelle bibliotheque
+
+
+
+
+
 
 
     @Override
@@ -76,6 +82,7 @@ public class Controller implements Initializable {
         }
 
         this.initJeu();
+
     }
 
     private void initJeu() {
@@ -92,6 +99,7 @@ public class Controller implements Initializable {
         }
 
         this.initAnimation();
+        GestionSon.getInstance().demarrer("/universite_paris8/iut/fabdelrahim/sae/vue/test.wav");
     }
 
     private void initAnimation() {
@@ -168,12 +176,13 @@ public class Controller implements Initializable {
 
     public void reglage(ActionEvent event) throws IOException {
         if (gameLoop != null) gameLoop.stop();
-
+        GestionSon.getInstance().pause(); // stop le son
         Stage stage = new Stage();
         FXMLLoader fxmlLoader = new FXMLLoader(Controller.class.getResource("/universite_paris8/iut/fabdelrahim/sae/reglage.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
         stage.show();
+
     }
     public void aide(ActionEvent event) throws IOException {
         if (gameLoop != null) gameLoop.stop();
@@ -225,11 +234,7 @@ public class Controller implements Initializable {
     }
     // Exemple dans ton gestionnaire de clic
 
-    public void son (MouseEvent event){
-        // fxml : onMouseDragged="#son"
-        //            onMouseReleased="#son"
 
-    }
 
 
     public void revente (ActionEvent event){
