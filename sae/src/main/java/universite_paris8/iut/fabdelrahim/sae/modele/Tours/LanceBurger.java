@@ -1,39 +1,19 @@
 package universite_paris8.iut.fabdelrahim.sae.modele.Tours;
 
-import universite_paris8.iut.fabdelrahim.sae.modele.Zombies.Enemie;
-
-import java.util.List;
-
+/**
+ * Représente l'artillerie lourde de la pizzeria.
+ * Cette tour possède une longue portée et génère de lourds dégâts de zone (AoE).
+ * Note : La gestion de l'explosion est gérée à l'impact par l'entité du projectile Burger.
+ */
 public class LanceBurger extends Tour {
-
-    private int rayonExplosion = 50; // Rayon des dégâts de zone (en pixels)
 
     public LanceBurger(int x, int y) {
         // super(x, y, portee, degats, vitesseTir, identite)
-        super(x, y, 180, 15, 60, "LanceBurger"); // Portée augmentée à 180 !
+        // Portée de 180 pixels, 15 points de dégâts, cadence lente (60 tics de recharge)
+        super(x, y, 180, 15, 60, "LanceBurger");
     }
 
-    //LE POLYMORPHISME : On réécrit l'attaque pour faire des dégâts de zone
-    @Override
-    protected void infligerDegats(Enemie cible, List<Enemie> listeZombies) {
-        System.out.println("Le Burger explose !");
-
-        // On regarde la position de l'impact (le zombie ciblé)
-        double impactX = cible.getX();
-        double impactY = cible.getY();
-
-        // On inflige des dégâts à TOUS les zombies proches de l'impact
-        for (Enemie z : listeZombies) {
-            if (!z.estMort()) {
-                double dX = impactX - z.getX();
-                double dY = impactY - z.getY();
-                double distanceDeLExplosion = Math.sqrt(dX * dX + dY * dY);
-
-                // Si le zombie est dans le rayon de la bombe, il prend
-                if (distanceDeLExplosion <= this.rayonExplosion) {
-                    z.recevoirDegats(this.degats);
-                }
-            }
-        }
-    }
+    // L'ancienne méthode infligerDegats() a été supprimée.
+    // C'est maintenant le projectile "Burger.java" qui applique son effet d'explosion
+    // dans sa méthode "appliquerEffet(Environnement env)" lors de sa collision avec le zombie.
 }

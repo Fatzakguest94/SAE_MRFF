@@ -10,6 +10,7 @@ import javafx.collections.ObservableList;
 import universite_paris8.iut.fabdelrahim.sae.modele.Chemin.Bfs;
 import universite_paris8.iut.fabdelrahim.sae.modele.Chemin.Point;
 import universite_paris8.iut.fabdelrahim.sae.modele.Chemin.Terrain;
+import universite_paris8.iut.fabdelrahim.sae.modele.Projectiles.Projectile;
 import universite_paris8.iut.fabdelrahim.sae.modele.Tours.*;
 import universite_paris8.iut.fabdelrahim.sae.modele.Zombies.*;
 
@@ -30,6 +31,8 @@ public class Environnement {
     private final Comptoir base;
     private final ObservableList<Tour> tours;
     private final ObservableList<Enemie> zombies;
+    // CORRECTION : Changement de Projectiles en Projectile
+    private final ObservableList<Projectile> projectiles;
 
     private final IntegerProperty argent;
     private final IntegerProperty numeroVague;
@@ -45,13 +48,13 @@ public class Environnement {
         this.terrain = new Terrain();
         this.tours = FXCollections.observableArrayList();
         this.zombies = FXCollections.observableArrayList();
+        this.projectiles = FXCollections.observableArrayList(); // CORRECTION ici aussi
 
         this.argent = new SimpleIntegerProperty(ArgentDepart);
         this.numeroVague = new SimpleIntegerProperty(0);
         this.vagueEnCours = new SimpleBooleanProperty(false);
         this.temps = 0;
 
-        // Trajet des monstres via l'algorithme BFS
         Point debut = terrain.trouverEntree();
         Point arrivee = terrain.trouverSortie();
         this.chemin = Bfs.bfs(terrain.grille, debut, arrivee);
@@ -60,7 +63,6 @@ public class Environnement {
             System.err.println("Aucun chemin valide trouvé !");
         }
 
-        // Placement du QG de fin de parcours
         this.base = new Comptoir(
                 (int) (arrivee.y * TailleCase),
                 (int) (arrivee.x * TailleCase),
@@ -71,8 +73,7 @@ public class Environnement {
     public void preparerNouvelleVague() {
         numeroVague.set(getNumeroVague() + 1);
         vagueEnCours.set(true);
-
-        zombiesRestantsASpawner = 10 * getNumeroVague(); // +10 zombies par vague
+        zombiesRestantsASpawner = 10 * getNumeroVague();
         delaiAvantProchainZombie = 0;
     }
 
@@ -81,24 +82,24 @@ public class Environnement {
         int colonne = pixelX / TailleCase;
         int idTuile = terrain.grille[ligne][colonne];
 
-        // Anti-superposition
         for (Tour t : tours) {
             if (t.getX() == pixelX && t.getY() == pixelY) {
                 return;
             }
         }
 
-        // Vérification des règles de placement
         boolean estTourSpeciale = type.equals("BacGlace") || type.equals("Barbecue");
 
         if (estTourSpeciale) {
             if (idTuile == 1 || idTuile == 100) {
-                if (compteurToursSurChemin >= 6) return; // Limite sur chemin
-            } else if (idTuile != 0) {
-                return; // Interdit hors sol ou chemin
+                if (compteurToursSurChemin >= 6) return;
             }
-        } else {
-            if (idTuile != 0) return; // Tours classiques uniquement sur les tables (0)
+            else if (idTuile != 0) {
+                return;
+            }
+        }
+        else {
+            if (idTuile != 0) return;
         }
 
         int cout = coutTour(type);
@@ -115,40 +116,31 @@ public class Environnement {
 
     private int coutTour(String type) {
         switch (type) {
-            case "LanceBurger":
-                return 150;
-            case "MitrailletteFrite":
-                return 100;
-            case "BacGlace":
-                return 200;
-            case "Barbecue":
-                return 250;
-            default:
-                return 100;
+            case "LanceBurger": return 150;
+            case "MitrailletteFrite": return 100;
+            case "BacGlace": return 200;
+            case "Barbecue": return 250;
+            default: return 100;
         }
     }
 
     private Tour creerTour(int x, int y, String type) {
         switch (type) {
-            case "LanceBurger":
-                return new LanceBurger(x, y);
-            case "MitrailletteFrite":
-                return new MitrailletteFrite(x, y);
-            case "BacGlace":
-                return new BacGlace(x, y);
-            case "Barbecue":
-                return new Barbecue(x, y);
-            default:
-                return new MitrailletteFrite(x, y);
+            case "LanceBurger": return new LanceBurger(x, y);
+            case "MitrailletteFrite": return new MitrailletteFrite(x, y);
+            case "BacGlace": return new BacGlace(x, y);
+            case "Barbecue": return new Barbecue(x, y);
+            default: return new MitrailletteFrite(x, y);
         }
     }
 
     public void unTourDeJeu() {
         temps++;
-        if (temps % PAS_LOGIQUE != 0) return; // Régulateur de vitesse
+        if (temps % PAS_LOGIQUE != 0) return;
 
         gererAparition();
         faireAttaquerLesTours();
+        mettreAJourProjectiles(); // NOUVEAU : On fait bouger les projectiles
         mettreAJourZombies();
         gererTransitionVague();
     }
@@ -166,12 +158,28 @@ public class Environnement {
 
     private void faireAttaquerLesTours() {
         for (Tour t : tours) {
-            t.attaquer(zombies);
+            t.attaquer(this); // On passe l'environnement lui-même
+        }
+    }
+
+    //Gère le déplacement et l'impact des projectiles
+    private void mettreAJourProjectiles() {
+        for (int i = projectiles.size() - 1; i >= 0; i--) {
+            Projectile p = projectiles.get(i);
+
+            p.avancer();
+
+            // Si le projectile a touché sa cible (ou que la cible a disparu)
+            if (p.isATouche() || p.getCible() == null || p.getCible().estMort()) {
+                if (p.isATouche()) {
+                    p.appliquerEffet(this); // Applique l'explosion ou les dégâts
+                }
+                projectiles.remove(i); // Retiré du modèle -> Retiré de la vue automatiquement
+            }
         }
     }
 
     private void mettreAJourZombies() {
-        // Parcours inversé pour sécuriser les suppressions en cours de boucle
         for (int i = zombies.size() - 1; i >= 0; i--) {
             Enemie z = zombies.get(i);
             z.avancer();
@@ -184,7 +192,6 @@ public class Environnement {
                 argent.set(getArgent() + RecompenseParZombie);
             }
 
-            // Division du ZombieFamille à sa mort
             if (z instanceof ZombieFamille zf) {
                 if (zf.estMort()) {
                     List<Enemie> enfants = zf.genererEnfants(chemin, zf.getEtapeActuelle());
@@ -230,10 +237,8 @@ public class Environnement {
         zombies.add(zombie);
     }
 
-    // Logique d'apparition selon le niveau de difficulté de la vague
     private Enemie creerZombieSelonVague(int x, int y) {
         int vague = getNumeroVague();
-
         if (vague >= 5) {
             double hasard = Math.random();
             if (hasard < 0.20) return new ZombieGros(x, y);
@@ -241,26 +246,20 @@ public class Environnement {
             if (hasard < 0.70) return new ZombieRapide(x, y);
             return new ZombieNormal(x, y);
         }
-
         if (vague >= 3) {
             if (zombiesRestantsASpawner % 4 == 0) return new ZombieGros(x, y);
             if (zombiesRestantsASpawner % 3 == 0) return new ZombieRapide(x, y);
             return new ZombieNormal(x, y);
         }
-
         if (vague >= 2) {
             if (zombiesRestantsASpawner % 3 == 0) return new ZombieRapide(x, y);
             return new ZombieNormal(x, y);
         }
-
         return new ZombieNormal(x, y);
     }
 
-
     public void vendreTour(int pixelX, int pixelY) {
         Tour tourATrouver = null;
-
-        //On cherche la tour qui se trouve sur la case cliquée
         for (Tour t : tours) {
             if (t.getX() == pixelX && t.getY() == pixelY) {
                 tourATrouver = t;
@@ -268,17 +267,13 @@ public class Environnement {
             }
         }
 
-        //Si on a trouvé une tour, on procède à la vente
         if (tourATrouver != null) {
-            // On récupère son type pour calculer le remboursement (la moitié du prix)
             String type = tourATrouver.getIdentite();
             int prixDeBase = coutTour(type);
             int remboursement = prixDeBase / 2;
 
-            // On rend l'argent au joueur
             argent.set(getArgent() + remboursement);
 
-            // Si la tour était sur le chemin (tuile 1 ou 100), on libère une place
             int ligne = pixelY / TailleCase;
             int colonne = pixelX / TailleCase;
             int idTuile = terrain.grille[ligne][colonne];
@@ -286,15 +281,14 @@ public class Environnement {
                 compteurToursSurChemin--;
             }
 
-            // On la retire du modèle (la vue va se mettre à jour automatiquement grâce à l'écouteur)
             tours.remove(tourATrouver);
             System.out.println("Tour vendue ! Recrédité de : " + remboursement + " Tickets.");
         }
     }
 
-    // Getters / Setters standard
     public ObservableList<Enemie> getZombies() { return zombies; }
     public ObservableList<Tour> getTours() { return tours; }
+    public ObservableList<Projectile> getProjectiles() { return this.projectiles; }
     public Terrain getTerrain() { return terrain; }
     public Comptoir getBase() { return base; }
     public int getArgent() { return argent.get(); }

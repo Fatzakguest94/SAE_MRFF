@@ -19,4 +19,6 @@ module universite_paris8.iut.fabdelrahim.sae {
     opens universite_paris8.iut.fabdelrahim.sae.modele.Zombies to javafx.fxml;
     exports universite_paris8.iut.fabdelrahim.sae.modele.Chemin;
     opens universite_paris8.iut.fabdelrahim.sae.modele.Chemin to javafx.fxml;
+    exports universite_paris8.iut.fabdelrahim.sae.modele.Projectiles;
+    opens universite_paris8.iut.fabdelrahim.sae.modele.Projectiles to javafx.fxml;
 }

@@ -20,6 +20,9 @@ public class GestionImage {
         sprites.put("LanceBurger", new Image(GestionImage.class.getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/burger.png")));
         sprites.put("BacGlace", new Image(GestionImage.class.getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/glace.png")));
         sprites.put("Barbecue", new Image(GestionImage.class.getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/soda.png")));
+
+        sprites.put("Frite", new Image(GestionImage.class.getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/tefri.png")));
+        sprites.put("Burger", new Image(GestionImage.class.getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/balleb.png")));
     }
 
     public static Image getImage(String key) {
