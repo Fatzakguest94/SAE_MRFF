@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
 import javafx.stage.Stage;
 import universite_paris8.iut.fabdelrahim.sae.pizzattackapplication;
 import java.io.IOException;
@@ -14,9 +15,15 @@ public class ecranController {
     @FXML
     private Button playBtn;
 
+
+
+
+
     @FXML
     private void jouer() {
         try {
+            GestionSon.getInstance().demarrer("/universite_paris8/iut/fabdelrahim/sae/musique/Pizzayolo.wav");
+
             FXMLLoader loader = new FXMLLoader(
                     pizzattackapplication.class.getResource("vue0.fxml")
             );
@@ -27,9 +34,4 @@ public class ecranController {
             e.printStackTrace();
         }
     }
-    public void quitte (ActionEvent event ) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Controller.class.getResource("/universite_paris8/iut/fabdelrahim/sae/ecran.fxml"));
-    }
-
-
 }

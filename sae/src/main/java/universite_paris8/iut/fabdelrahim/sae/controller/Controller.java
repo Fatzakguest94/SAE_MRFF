@@ -110,7 +110,12 @@ public class Controller implements Initializable {
         }
     }
 
-
+    @FXML
+    public void recommencerJeu(ActionEvent event) {
+        if (this.gameLoop != null) {
+            this.gameLoop.stop();
+        }
+    }
 
     @FXML
     public void arreterJeu(ActionEvent event) {
