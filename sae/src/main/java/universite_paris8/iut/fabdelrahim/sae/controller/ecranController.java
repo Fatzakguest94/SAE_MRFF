@@ -15,7 +15,7 @@ public class ecranController {
     private Button playBtn;
 
     @FXML
-    private void handlePlay() {
+    private void jouer() {
         try {
             FXMLLoader loader = new FXMLLoader(
                     pizzattackapplication.class.getResource("vue0.fxml")

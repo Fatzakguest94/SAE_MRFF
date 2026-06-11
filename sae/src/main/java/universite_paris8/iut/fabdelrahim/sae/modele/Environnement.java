@@ -38,6 +38,8 @@ public class Environnement {
     private int delaiAvantProchainZombie;
     private int tempsAvantProchaineVague;
 
+    private int compteurToursSurChemin = 0;
+
     public Environnement() {
         this.terrain = new Terrain();
         this.tours = FXCollections.observableArrayList();
@@ -78,6 +80,46 @@ public class Environnement {
 
     // Tente d'acheter et de placer une tour sur la carte
     public void ajouterTour(int pixelX, int pixelY, String type) {
+
+        //Conversion des pixels en indices de la matrice (grille)
+        int ligne = pixelY / TailleCase;
+        int colonne = pixelX / TailleCase;
+
+        //Récupération de l'ID de la tuile sur laquelle le joueur a cliqué
+        int idTuile = terrain.grille[ligne][colonne];
+
+        //Vérification anti-superposition : s'il y a déjà une tour ici, on bloque
+        for (Tour t : tours) {
+            if (t.getX() == pixelX && t.getY() == pixelY) {
+                System.out.println("Placement refusé : il y a déjà une tour sur cette case.");
+                return;
+            }
+        }
+
+        //Vérification des règles de placement selon le type de tour
+        boolean estTourSpeciale = type.equals("BacGlace") || type.equals("Barbecue");
+
+        if (estTourSpeciale) {
+            // Les tours de ralentissement et de brûlure vont sur 0, 1 et 100
+            if (idTuile == 1 || idTuile == 100) {
+                if (compteurToursSurChemin >= 6) {
+                    System.out.println("Placement refusé : limite de 6 tours sur le chemin atteinte !");
+                    return;
+                }
+            } else if (idTuile != 0) {
+                // Si ce n'est ni 1, ni 100, ni 0, on refuse
+                System.out.println("Placement refusé : case non constructible pour cette tour.");
+                return;
+            }
+        } else {
+            // Les tours normales (LanceBurger, MitrailletteFrite) ne vont QUE sur les cases 0
+            if (idTuile != 0) {
+                System.out.println("Placement refusé : les tours classiques ne vont que sur les cases 0.");
+                return;
+            }
+        }
+
+        //Paiement et instanciation (ton code d'origine)
         int cout = coutTour(type);
 
         if (!payerAchat(cout)) {
@@ -88,7 +130,14 @@ public class Environnement {
         Tour nouvelleTour = creerTour(pixelX, pixelY, type);
         if (nouvelleTour != null) {
             tours.add(nouvelleTour);
-            System.out.println("[Tour] " + type + " achetée et placée en (" + pixelX + ", " + pixelY + ").");
+
+            // Si la tour a été posée sur le chemin (1 ou 100), on incrémente le compteur
+            if (idTuile == 1 || idTuile == 100) {
+                compteurToursSurChemin++;
+                System.out.println("[Tour] " + type + " placée sur le chemin. Total : " + compteurToursSurChemin + "/6.");
+            } else {
+                System.out.println("[Tour] " + type + " achetée et placée en (" + pixelX + ", " + pixelY + ").");
+            }
         }
     }
 
@@ -137,14 +186,14 @@ public class Environnement {
             return;
         }
 
-        gererSpawn();
+        gererAparition();
         faireAttaquerLesTours();
         mettreAJourZombies();
         gererTransitionVague();
     }
 
     // Gère le rythme d'apparition des zombies
-    private void gererSpawn() {
+    private void gererAparition() {
         if (zombiesRestantsASpawner <= 0) {
             return;
         }

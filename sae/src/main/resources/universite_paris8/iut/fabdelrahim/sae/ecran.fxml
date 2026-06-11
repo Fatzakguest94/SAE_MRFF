@@ -21,8 +21,8 @@
                style="-fx-font-size: 24px; -fx-text-fill: #f5e6c8;"/>
 
         <Button fx:id="playBtn"
-                text="▶JOUER"
-                onAction="#handlePlay"
+                text="JOUER"
+                onAction="#jouer"
                 style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-background-color: #e87800; -fx-text-fill: #1a0f04; -fx-padding: 16px 80px; -fx-cursor: hand; -fx-background-radius: 6px;" />
 
     </VBox>

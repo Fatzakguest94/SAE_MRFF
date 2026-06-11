@@ -37,8 +37,7 @@ public class Controller implements Initializable {
     private Label labelVague;
     @FXML
     private Label labelHpBase;
-    @FXML
-    private Button renomer;
+
 
     // Variables pour la gestion des vues et du moteur de jeu
     private TerrainVue terrainVue;
@@ -62,6 +61,9 @@ public class Controller implements Initializable {
         // Création et affichage du terrain (les tuiles)
         this.terrainVue = new TerrainVue(env.getTerrain(), map);
         this.terrainVue.creerTerrain();
+
+        this.panneauJeu.setPrefWidth(1152);   // 32 colonnes * 36 pixels
+        this.panneauJeu.setPrefHeight(756);   // 21 lignes * 36 pixels
 
         // Data binding pour lier l'affichage aux variables du modèle (mise à jour automatique)
         if (this.labelArgent != null) {
@@ -277,11 +279,5 @@ public class Controller implements Initializable {
         this.tourAcheteeEnCours = null;
     }
 
-    // Changement temporaire du texte du bouton de catégorie
-    @FXML
-    private void rename(MouseEvent event) {
-        if (renomer != null) {
-            renomer.setText("Objets");
-        }
-    }
+
 }

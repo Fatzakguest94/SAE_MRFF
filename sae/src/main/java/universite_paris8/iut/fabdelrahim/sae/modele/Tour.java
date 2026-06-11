@@ -37,7 +37,7 @@ public class Tour {
             Enemie zombie = listeZombies.get(i);
 
             if (!zombie.estMort()) {
-                //AJUSTEMENT GÉOMÉTRIQUE : TIR DEPUIS LE CENTRE DES CASES
+                //tir depuis le centre des cases
                 double centreTourX = this.x + 18;
                 double centreTourY = this.y + 18;
                 double centreZombieX = zombie.getX() + 18;
@@ -63,7 +63,7 @@ public class Tour {
         }
     }
 
-    // Par défaut, une tour normale ne touche qu'un seul zombie
+    // une tour normale ne touche qu'un seul zombie
     protected void infligerDegats(Enemie cible, List<Enemie> listeZombies) {
         cible.recevoirDegats(this.degats);
         System.out.println(this.identite + " tire ! HP restants : " + cible.getHp());
