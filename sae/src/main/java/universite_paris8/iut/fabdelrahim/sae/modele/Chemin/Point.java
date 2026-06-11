@@ -1,4 +1,4 @@
-package universite_paris8.iut.fabdelrahim.sae.modele;
+package universite_paris8.iut.fabdelrahim.sae.modele.Chemin;
 
 public class Point {
     public int x;

@@ -13,4 +13,10 @@ module universite_paris8.iut.fabdelrahim.sae {
     opens universite_paris8.iut.fabdelrahim.sae.modele to javafx.fxml;
     exports universite_paris8.iut.fabdelrahim.sae.vue;
     opens universite_paris8.iut.fabdelrahim.sae.vue to javafx.fxml;
+    exports universite_paris8.iut.fabdelrahim.sae.modele.Tours;
+    opens universite_paris8.iut.fabdelrahim.sae.modele.Tours to javafx.fxml;
+    exports universite_paris8.iut.fabdelrahim.sae.modele.Zombies;
+    opens universite_paris8.iut.fabdelrahim.sae.modele.Zombies to javafx.fxml;
+    exports universite_paris8.iut.fabdelrahim.sae.modele.Chemin;
+    opens universite_paris8.iut.fabdelrahim.sae.modele.Chemin to javafx.fxml;
 }

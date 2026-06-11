@@ -7,37 +7,38 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import universite_paris8.iut.fabdelrahim.sae.modele.Chemin.Bfs;
+import universite_paris8.iut.fabdelrahim.sae.modele.Chemin.Point;
+import universite_paris8.iut.fabdelrahim.sae.modele.Chemin.Terrain;
+import universite_paris8.iut.fabdelrahim.sae.modele.Tours.*;
+import universite_paris8.iut.fabdelrahim.sae.modele.Zombies.*;
 
 public class Environnement {
 
-    // Réglages de la grille et équilibrage du jeu
+    // Paramètres d'équilibrage
     private static final int ArgentDepart = 100000;
     private static final int RecompenseParZombie = 10;
-    private static final int TailleCase = 36; // En pixels (taille d'une tuile)
+    private static final int TailleCase = 36;
 
-    // Gestion du temps (en nombre de "ticks")
+    // Gestion du temps et des vagues
     private static final int Delaiavantaparition = 10;
     private static final int DelaientreVague = 60;
-    private static final int PAS_LOGIQUE = 5; // Facteur pour réguler la vitesse du jeu
+    private static final int PAS_LOGIQUE = 5;
 
-    // Composants du moteur de jeu
     private final Terrain terrain;
     private final List<Point> chemin;
     private final Comptoir base;
     private final ObservableList<Tour> tours;
-    private final ObservableList<Enemie> zombies; // Liste observable pour mettre à jour la vue automatiquement
+    private final ObservableList<Enemie> zombies;
 
-    // Propriétés synchronisées avec l'interface
     private final IntegerProperty argent;
     private final IntegerProperty numeroVague;
     private final BooleanProperty vagueEnCours;
 
-    // Compteurs internes pour la gestion des vagues et du temps
     private int temps;
     private int zombiesRestantsASpawner;
     private int delaiAvantProchainZombie;
     private int tempsAvantProchaineVague;
-
     private int compteurToursSurChemin = 0;
 
     public Environnement() {
@@ -50,16 +51,16 @@ public class Environnement {
         this.vagueEnCours = new SimpleBooleanProperty(false);
         this.temps = 0;
 
-        // Calcul du chemin unique entre l'entrée et la sortie grâce au BFS
+        // Trajet des monstres via l'algorithme BFS
         Point debut = terrain.trouverEntree();
         Point arrivee = terrain.trouverSortie();
         this.chemin = Bfs.bfs(terrain.grille, debut, arrivee);
 
         if (chemin.isEmpty()) {
-            System.err.println("[Environnement] Aucun chemin trouvé entre l'entrée et la sortie !");
+            System.err.println("Aucun chemin valide trouvé !");
         }
 
-        // Placement du comptoir de la pizzeria sur la case de sortie (conversion en pixels)
+        // Placement du QG de fin de parcours
         this.base = new Comptoir(
                 (int) (arrivee.y * TailleCase),
                 (int) (arrivee.x * TailleCase),
@@ -67,124 +68,84 @@ public class Environnement {
         );
     }
 
-    // Initialise les variables pour lancer une nouvelle vague
     public void preparerNouvelleVague() {
         numeroVague.set(getNumeroVague() + 1);
         vagueEnCours.set(true);
 
-        // Formule de scaling : +10 zombies par vague
-        zombiesRestantsASpawner = 10 * getNumeroVague();
+        zombiesRestantsASpawner = 10 * getNumeroVague(); // +10 zombies par vague
         delaiAvantProchainZombie = 0;
-        System.out.println("[Vague " + getNumeroVague() + "] Début — " + zombiesRestantsASpawner + " zombies à spawner.");
     }
 
-    // Tente d'acheter et de placer une tour sur la carte
     public void ajouterTour(int pixelX, int pixelY, String type) {
-
-        //Conversion des pixels en indices de la matrice (grille)
         int ligne = pixelY / TailleCase;
         int colonne = pixelX / TailleCase;
-
-        //Récupération de l'ID de la tuile sur laquelle le joueur a cliqué
         int idTuile = terrain.grille[ligne][colonne];
 
-        //Vérification anti-superposition : s'il y a déjà une tour ici, on bloque
+        // Anti-superposition
         for (Tour t : tours) {
             if (t.getX() == pixelX && t.getY() == pixelY) {
-                System.out.println("Placement refusé : il y a déjà une tour sur cette case.");
                 return;
             }
         }
 
-        //Vérification des règles de placement selon le type de tour
+        // Vérification des règles de placement
         boolean estTourSpeciale = type.equals("BacGlace") || type.equals("Barbecue");
 
         if (estTourSpeciale) {
-            // Les tours de ralentissement et de brûlure vont sur 0, 1 et 100
             if (idTuile == 1 || idTuile == 100) {
-                if (compteurToursSurChemin >= 6) {
-                    System.out.println("Placement refusé : limite de 6 tours sur le chemin atteinte !");
-                    return;
-                }
+                if (compteurToursSurChemin >= 6) return; // Limite sur chemin
             } else if (idTuile != 0) {
-                // Si ce n'est ni 1, ni 100, ni 0, on refuse
-                System.out.println("Placement refusé : case non constructible pour cette tour.");
-                return;
+                return; // Interdit hors sol ou chemin
             }
         } else {
-            // Les tours normales (LanceBurger, MitrailletteFrite) ne vont QUE sur les cases 0
-            if (idTuile != 0) {
-                System.out.println("Placement refusé : les tours classiques ne vont que sur les cases 0.");
-                return;
-            }
+            if (idTuile != 0) return; // Tours classiques uniquement sur les tables (0)
         }
 
-        //Paiement et instanciation (ton code d'origine)
         int cout = coutTour(type);
-
-        if (!payerAchat(cout)) {
-            System.out.println("[Tour] Pas assez de Tickets Resto pour : " + type + " (coût : " + cout + ")");
-            return;
-        }
+        if (!payerAchat(cout)) return;
 
         Tour nouvelleTour = creerTour(pixelX, pixelY, type);
         if (nouvelleTour != null) {
             tours.add(nouvelleTour);
-
-            // Si la tour a été posée sur le chemin (1 ou 100), on incrémente le compteur
             if (idTuile == 1 || idTuile == 100) {
                 compteurToursSurChemin++;
-                System.out.println("[Tour] " + type + " placée sur le chemin. Total : " + compteurToursSurChemin + "/6.");
-            } else {
-                System.out.println("[Tour] " + type + " achetée et placée en (" + pixelX + ", " + pixelY + ").");
             }
         }
     }
 
-
     private int coutTour(String type) {
-        int cout;
-
         switch (type) {
             case "LanceBurger":
-                cout = 150;
-                break;
+                return 150;
             case "MitrailletteFrite":
-                cout = 100;
-                break;
+                return 100;
             case "BacGlace":
-                cout = 200;
-                break;
+                return 200;
             case "Barbecue":
-                cout = 250;
-                break;
+                return 250;
             default:
-                cout = 100;
-                break;
+                return 100;
         }
-
-        return cout;
     }
 
-    // Utilisation du switch moderne pour instancier la bonne classe de Tour
     private Tour creerTour(int x, int y, String type) {
-        return switch (type) {
-            case "LanceBurger" -> new LanceBurger(x, y);
-            case "MitrailletteFrite" -> new MitrailletteFrite(x, y);
-            case "BacGlace" -> new BacGlace(x, y);
-            case "Barbecue" -> new Barbecue(x, y);
-            default -> new MitrailletteFrite(x, y);
-        };
+        switch (type) {
+            case "LanceBurger":
+                return new LanceBurger(x, y);
+            case "MitrailletteFrite":
+                return new MitrailletteFrite(x, y);
+            case "BacGlace":
+                return new BacGlace(x, y);
+            case "Barbecue":
+                return new Barbecue(x, y);
+            default:
+                return new MitrailletteFrite(x, y);
+        }
     }
 
-    // Moteur principal appelé à chaque tick par l'AnimationTimer
     public void unTourDeJeu() {
         temps++;
-
-        // Permet de ne pas exécuter la logique physique à chaque tick d'horloge
-        if (temps % PAS_LOGIQUE != 0) {
-            return;
-        }
+        if (temps % PAS_LOGIQUE != 0) return; // Régulateur de vitesse
 
         gererAparition();
         faireAttaquerLesTours();
@@ -192,69 +153,57 @@ public class Environnement {
         gererTransitionVague();
     }
 
-    // Gère le rythme d'apparition des zombies
     private void gererAparition() {
-        if (zombiesRestantsASpawner <= 0) {
-            return;
-        }
+        if (zombiesRestantsASpawner <= 0) return;
+
         delaiAvantProchainZombie--;
         if (delaiAvantProchainZombie <= 0) {
             faireApparaitreZombie();
             zombiesRestantsASpawner--;
-            delaiAvantProchainZombie = Delaiavantaparition; // Réinitialisation du cooldown
+            delaiAvantProchainZombie = Delaiavantaparition;
         }
     }
 
-    // Fait tirer toutes les tours posées sur la carte
     private void faireAttaquerLesTours() {
         for (Tour t : tours) {
-            t.attaquer(zombies); // La tour cherche sa cible dans la liste observable des zombies
+            t.attaquer(zombies);
         }
     }
 
-    // Met à jour la position et l'état de santé des zombies
     private void mettreAJourZombies() {
-        // Parcours inversé obligatoire pour éviter les bugs d'index lors des suppressions en plein milieu
+        // Parcours inversé pour sécuriser les suppressions en cours de boucle
         for (int i = zombies.size() - 1; i >= 0; i--) {
             Enemie z = zombies.get(i);
             z.avancer();
 
-            // Le zombie a atteint le comptoir
             if (z.estArrive() && base != null) {
                 base.recevoirDegats(z.getDegat());
             }
 
-            //Le zombie est mort, on donne la récompense au joueur
             if (z.prendreRecompense()) {
                 argent.set(getArgent() + RecompenseParZombie);
             }
 
-            // Cas spécial du ZombieFamille : s'il meurt, on extrait ses enfants et on les ajoute à la liste
-            if (z instanceof ZombieFamille) {
-                ZombieFamille zf = (ZombieFamille) z; // Cast classique, propre et explicite pour le BUT 1
+            // Division du ZombieFamille à sa mort
+            if (z instanceof ZombieFamille zf) {
                 if (zf.estMort()) {
                     List<Enemie> enfants = zf.genererEnfants(chemin, zf.getEtapeActuelle());
                     zombies.addAll(enfants);
                 }
             }
 
-            // Nettoyage de la liste : on retire les monstres morts ou arrivés au bout
             if (z.estMort() || z.estArrive()) {
                 zombies.remove(i);
             }
         }
     }
 
-    // Gère la fin d'une vague et le déclenchement automatique de la suivante
     private void gererTransitionVague() {
-        // Si la vague est active mais qu'il n'y a plus aucun zombie en vie ni à spawner
         if (vagueEnCours.get() && zombiesRestantsASpawner == 0 && zombies.isEmpty()) {
             vagueEnCours.set(false);
             tempsAvantProchaineVague = DelaientreVague;
-            System.out.println("[Vague " + getNumeroVague() + "] Terminée. Prochaine vague dans " + DelaientreVague + " ticks.");
         }
 
-        // Compte à rebours avant le lancement automatique de la prochaine vague
         if (!vagueEnCours.get() && getNumeroVague() > 0) {
             tempsAvantProchaineVague--;
             if (tempsAvantProchaineVague <= 0) {
@@ -263,7 +212,6 @@ public class Environnement {
         }
     }
 
-    // Vérifie et déduis l'argent si le solde est suffisant
     public boolean payerAchat(int montant) {
         if (getArgent() >= montant) {
             argent.set(getArgent() - montant);
@@ -272,7 +220,6 @@ public class Environnement {
         return false;
     }
 
-    // Crée un zombie au point de départ (en pixels)
     private void faireApparaitreZombie() {
         Point depart = terrain.trouverEntree();
         int pixelX = (int) (depart.y * TailleCase);
@@ -283,11 +230,10 @@ public class Environnement {
         zombies.add(zombie);
     }
 
-    // Algorithme d'apparition des zombies selon le niveau de la vague actuelle
+    // Logique d'apparition selon le niveau de difficulté de la vague
     private Enemie creerZombieSelonVague(int x, int y) {
         int vague = getNumeroVague();
 
-        // Vague 5 et plus : Probabilités aléatoires
         if (vague >= 5) {
             double hasard = Math.random();
             if (hasard < 0.20) return new ZombieGros(x, y);
@@ -296,24 +242,21 @@ public class Environnement {
             return new ZombieNormal(x, y);
         }
 
-        // Vague 3 et 4  Gros et Rapides
         if (vague >= 3) {
             if (zombiesRestantsASpawner % 4 == 0) return new ZombieGros(x, y);
             if (zombiesRestantsASpawner % 3 == 0) return new ZombieRapide(x, y);
             return new ZombieNormal(x, y);
         }
 
-        // Vague 2 zombie rapide ajouter
         if (vague >= 2) {
             if (zombiesRestantsASpawner % 3 == 0) return new ZombieRapide(x, y);
             return new ZombieNormal(x, y);
         }
 
-        // Vague 1 Uniquement des zombies basiques
         return new ZombieNormal(x, y);
     }
 
-    // Getters / Setters et Properties pour les fenêtres JavaFX
+    // Getters / Setters standard
     public ObservableList<Enemie> getZombies() { return zombies; }
     public ObservableList<Tour> getTours() { return tours; }
     public Terrain getTerrain() { return terrain; }

@@ -1,5 +1,7 @@
 package universite_paris8.iut.fabdelrahim.sae.modele;
 
+import universite_paris8.iut.fabdelrahim.sae.modele.Tours.Tour;
+
 public class Projectiles {
     private int x;
     private int y;

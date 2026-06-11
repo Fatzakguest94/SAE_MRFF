@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
-import universite_paris8.iut.fabdelrahim.sae.modele.Terrain;
+import universite_paris8.iut.fabdelrahim.sae.modele.Chemin.Terrain;
 
 
 public class TerrainVue {

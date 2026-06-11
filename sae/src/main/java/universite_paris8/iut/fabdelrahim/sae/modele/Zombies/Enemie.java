@@ -1,4 +1,6 @@
-package universite_paris8.iut.fabdelrahim.sae.modele;
+package universite_paris8.iut.fabdelrahim.sae.modele.Zombies;
+
+import universite_paris8.iut.fabdelrahim.sae.modele.Chemin.Point;
 
 import java.util.List;
 

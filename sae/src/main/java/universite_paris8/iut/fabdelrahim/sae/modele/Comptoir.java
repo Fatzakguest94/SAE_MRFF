@@ -28,7 +28,7 @@ public class Comptoir {
         this.hp.set(nouveauxHp);
     }
 
-    // --- GETTER DE LA PROPERTY (Pour le binding ou l'écoute) ---
+    //GETTER DE LA PROPERTY Pour le binding ou l'écoute
     public IntegerProperty hpProperty() {
         return this.hp;
     }
