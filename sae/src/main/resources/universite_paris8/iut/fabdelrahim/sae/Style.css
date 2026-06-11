@@ -149,22 +149,8 @@
 
             /*  recommencer */
 
-.btn-restart {
-
-    -fx-pref-width: 180;
-    -fx-pref-height: 40;
-
-    -fx-background-color: linear-gradient(to bottom, #f39c12, #d68910);
-
+.btn-vendre {
+    -fx-background-color: blue; /* Rouge */
     -fx-text-fill: white;
-
     -fx-font-weight: bold;
-
-    -fx-background-radius: 10;
-
-    -fx-cursor: hand;
-}
-
-.btn-restart:hover {
-    -fx-background-color: linear-gradient(to bottom, #f1c40f, #f39c12);
 }

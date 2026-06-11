@@ -18,17 +18,20 @@ public class EntiteVue {
     public EntiteVue(Pane terrain, Environnement env) {
         this.panneauJeu = terrain;
 
-        // Gestionnaire d'affichage des zombies (Ajout / Suppression)
+        // 1. Gestionnaire d'affichage des ZOMBIES (Correction ici !)
         env.getZombies().addListener((ListChangeListener<Enemie>) change -> {
             while (change.next()) {
                 if (change.wasAdded()) {
                     for (Enemie nouveauZombie : change.getAddedSubList()) {
-                        creerImageZombie(nouveauZombie);
+                        // On appelle ta méthode pour créer l'image du zombie sur la map
+                        this.creerImageZombie(nouveauZombie);
                     }
                 }
+
                 if (change.wasRemoved()) {
-                    for (Enemie zombieRetire : change.getRemoved()) {
-                        Node imgView = this.panneauJeu.lookup("#" + zombieRetire.getIdUnique());
+                    for (Enemie zombieMort : change.getRemoved()) {
+                        // On cherche l'image du zombie par son ID unique pour la supprimer
+                        Node imgView = this.panneauJeu.lookup("#" + zombieMort.getIdUnique());
                         if (imgView != null) {
                             this.panneauJeu.getChildren().remove(imgView);
                         }
@@ -37,12 +40,22 @@ public class EntiteVue {
             }
         });
 
-        // Gestionnaire d'affichage des tours posées
+        // 2. Gestionnaire d'affichage des TOURS (Pose et Vente)
         env.getTours().addListener((ListChangeListener<Tour>) change -> {
             while (change.next()) {
                 if (change.wasAdded()) {
                     for (Tour nouvelleTour : change.getAddedSubList()) {
                         this.afficherTour(nouvelleTour);
+                    }
+                }
+
+                if (change.wasRemoved()) {
+                    for (Tour tourRetiree : change.getRemoved()) {
+                        // On cherche l'image de la tour pour la supprimer (utile pour la vente)
+                        Node imgView = this.panneauJeu.lookup("#" + tourRetiree.getIdUnique());
+                        if (imgView != null) {
+                            this.panneauJeu.getChildren().remove(imgView);
+                        }
                     }
                 }
             }

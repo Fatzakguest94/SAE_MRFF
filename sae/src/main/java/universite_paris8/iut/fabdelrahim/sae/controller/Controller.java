@@ -110,19 +110,7 @@ public class Controller implements Initializable {
         }
     }
 
-    @FXML
-    public void recommencerJeu(ActionEvent event) {
-        if (this.gameLoop != null) {
-            this.gameLoop.stop();
-        }
 
-        this.entiteVue.viderTout();
-        this.env = new Environnement(); // Reset du modèle
-
-        this.initJeu();
-        this.env.preparerNouvelleVague();
-        this.gameLoop.play();
-    }
 
     @FXML
     public void arreterJeu(ActionEvent event) {
@@ -197,11 +185,23 @@ public class Controller implements Initializable {
     public void clicSurTerrain(MouseEvent event) {
         if (this.tourAcheteeEnCours == null) return;
 
-        // Raccords avec la grille de 36x36
         int xAjuste = ((int) event.getX() / 36) * 36;
         int yAjuste = ((int) event.getY() / 36) * 36;
 
-        this.env.ajouterTour(xAjuste, yAjuste, this.tourAcheteeEnCours);
-        this.tourAcheteeEnCours = null; // Reset après pose
+        // Si on a activé le mode vente
+        if (this.tourAcheteeEnCours.equals("VENDRE")) {
+            this.env.vendreTour(xAjuste, yAjuste);
+        }
+        // Sinon on pose une tour classique
+        else {
+            this.env.ajouterTour(xAjuste, yAjuste, this.tourAcheteeEnCours);
+        }
+
+        this.tourAcheteeEnCours = null; // Désactive le mode après le clic
+    }
+    @FXML
+    public void vendreT(ActionEvent event) {
+        this.tourAcheteeEnCours = "VENDRE";
+        System.out.println("Mode vente activé : cliquez sur une tour pour la revendre.");
     }
 }

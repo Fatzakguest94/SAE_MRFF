@@ -69,7 +69,7 @@
             <!-- ESPACE -->
             <Region prefHeight="10"/>
 
-            <!-- CONTRÔLES DU JEU -->
+
             <Button text="Lancer"
                     onAction="#lancerJeu"
                     styleClass="btn-play-big"
@@ -82,9 +82,9 @@
                     prefWidth="180"
                     prefHeight="40"/>
 
-            <Button text="Recommencer"
-                    onAction="#recommencerJeu"
-                    styleClass="btn-restart"
+            <Button text="Vendre"
+                    onAction="#vendreT"
+                    styleClass="btn-vendre"
                     prefWidth="180"
                     prefHeight="40"/>
 

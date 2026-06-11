@@ -256,6 +256,42 @@ public class Environnement {
         return new ZombieNormal(x, y);
     }
 
+
+    public void vendreTour(int pixelX, int pixelY) {
+        Tour tourATrouver = null;
+
+        //On cherche la tour qui se trouve sur la case cliquée
+        for (Tour t : tours) {
+            if (t.getX() == pixelX && t.getY() == pixelY) {
+                tourATrouver = t;
+                break;
+            }
+        }
+
+        //Si on a trouvé une tour, on procède à la vente
+        if (tourATrouver != null) {
+            // On récupère son type pour calculer le remboursement (la moitié du prix)
+            String type = tourATrouver.getIdentite();
+            int prixDeBase = coutTour(type);
+            int remboursement = prixDeBase / 2;
+
+            // On rend l'argent au joueur
+            argent.set(getArgent() + remboursement);
+
+            // Si la tour était sur le chemin (tuile 1 ou 100), on libère une place
+            int ligne = pixelY / TailleCase;
+            int colonne = pixelX / TailleCase;
+            int idTuile = terrain.grille[ligne][colonne];
+            if (idTuile == 1 || idTuile == 100) {
+                compteurToursSurChemin--;
+            }
+
+            // On la retire du modèle (la vue va se mettre à jour automatiquement grâce à l'écouteur)
+            tours.remove(tourATrouver);
+            System.out.println("Tour vendue ! Recrédité de : " + remboursement + " Tickets.");
+        }
+    }
+
     // Getters / Setters standard
     public ObservableList<Enemie> getZombies() { return zombies; }
     public ObservableList<Tour> getTours() { return tours; }
