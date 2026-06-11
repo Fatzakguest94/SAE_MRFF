@@ -34,8 +34,8 @@
 
 .tower-button {
 
-    -fx-pref-width: 70;
-    -fx-pref-height: 70;
+    -fx-pref-width: 100;
+    -fx-pref-height: 100;
 
     -fx-background-color: linear-gradient(to bottom, #d35400, #a84300);
 
@@ -79,7 +79,7 @@
     -fx-font-weight: bold;
 }
 
-            /* BOUTONS */
+/* BOUTONS */
 
 .btn {
 
@@ -101,13 +101,13 @@
     -fx-background-color: #4a4a4a;
 }
 
-            /*LANCER*/
+/*LANCER*/
 
 .btn-play-big {
 
-    -fx-pref-width: 180;
-    -fx-pref-height: 120;
 
+    -fx-pref-width: 85;
+    -fx-pref-height: 85;
     -fx-background-color: linear-gradient(to bottom, #27ae60, #1e8449);
 
     -fx-text-fill: white;
@@ -125,12 +125,12 @@
     -fx-background-color: linear-gradient(to bottom, #2ecc71, #27ae60);
 }
 
-            /* STOP */
+/* STOP */
 
 .btn-stop {
 
-    -fx-pref-width: 180;
-    -fx-pref-height: 40;
+    -fx-pref-width: 85;
+    -fx-pref-height: 85;
 
     -fx-background-color: linear-gradient(to bottom, #c0392b, #922b21);
 
@@ -138,7 +138,7 @@
 
     -fx-font-weight: bold;
 
-    -fx-background-radius: 10;
+    -fx-background-radius: 12;
 
     -fx-cursor: hand;
 }
@@ -147,10 +147,17 @@
     -fx-background-color: linear-gradient(to bottom, #e74c3c, #c0392b);
 }
 
-            /*  recommencer */
-
 .btn-vendre {
-    -fx-background-color: blue; /* Rouge */
+
+    -fx-pref-width: 160;
+    -fx-pref-height: 110;
+
+    -fx-background-color: linear-gradient(to bottom, #3498db, #2980b9);
     -fx-text-fill: white;
+
+
+    -fx-font-size: 20px;
     -fx-font-weight: bold;
+    -fx-background-radius: 12;
+    -fx-cursor: hand;
 }

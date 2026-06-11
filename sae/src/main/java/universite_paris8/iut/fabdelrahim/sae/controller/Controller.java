@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
@@ -29,7 +30,8 @@ public class Controller implements Initializable {
     @FXML private Pane panneauJeu;
     @FXML private Label labelArgent;
     @FXML private Label labelVague;
-    @FXML private Label labelHpBase;
+    @FXML private ProgressBar pv;
+
 
     private TerrainVue terrainVue;
     private EntiteVue entiteVue;
@@ -66,13 +68,13 @@ public class Controller implements Initializable {
 
         // Bindings
         if (this.labelArgent != null) {
-            this.labelArgent.textProperty().bind(env.argentProperty().asString("Ticket Resto : %d"));
+            this.labelArgent.textProperty().bind(env.argentProperty().asString(" : %d"));
         }
         if (this.labelVague != null) {
             this.labelVague.textProperty().bind(env.numeroVagueProperty().asString("Vague : %d"));
         }
-        if (this.env.getBase() != null && this.labelHpBase != null) {
-            this.labelHpBase.textProperty().bind(this.env.getBase().hpProperty().asString("Pizza : %d PV"));
+        if (this.env.getBase() != null && this.pv != null){
+            this.pv.progressProperty().bind(this.env.getBase().hpProperty().divide(100.0));
         }
 
         this.initAnimation();

@@ -3,84 +3,91 @@
 <?import java.net.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<BorderPane prefHeight="856.0"
-            prefWidth="1377.0"
-            styleClass="root"
-            xmlns="http://javafx.com/javafx/8.0.40"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="universite_paris8.iut.fabdelrahim.sae.controller.Controller">
+<BorderPane prefHeight="856.0" prefWidth="1377.0" styleClass="root" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="universite_paris8.iut.fabdelrahim.sae.controller.Controller">
 
     <stylesheets>
-        <URL value="@Style.css"/>
+        <URL value="@Style.css" />
     </stylesheets>
 
     <right>
-        <VBox alignment="TOP_CENTER"
-              prefWidth="225.0"
-              prefHeight="620.0"
-              spacing="15"
-              styleClass="sidebar">
+        <VBox alignment="TOP_CENTER" prefHeight="620.0" prefWidth="225.0" spacing="15" styleClass="sidebar">
 
             <padding>
-                <Insets top="20" right="15" bottom="20" left="15"/>
+                <Insets bottom="20" left="15" right="15" top="20" />
             </padding>
 
-            <Button fx:id="renomer"  styleClass="title" text="Tours" />
+            <Button fx:id="renomer" styleClass="title" text="Tours" />
 
             <!-- TOURS -->
             <HBox alignment="CENTER" spacing="15">
                 <VBox alignment="CENTER" spacing="5">
-                    <Button prefWidth="70" prefHeight="70"
-                            text="100"
-                            styleClass="tower-button"
-                            onAction="#clicBoutonMitrailletteFrite"/>
-                    <Label text="Frites"/>
+                    <Button contentDisplay="top" onAction="#clicBoutonMitrailletteFrite" prefHeight="70" prefWidth="70" styleClass="tower-button" text="100✉︎">
+                        <graphic>
+                            <ImageView fitHeight="55" fitWidth="55">
+                                <image>
+                                    <Image url="@vue/frite.png" />
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    <Label text="Mitra-Frites" />
                 </VBox>
 
                 <VBox alignment="CENTER" spacing="5">
-                    <Button prefWidth="70" prefHeight="70"
-                            text="150"
-                            styleClass="tower-button"
-                            onAction="#clicBoutonLanceBurger"/>
-                    <Label text="Burger"/>
+                    <Button contentDisplay="top" onAction="#clicBoutonLanceBurger" prefHeight="70" prefWidth="70" styleClass="tower-button" text="150✉︎">
+                        <graphic>
+                            <ImageView fitHeight="65" fitWidth="65">
+                                <image>
+                                    <Image url="@vue/burger.png" />
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    <Label text="Lance-Burger" />
                 </VBox>
+
             </HBox>
 
             <HBox alignment="CENTER" spacing="15">
+
                 <VBox alignment="CENTER" spacing="5">
-                    <Button prefWidth="70" prefHeight="70"
-                            text="200"
-                            styleClass="tower-button"
-                            onAction="#clicBoutonBacGlace"/>
-                    <Label text="Glace"/>
+                    <Button contentDisplay="top" onAction="#clicBoutonBarbecue" prefHeight="70" prefWidth="70" styleClass="tower-button" text="200✉︎">
+                        <graphic>
+                            <ImageView fitHeight="55" fitWidth="55">
+                                <image>
+                                    <Image url="@vue/soda.png" />
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    <Label text="Barbecue">
+                        <font>
+                            <Font name="GLYPHICONS Halflings Regular" size="13.0" />
+                        </font>
+                    </Label>
                 </VBox>
 
                 <VBox alignment="CENTER" spacing="5">
-                    <Button prefWidth="70" prefHeight="70"
-                            text="250"
-                            styleClass="tower-button"
-                            onAction="#clicBoutonBarbecue"/>
-                    <Label text="BBQ"/>
+                    <Button contentDisplay="top" onAction="#clicBoutonBacGlace" prefHeight="70" prefWidth="70" styleClass="tower-button" text="300✉︎">
+                        <graphic>
+                            <ImageView fitHeight="55" fitWidth="55">
+                                <image>
+                                    <Image url="@vue/glace.png" />
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    <Label text="Bac à Glace" />
                 </VBox>
+
             </HBox>
 
             <!-- ESPACE -->
-            <Region prefHeight="10"/>
-
-
-            <Button text="Lancer"
-                    onAction="#lancerJeu"
-                    styleClass="btn-play-big"
-                    prefWidth="180"
-                    prefHeight="120"/>
-
-            <Button text="Arrêter"
-                    onAction="#arreterJeu"
-                    styleClass="btn-stop"
-                    prefWidth="180"
-                    prefHeight="40"/>
+            <Region prefHeight="20" />
 
             <Button text="Vendre"
                     onAction="#vendreT"
@@ -88,8 +95,33 @@
                     prefWidth="180"
                     prefHeight="40"/>
 
-            <!-- ESPACE BAS -->
-            <Region VBox.vgrow="ALWAYS"/>
+            <!-- CONTRÔLES DU JEU -->
+            <Region VBox.vgrow="ALWAYS" />
+            <HBox alignment="CENTER" spacing="20">
+                <padding>
+                    <Insets bottom="10" top="10" />
+                </padding>
+
+                <Button onAction="#arreterJeu" styleClass="btn-stop">
+                    <graphic>
+                        <ImageView fitHeight="40" fitWidth="40">
+                            <image>
+                                <Image url="@vue/pauseee.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+
+                <Button onAction="#lancerJeu" styleClass="btn-play-big">
+                    <graphic>
+                        <ImageView fitHeight="40" fitWidth="40">
+                            <image>
+                                <Image url="@vue/lancer.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </HBox>
         </VBox>
     </right>
 
@@ -97,33 +129,44 @@
 
         <Pane>
 
-            <TilePane fx:id="map" styleClass="map"/>
+            <TilePane fx:id="map" styleClass="map" />
 
-            <Pane fx:id="panneauJeu"
-                  onMouseClicked="#clicSurTerrain"
-                  style="-fx-background-color: transparent;" />
+            <Pane fx:id="panneauJeu" onMouseClicked="#clicSurTerrain" style="-fx-background-color: transparent;" />
         </Pane>
     </center>
 
     <bottom>
-        <HBox alignment="CENTER_LEFT"
-              prefHeight="100"
-              spacing="40"
-              styleClass="bottom-bar">
+        <HBox alignment="CENTER_LEFT" prefHeight="100" spacing="40" styleClass="bottom-bar">
 
             <padding>
-                <Insets top="10" right="20" bottom="10" left="20"/>
+                <Insets bottom="10" left="20" right="20" top="10" />
             </padding>
 
-            <Label fx:id="labelHpBase"  styleClass="info-label"/>
+            <Label fx:id="labelVague" styleClass="info-label" />
 
-            <Label fx:id="labelArgent"  styleClass="info-label"/>
+            <HBox alignment="CENTER_LEFT" spacing="5">
+                <ImageView fitHeight="100" fitWidth="100">
+                    <image>
+                        <Image url="@vue/ticket.png"/>
+                    </image>
+                </ImageView>
+                <Label fx:id="labelArgent" styleClass="info-label"/>
+            </HBox>
 
-            <Label fx:id="labelVague"  styleClass="info-label"/>
+            <Region HBox.hgrow="ALWAYS" />
 
-            <Region HBox.hgrow="ALWAYS"/>
+            <VBox alignment="CENTER" spacing="1">
+                <ImageView fitHeight="50" fitWidth="50">
+                    <image>
+                        <Image url="@vue/pizzaa.png"/>
+                    </image>
+                </ImageView>
+                <ProgressBar fx:id="pv" prefWidth="350" prefHeight="25" style="-fx-accent: #FFCC00; -fx-control-inner-background: #2b1114;"/>
+            </VBox>
 
-            <Button text="Réglages" onAction="#reglage" styleClass="btn"/>
+            <Region HBox.hgrow="ALWAYS" />
+
+            <Button onAction="#reglage" styleClass="btn" text="Réglages" />
             <Button onAction="#aide" styleClass="btn" text="Aide?" />
 
 
