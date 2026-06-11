@@ -13,7 +13,11 @@
       style="-fx-background-color: #6E2934;">
 
     <Button fx:id="leave" styleClass="btn" text="Reprendre" onAction="#quitte"/>
-    <Label text="Langues"/>
+    <Button text="Recommencer"
+            onAction="#recommencerJeu"
+            styleClass="btn-restart"
+            prefWidth="180"
+            prefHeight="40"/>
     <Label text="Crédit : MRFF"/>
 
 

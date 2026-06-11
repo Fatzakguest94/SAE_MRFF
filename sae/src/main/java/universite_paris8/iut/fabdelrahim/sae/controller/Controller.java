@@ -50,20 +50,6 @@ public class Controller implements Initializable {
 
     private String tourAcheteeEnCours = null; // null veut dire "aucune tour sélectionnée
 
-    @FXML
-    private Button playBtn;
-
-    @FXML
-    private Button renomer;
-
-
-
-
-
-
-
-
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.env = new Environnement();
@@ -82,6 +68,7 @@ public class Controller implements Initializable {
         }
 
         this.initJeu();
+        GestionJeu.getInstance().setController(this);
 
     }
 
@@ -165,15 +152,6 @@ public class Controller implements Initializable {
             System.out.println("Jeu mis en pause");
         }
     }
-
-    @FXML
-    public void gestionargent(ActionEvent event) {
-        this.achatTour = true;
-        System.out.println("Mode placement activé ! Cliquez sur le terrain.");
-    }
-
-
-
     public void reglage(ActionEvent event) throws IOException {
         if (gameLoop != null) gameLoop.stop();
         GestionSon.getInstance().pause(); // stop le son
@@ -205,6 +183,8 @@ public class Controller implements Initializable {
         System.out.println("Mode placement : LanceBurger sélectionné !");
     }
 
+
+
     @FXML
     public void clicBoutonTour3(ActionEvent event) {
         this.tourAcheteeEnCours = "Tour3";
@@ -216,6 +196,8 @@ public class Controller implements Initializable {
         this.tourAcheteeEnCours = "Tour4";
         System.out.println("Mode placement : Tour 4 sélectionnée !");
     }
+
+
 
     // 3. Modifie la méthode du clic sur le terrain pour envoyer le bon type
     @FXML
@@ -232,15 +214,4 @@ public class Controller implements Initializable {
         this.tourAcheteeEnCours = null;
 
     }
-    // Exemple dans ton gestionnaire de clic
-
-
-
-
-    public void revente (ActionEvent event){
-        /// curseur appuie sur la tour enelve de la table + recuperer l'argent ou la moitier pour plus de difficulter + son mp3
-        // styliser les reglages avec des logos ( inspire toi de aide)
-          
-    }
-
 }
