@@ -239,6 +239,11 @@ public class Environnement {
 
     private Enemie creerZombieSelonVague(int x, int y) {
         int vague = getNumeroVague();
+
+        if(vague == 10){
+
+        }
+
         if (vague >= 5) {
             double hasard = Math.random();
             if (hasard < 0.20) return new ZombieGros(x, y);
@@ -256,6 +261,7 @@ public class Environnement {
             return new ZombieNormal(x, y);
         }
         return new ZombieNormal(x, y);
+
     }
 
     public void vendreTour(int pixelX, int pixelY) {
