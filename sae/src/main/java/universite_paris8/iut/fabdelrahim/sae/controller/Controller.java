@@ -270,7 +270,7 @@ public class Controller implements Initializable {
     }
 
     private void afficherAnnonceVague(int numeroVague) {
-        // 1. ON MET LE JEU EN PAUSE ICI
+        // ON MET LE JEU EN PAUSE ICI
         if (this.gameLoop != null) {
             this.gameLoop.pause();
         }
@@ -293,7 +293,7 @@ public class Controller implements Initializable {
                     vagueAnnonce.setVisible(false);
                     flouter(false);
 
-                    // 2. ON RELANCE LE JEU ICI UNE FOIS L'ANIMATION TERMINÉE
+                    // ON RELANCE LE JEU ICI UNE FOIS L'ANIMATION TERMINÉE
                     if (this.gameLoop != null) {
                         this.gameLoop.play();
                     }

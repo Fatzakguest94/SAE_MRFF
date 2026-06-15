@@ -79,7 +79,7 @@ public class Environnement {
             delaiAvantProchainZombie = 0;
         }
         else{
-            zombiesRestantsASpawner = 10;
+            zombiesRestantsASpawner = 10 * (getNumeroVague()/2);
         }
     }
 
@@ -247,14 +247,14 @@ public class Environnement {
         int vague = getNumeroVague();
         double hasard = Math.random();
         if(vague == 10){
-            if (zombiesRestantsASpawner == 4) return new Boss(x, y);
+            if (zombiesRestantsASpawner == 25) return new Boss(x, y);
             if (hasard < 0.20) return new ZombieGros(x, y);
             if (hasard < 0.40) return new ZombieFamille(x, y);
             if (hasard < 0.50) return new ZombieRapide(x, y);
             if (hasard < 0.55) return new ZombieNormal(x, y);
 
 
-            //return new Boss(x, y);
+            
         }
 
         if (vague >= 5) {
