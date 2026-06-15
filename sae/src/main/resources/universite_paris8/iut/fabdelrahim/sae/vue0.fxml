@@ -38,7 +38,24 @@
                 </VBox>
 
                 <VBox alignment="CENTER" spacing="5">
-                    <Button contentDisplay="top" onAction="#clicBoutonLanceBurger" prefHeight="70" prefWidth="70" styleClass="tower-button" text="150✉︎">
+                    <Button contentDisplay="top" onAction="#clicBoutonBacGlace" prefHeight="70" prefWidth="70" styleClass="tower-button" text="150✉︎">
+                        <graphic>
+                            <ImageView fitHeight="55" fitWidth="55">
+                                <image>
+                                    <Image url="@vue/glace.png" />
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    <Label text="Bac à Glace" />
+                </VBox>
+
+            </HBox>
+
+            <HBox alignment="CENTER" spacing="15">
+
+                <VBox alignment="CENTER" spacing="5">
+                    <Button contentDisplay="top" onAction="#clicBoutonLanceBurger" prefHeight="70" prefWidth="70" styleClass="tower-button" text="200✉︎">
                         <graphic>
                             <ImageView fitHeight="65" fitWidth="65">
                                 <image>
@@ -50,12 +67,9 @@
                     <Label text="Lance-Burger" />
                 </VBox>
 
-            </HBox>
-
-            <HBox alignment="CENTER" spacing="15">
 
                 <VBox alignment="CENTER" spacing="5">
-                    <Button contentDisplay="top" onAction="#clicBoutonBarbecue" prefHeight="70" prefWidth="70" styleClass="tower-button" text="200✉︎">
+                    <Button contentDisplay="top" onAction="#clicBoutonBarbecue" prefHeight="70" prefWidth="70" styleClass="tower-button" text="300✉︎">
                         <graphic>
                             <ImageView fitHeight="55" fitWidth="55">
                                 <image>
@@ -69,19 +83,6 @@
                             <Font name="GLYPHICONS Halflings Regular" size="13.0" />
                         </font>
                     </Label>
-                </VBox>
-
-                <VBox alignment="CENTER" spacing="5">
-                    <Button contentDisplay="top" onAction="#clicBoutonBacGlace" prefHeight="70" prefWidth="70" styleClass="tower-button" text="300✉︎">
-                        <graphic>
-                            <ImageView fitHeight="55" fitWidth="55">
-                                <image>
-                                    <Image url="@vue/glace.png" />
-                                </image>
-                            </ImageView>
-                        </graphic>
-                    </Button>
-                    <Label text="Bac à Glace" />
                 </VBox>
 
             </HBox>
