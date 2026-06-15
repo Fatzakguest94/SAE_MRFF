@@ -7,11 +7,7 @@ import universite_paris8.iut.fabdelrahim.sae.modele.Projectiles.Burger;
 
 import java.util.List;
 
-/**
- * Classe mère représentant une tour de défense (structure de la pizzeria).
- * Gère la détection de cible à portée, le temps de recharge (cooldown) et
- * le déclenchement des tirs ou effets de zone.
- */
+
 public class Tour {
     protected int x;
     protected int y;
@@ -20,6 +16,7 @@ public class Tour {
     protected int cooldown;
     protected int vitesseTir;
     protected String identite;
+    protected int niveau; // NOUVEAU : Suivi du niveau de la tour
 
     private static int compteur = 0;
     private String idUnique;
@@ -32,13 +29,32 @@ public class Tour {
         this.cooldown = 0;
         this.vitesseTir = vitesseTir;
         this.identite = identite;
+        this.niveau = 1; // Initialisation au niveau 1
         this.idUnique = "tour_" + compteur++;
     }
 
-    /**
-     * Boucle d'action de la tour appelée à chaque tic de jeu.
-     * Détermine si la tour peut tirer et cherche une cible valide à portée.
-     */
+    // NOUVEAU : Méthode pour appliquer l'amélioration des stats
+    public void ameliorer() {
+        this.niveau++;
+        // Augmentation progressive : +50% de dégâts et +15% de portée par niveau
+        this.degats = (int) (this.degats * 1.5);
+        this.portee = (int) (this.portee * 1.15);
+    }
+
+    // NOUVEAU : Calcule le coût selon le type et le niveau visé
+    public int getPrixAmelioration() {
+        int coutBase;
+        switch (this.identite) {
+            case "LanceBurger": coutBase = 200; break;
+            case "MitrailletteFrite": coutBase = 100; break;
+            case "BacGlace": coutBase = 150; break;
+            case "Barbecue": coutBase = 250; break;
+            default: coutBase = 100;
+        }
+        // a chaque fois en fait +100 pour le prix
+        return coutBase + 100 * getNiveau();
+    }
+
     public void attaquer(Environnement env) {
         // Gestion du temps de recharge
         if (this.cooldown > 0) {
@@ -89,11 +105,14 @@ public class Tour {
         double departY = this.y + 10;
 
         if (this.identite.equals("LanceBurger")) {
+            // Le projectile récupère directement les dégâts mis à jour de la tour
             Burger b = new Burger(departX, departY, cible);
+            b.setDegats(this.degats);
             env.getProjectiles().add(b);
         }
         else if (this.identite.equals("MitrailletteFrite")) {
             Frites f = new Frites(departX, departY, cible);
+            f.setDegats(this.degats);
             env.getProjectiles().add(f);
         }
         // Pour les pièges au sol (BacGlace, Barbecue), on applique l'effet directement sans projectile volant
@@ -102,18 +121,15 @@ public class Tour {
         }
     }
 
-    /**
-     * Méthode crochet destinée à être redéfinie par les structures à effet instantané
-     * (ex: BacGlace pour le gel, Barbecue pour la brûlure).
-     */
+
     protected void appliquerEffetImmediat(Enemie cible, List<Enemie> listeZombies) {
         // Comportement vide par défaut pour les tours à projectiles classiques
     }
 
     // Getters standard
-    public int getDegats() { return this.degats; }
     public int getX() { return this.x; }
     public int getY() { return this.y; }
     public String getIdUnique() { return this.idUnique; }
     public String getIdentite() { return this.identite; }
+    public int getNiveau() { return this.niveau; } // NOUVEAU
 }

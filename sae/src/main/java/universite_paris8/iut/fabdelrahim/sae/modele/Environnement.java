@@ -17,7 +17,7 @@ import universite_paris8.iut.fabdelrahim.sae.modele.Zombies.*;
 public class Environnement {
 
     // Paramètres d'équilibrage
-    private static final int ArgentDepart = 100000;
+    private static final int ArgentDepart = 100;
     private static final int RecompenseParZombie = 10;
     private static final int TailleCase = 36;
 
@@ -31,7 +31,6 @@ public class Environnement {
     private final Comptoir base;
     private final ObservableList<Tour> tours;
     private final ObservableList<Enemie> zombies;
-    // CORRECTION : Changement de Projectiles en Projectile
     private final ObservableList<Projectile> projectiles;
 
     private final IntegerProperty argent;
@@ -116,9 +115,9 @@ public class Environnement {
 
     private int coutTour(String type) {
         switch (type) {
-            case "LanceBurger": return 150;
+            case "LanceBurger": return 200;
             case "MitrailletteFrite": return 100;
-            case "BacGlace": return 200;
+            case "BacGlace": return 150;
             case "Barbecue": return 250;
             default: return 100;
         }
@@ -290,7 +289,32 @@ public class Environnement {
             tours.remove(tourATrouver);
             System.out.println("Tour vendue ! Recrédité de : " + remboursement + " Tickets.");
         }
+
     }
+
+    public void ameliorerTour(int pixelX, int pixelY) {
+        Tour tourATrouver = null;
+        for (Tour t : tours) {
+            if (t.getX() == pixelX && t.getY() == pixelY) {
+                tourATrouver = t;
+                break;
+            }
+        }
+
+        if (tourATrouver != null) {
+            int cout = tourATrouver.getPrixAmelioration();
+
+            // Vérification du solde du joueur
+            if (payerAchat(cout)) {
+                tourATrouver.ameliorer();
+                System.out.println("Tour améliore au niveau " + tourATrouver.getNiveau() + " ! Cost: " + cout);
+            } else {
+                System.out.println("Pas assez d'argent pour améliorer cette tour !");
+            }
+        }
+    }
+
+
 
     public ObservableList<Enemie> getZombies() { return zombies; }
     public ObservableList<Tour> getTours() { return tours; }

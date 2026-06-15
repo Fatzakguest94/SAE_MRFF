@@ -76,6 +76,7 @@ public abstract class Projectile {
     public int getDegats() {
         return degats;
     }
+    public void setDegats(int nouveauxDegats) {this.degats = nouveauxDegats;}
     public Enemie getCible() {
         return cible;
     }

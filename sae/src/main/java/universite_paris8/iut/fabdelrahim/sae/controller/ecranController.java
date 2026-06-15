@@ -17,8 +17,6 @@ public class ecranController {
 
 
 
-
-
     @FXML
     private void jouer() {
         try {
