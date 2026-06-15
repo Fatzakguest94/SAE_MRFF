@@ -51,14 +51,10 @@ public class Tour {
             case "Barbecue": coutBase = 250; break;
             default: coutBase = 100;
         }
-        // Le niveau 2 coûte le prix de base, le niveau 3 coûte le double, etc.
-        return coutBase * this.niveau;
+        // a chaque fois en fait +100 pour le prix
+        return coutBase + 100 * getNiveau();
     }
 
-    /**
-     * Boucle d'action de la tour appelée à chaque tic de jeu.
-     * Détermine si la tour peut tirer et cherche une cible valide à portée.
-     */
     public void attaquer(Environnement env) {
         // Gestion du temps de recharge
         if (this.cooldown > 0) {
