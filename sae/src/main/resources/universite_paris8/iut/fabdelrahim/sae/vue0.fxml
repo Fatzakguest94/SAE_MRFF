@@ -141,6 +141,33 @@
             <TilePane fx:id="map" styleClass="map" />
 
             <Pane fx:id="panneauJeu" onMouseClicked="#clicSurTerrain" style="-fx-background-color: transparent;" />
+            <!-- Annonce de vague -->
+            <Label fx:id="vagueAnnonce"
+                   text="VAGUE 1"
+                   visible="false"
+                   layoutX="330" layoutY="280"
+                   style="-fx-font-size: 72px; -fx-text-fill: white; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, black, 10, 0.5, 2, 2);" />
+
+            <!-- Compte à rebours -->
+            <Label fx:id="compteARebours"
+                   text="3"
+                   visible="false"
+                   layoutX="530" layoutY="370"
+                   style="-fx-font-size: 96px; -fx-text-fill: orange; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, black, 10, 0.5, 2, 2);" />
+
+            <!-- GAME OVER -->
+            <Label fx:id="gameOverLabel"
+                   text="GAME OVER"
+                   visible="false"
+                   layoutX="270" layoutY="300"
+                   style="-fx-font-size: 72px; -fx-text-fill: red; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, black, 10, 0.5, 2, 2);" />
+
+            <!-- WIN -->
+            <Label fx:id="winLabel"
+                   text="YOU WIN !"
+                   visible="false"
+                   layoutX="320" layoutY="300"
+                   style="-fx-font-size: 72px; -fx-text-fill: green; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, black, 10, 0.5, 2, 2);" />
         </Pane>
     </center>
 

@@ -7,7 +7,6 @@ public class Comptoir {
     private int x;
     private int y;
     private String identite;
-
     //PROPERTY
     private IntegerProperty hp;
 

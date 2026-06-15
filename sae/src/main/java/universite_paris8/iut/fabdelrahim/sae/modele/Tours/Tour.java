@@ -16,7 +16,7 @@ public class Tour {
     protected int cooldown;
     protected int vitesseTir;
     protected String identite;
-    protected int niveau; // NOUVEAU : Suivi du niveau de la tour
+    protected int niveau;
 
     private static int compteur = 0;
     private String idUnique;
@@ -33,7 +33,7 @@ public class Tour {
         this.idUnique = "tour_" + compteur++;
     }
 
-    // NOUVEAU : Méthode pour appliquer l'amélioration des stats
+    // Méthode pour appliquer l'amélioration des stats
     public void ameliorer() {
         this.niveau++;
         // Augmentation progressive : +50% de dégâts et +15% de portée par niveau
@@ -41,7 +41,7 @@ public class Tour {
         this.portee = (int) (this.portee * 1.15);
     }
 
-    // NOUVEAU : Calcule le coût selon le type et le niveau visé
+    // Calcule le coût selon le type et le niveau visé
     public int getPrixAmelioration() {
         int coutBase;
         switch (this.identite) {
@@ -94,11 +94,7 @@ public class Tour {
         }
     }
 
-    /**
-     * Oriente l'action de la tour selon sa nature :
-     * - Crée un projectile mobile pour les tours d'attaque à distance.
-     * - Applique un effet de zone direct pour les pièges environnementaux.
-     */
+
     protected void gererActionTour(Enemie cible, Environnement env) {
         // Point de départ centré pour les projectiles visuels (16x16)
         double departX = this.x + 10;

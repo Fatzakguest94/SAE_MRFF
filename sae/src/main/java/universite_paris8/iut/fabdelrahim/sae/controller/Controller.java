@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
@@ -38,6 +39,12 @@ public class Controller implements Initializable {
     private Timeline gameLoop;
     private Environnement env;
     private String tourAcheteeEnCours = null; // Stocke l'action actuelle ("VENDRE", "AMELIORER" ou le type de tour)
+
+    @FXML private Label gameOverLabel;
+    @FXML private Label winLabel;
+    @FXML private Label vagueAnnonce;
+    @FXML private Label compteARebours;
+    private int derniereVagueAffichee = 0;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -82,20 +89,36 @@ public class Controller implements Initializable {
 
     // Boucle principale du jeu (Game Loop)
     private void initAnimation() {
+
         this.gameLoop = new Timeline();
         this.gameLoop.setCycleCount(Timeline.INDEFINITE);
 
         KeyFrame kf = new KeyFrame(
-                Duration.seconds(0.017), // Environ 60 FPS
+                Duration.seconds(0.017),
                 ev -> {
                     this.env.unTourDeJeu();
                     this.entiteVue.mettreAJourAffichage(this.env);
 
-                    // Condition de défaite
+                    // D
                     if (this.env.getBase() != null && this.env.getBase().estDetruit()) {
                         this.gameLoop.stop();
                         this.labelVague.textProperty().unbind();
                         this.labelVague.setText("GAME OVER !");
+                        if (this.gameOverLabel != null) this.gameOverLabel.setVisible(true);
+                        flouter(true); // ← AJOUTER
+                    }
+
+                    // V
+                    if (this.env.toutesVaguesTerminees()) {
+                        this.gameLoop.stop();
+                        if (this.winLabel != null) this.winLabel.setVisible(true);
+                        flouter(true); // ← AJOUTER
+                    }
+
+                    if (this.env.getNumeroVague() != derniereVagueAffichee) {
+                        derniereVagueAffichee = this.env.getNumeroVague();
+                        afficherAnnonceVague(derniereVagueAffichee);
+                        flouter(true); // ← AJOUTER
                     }
                 }
         );
@@ -126,7 +149,7 @@ public class Controller implements Initializable {
             this.panneauJeu.getChildren().clear();
         }
 
-        // 3. Re-générer le terrain visuel (efface l'ancien s'il y a besoin)
+        // Re-générer le terrain visuel (efface l'ancien s'il y a besoin)
         if (this.map != null) {
             this.map.getChildren().clear();
             this.terrainVue = new TerrainVue(env.getTerrain(), map);
@@ -222,7 +245,7 @@ public class Controller implements Initializable {
         if (this.tourAcheteeEnCours.equals("VENDRE")) {
             this.env.vendreTour(xAjuste, yAjuste);
         }
-        // MODIFICATION : Si on est en mode amélioration
+        //Si on est en mode amélioration
         else if (this.tourAcheteeEnCours.equals("AMELIORER")) {
             this.env.ameliorerTour(xAjuste, yAjuste);
         }
@@ -241,8 +264,42 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    public void ameliorerT(ActionEvent event) { // Renommé proprement pour correspondre au bouton
+    public void ameliorerT(ActionEvent event) {
         this.tourAcheteeEnCours = "AMELIORER";
         System.out.println("Mode amelioration active : cliquez sur une tour pour augmenter ses stats.");
+    }
+
+    private void afficherAnnonceVague(int numeroVague) {
+        vagueAnnonce.setText("VAGUE " + numeroVague);
+        vagueAnnonce.setVisible(true);
+        compteARebours.setVisible(true);
+
+        // Compte à rebours 3...2...1...
+        Timeline compteDown = new Timeline(
+                new KeyFrame(Duration.seconds(0), e -> compteARebours.setText("3")),
+                new KeyFrame(Duration.seconds(1), e -> compteARebours.setText("2")),
+                new KeyFrame(Duration.seconds(2), e -> compteARebours.setText("1")),
+                new KeyFrame(Duration.seconds(3), e -> compteARebours.setVisible(false))
+        );
+
+        // Disparition de l'annonce après 5 secondes
+        Timeline disparition = new Timeline(
+                new KeyFrame(Duration.seconds(5), e -> {
+                    vagueAnnonce.setVisible(false);
+                    flouter(false);
+                })
+        );
+
+        compteDown.play();
+        disparition.play();
+    }
+    private void flouter(boolean actif) {
+        if (actif) {
+            map.setEffect(new GaussianBlur(10));
+            panneauJeu.setEffect(new GaussianBlur(10));
+        } else {
+            map.setEffect(null);
+            panneauJeu.setEffect(null);
+        }
     }
 }

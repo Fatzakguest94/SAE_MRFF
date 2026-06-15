@@ -43,6 +43,8 @@ public class Environnement {
     private int tempsAvantProchaineVague;
     private int compteurToursSurChemin = 0;
 
+    private static final int NombreVaguesMax = 10;
+
     public Environnement() {
         this.terrain = new Terrain();
         this.tours = FXCollections.observableArrayList();
@@ -144,7 +146,7 @@ public class Environnement {
 
         gererAparition();
         faireAttaquerLesTours();
-        mettreAJourProjectiles(); // NOUVEAU : On fait bouger les projectiles
+        mettreAJourProjectiles();
         mettreAJourZombies();
         gererTransitionVague();
     }
@@ -317,6 +319,10 @@ public class Environnement {
                 System.out.println("Pas assez d'argent pour améliorer cette tour !");
             }
         }
+    }
+
+    public boolean toutesVaguesTerminees() {
+        return getNumeroVague() >= NombreVaguesMax && !vagueEnCours.get() && zombies.isEmpty();
     }
 
 
