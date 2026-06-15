@@ -26,6 +26,10 @@ public class ecranController {
                     pizzattackapplication.class.getResource("vue0.fxml")
             );
             Scene gameScene = new Scene(loader.load(), 1377, 856);
+
+            Controller jeuController = loader.getController();
+            GestionJeu.getInstance().setController(jeuController);
+
             Stage stage = (Stage) playBtn.getScene().getWindow();
             stage.setScene(gameScene);
         } catch (IOException e) {

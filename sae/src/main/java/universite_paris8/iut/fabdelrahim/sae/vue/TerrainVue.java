@@ -33,7 +33,7 @@ public class TerrainVue {
 
 
         Image sol = new Image(getClass().getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/tapisrose.png"));
-        Image entrer = new Image(getClass().getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/entrer.jpg"));
+        Image entrer = new Image(getClass().getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/entrer2.png"));
         Image sortie = new Image(getClass().getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/table.png"));
         Image barrage5 = new Image(getClass().getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/barrage5.png"));
         Image barrage6 = new Image(getClass().getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/barrage6.png"));

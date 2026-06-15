@@ -115,8 +115,31 @@ public class Controller implements Initializable {
     @FXML
     public void recommencerJeu(ActionEvent event) {
         if (this.gameLoop != null) {
-            this.gameLoop.stop();
+            this.gameLoop.stop(); // On arrête l'ancienne boucle
         }
+
+        //Réinitialiser le modèle (Environnement recrée un nouvel état propre)
+        this.env = new Environnement();
+
+        //Nettoyer les anciennes vues des entités sur le panneau de jeu
+        if (this.panneauJeu != null) {
+            this.panneauJeu.getChildren().clear();
+        }
+
+        // 3. Re-générer le terrain visuel (efface l'ancien s'il y a besoin)
+        if (this.map != null) {
+            this.map.getChildren().clear();
+            this.terrainVue = new TerrainVue(env.getTerrain(), map);
+            this.terrainVue.creerTerrain();
+        }
+
+        //Relancer toute l'initialisation des bindings et de la boucle de jeu
+        this.initJeu();
+
+        //Relancer directement le jeu automatiquement
+        this.lancerJeu(null);
+
+        System.out.println("La partie a été réinitialisée avec succès !");
     }
 
     @FXML

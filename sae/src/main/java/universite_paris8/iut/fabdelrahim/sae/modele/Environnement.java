@@ -17,7 +17,7 @@ import universite_paris8.iut.fabdelrahim.sae.modele.Zombies.*;
 public class Environnement {
 
     // Paramètres d'équilibrage
-    private static final int ArgentDepart = 100;
+    private static final int ArgentDepart = 10000;
     private static final int RecompenseParZombie = 10;
     private static final int TailleCase = 36;
 
@@ -74,7 +74,7 @@ public class Environnement {
         vagueEnCours.set(true);
         if(getNumeroVague() < 10) {
             zombiesRestantsASpawner = 10 * getNumeroVague();
-            delaiAvantProchainZombie = 3;
+            delaiAvantProchainZombie = 0;
         }
         else{
             zombiesRestantsASpawner = 1;
@@ -243,13 +243,13 @@ public class Environnement {
 
     private Enemie creerZombieSelonVague(int x, int y) {
         int vague = getNumeroVague();
-
+        double hasard = Math.random();
         if(vague == 10){
             return new Boss(x, y);
         }
 
         if (vague >= 5) {
-            double hasard = Math.random();
+
             if (hasard < 0.20) return new ZombieGros(x, y);
             if (hasard < 0.40) return new ZombieFamille(x, y);
             if (hasard < 0.70) return new ZombieRapide(x, y);
