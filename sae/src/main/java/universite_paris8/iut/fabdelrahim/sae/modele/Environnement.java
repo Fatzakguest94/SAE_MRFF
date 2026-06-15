@@ -116,9 +116,9 @@ public class Environnement {
 
     private int coutTour(String type) {
         switch (type) {
-            case "LanceBurger": return 150;
+            case "LanceBurger": return 200;
             case "MitrailletteFrite": return 100;
-            case "BacGlace": return 200;
+            case "BacGlace": return 150;
             case "Barbecue": return 250;
             default: return 100;
         }
