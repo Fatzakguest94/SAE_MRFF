@@ -16,6 +16,7 @@ import javafx.scene.layout.TilePane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import universite_paris8.iut.fabdelrahim.sae.modele.Environnement;
+import universite_paris8.iut.fabdelrahim.sae.modele.Tours.Tour;
 import universite_paris8.iut.fabdelrahim.sae.vue.TerrainVue;
 import universite_paris8.iut.fabdelrahim.sae.vue.EntiteVue;
 import universite_paris8.iut.fabdelrahim.sae.vue.GestionImage;
@@ -32,12 +33,11 @@ public class Controller implements Initializable {
     @FXML private Label labelVague;
     @FXML private ProgressBar pv;
 
-
     private TerrainVue terrainVue;
     private EntiteVue entiteVue;
     private Timeline gameLoop;
     private Environnement env;
-    private String tourAcheteeEnCours = null;
+    private String tourAcheteeEnCours = null; // Stocke l'action actuelle ("VENDRE", "AMELIORER" ou le type de tour)
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -195,20 +195,31 @@ public class Controller implements Initializable {
         int xAjuste = ((int) event.getX() / 36) * 36;
         int yAjuste = ((int) event.getY() / 36) * 36;
 
-        // Si on a activé le mode vente
+        // Si on est en mode vente
         if (this.tourAcheteeEnCours.equals("VENDRE")) {
             this.env.vendreTour(xAjuste, yAjuste);
+        }
+        // MODIFICATION : Si on est en mode amélioration
+        else if (this.tourAcheteeEnCours.equals("AMELIORER")) {
+            this.env.ameliorerTour(xAjuste, yAjuste);
         }
         // Sinon on pose une tour classique
         else {
             this.env.ajouterTour(xAjuste, yAjuste, this.tourAcheteeEnCours);
         }
 
-        this.tourAcheteeEnCours = null; // Désactive le mode après le clic
+        this.tourAcheteeEnCours = null; // Réinitialise l'état après l'action
     }
+
     @FXML
     public void vendreT(ActionEvent event) {
         this.tourAcheteeEnCours = "VENDRE";
-        System.out.println("Mode vente activé : cliquez sur une tour pour la revendre.");
+        System.out.println("Mode vente active : cliquez sur une tour pour la revendre.");
+    }
+
+    @FXML
+    public void ameliorerT(ActionEvent event) { // Renommé proprement pour correspondre au bouton
+        this.tourAcheteeEnCours = "AMELIORER";
+        System.out.println("Mode amelioration active : cliquez sur une tour pour augmenter ses stats.");
     }
 }

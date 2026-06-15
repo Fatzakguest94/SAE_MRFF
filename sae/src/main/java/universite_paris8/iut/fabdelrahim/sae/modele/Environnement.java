@@ -31,7 +31,6 @@ public class Environnement {
     private final Comptoir base;
     private final ObservableList<Tour> tours;
     private final ObservableList<Enemie> zombies;
-    // CORRECTION : Changement de Projectiles en Projectile
     private final ObservableList<Projectile> projectiles;
 
     private final IntegerProperty argent;
@@ -284,7 +283,32 @@ public class Environnement {
             tours.remove(tourATrouver);
             System.out.println("Tour vendue ! Recrédité de : " + remboursement + " Tickets.");
         }
+
     }
+
+    public void ameliorerTour(int pixelX, int pixelY) {
+        Tour tourATrouver = null;
+        for (Tour t : tours) {
+            if (t.getX() == pixelX && t.getY() == pixelY) {
+                tourATrouver = t;
+                break;
+            }
+        }
+
+        if (tourATrouver != null) {
+            int cout = tourATrouver.getPrixAmelioration();
+
+            // Vérification du solde du joueur
+            if (payerAchat(cout)) {
+                tourATrouver.ameliorer();
+                System.out.println("Tour améliore au niveau " + tourATrouver.getNiveau() + " ! Cost: " + cout);
+            } else {
+                System.out.println("Pas assez d'argent pour améliorer cette tour !");
+            }
+        }
+    }
+
+
 
     public ObservableList<Enemie> getZombies() { return zombies; }
     public ObservableList<Tour> getTours() { return tours; }
