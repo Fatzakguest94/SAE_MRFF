@@ -3,27 +3,86 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="universite_paris8.iut.fabdelrahim.sae.controller.reglageController"
-      spacing="20" alignment="CENTER"
-      prefWidth="300" prefHeight="400"
-      style="-fx-background-color: #6E2934;">
+      spacing="20"
+      alignment="CENTER"
+      prefWidth="300"
+      prefHeight="430"
+      style="-fx-background-color: linear-gradient(to bottom, #6E2934, #3B1116); -fx-padding: 20;">
 
-    <Button fx:id="leave" styleClass="btn" text="Reprendre" onAction="#quitte"/>
-    <Button text="Recommencer"
+    <!-- Titre de la fenêtre de réglages -->
+    <Label text="PANNEAU DE CONTRÔLE"
+           style="-fx-text-fill: #F1A139;
+                  -fx-font-family: 'System';
+                  -fx-font-size: 18px;
+                  -fx-font-weight: bold;
+                  -fx-letter-spacing: 1px;
+                  -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 4, 0.0, 0, 2);"/>
+
+    <!-- Séparateur visuel subtil -->
+    <Region style="-fx-background-color: #E28413; -fx-min-height: 2px; -fx-max-height: 2px; -fx-opacity: 0.5;" maxWidth="180"/>
+
+    <!-- Bouton Reprendre / Quitter -->
+    <Button fx:id="leave"
+            text="REPRENDRE"
+            onAction="#quitte"
+            prefWidth="200"
+            prefHeight="45"
+            style="-fx-background-color: #2D6A4F;
+                   -fx-text-fill: #FFFFFF;
+                   -fx-font-weight: bold;
+                   -fx-font-size: 13px;
+                   -fx-background-radius: 10;
+                   -fx-cursor: hand;
+                   -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 4, 0, 0, 3);"/>
+
+    <!-- Bouton Recommencer -->
+    <Button text="RECOMMENCER"
             onAction="#recommencerJeu"
-            styleClass="btn-restart"
-            prefWidth="180"
-            prefHeight="40"/>
-    <HBox alignment="CENTER_LEFT" spacing="8" maxWidth="200">
-        <Label text="🔊"/>
-        <Slider fx:id="volume"
-                min="0" max="100" value="50"
-                HBox.hgrow="ALWAYS"/>
-    </HBox>
-    <Label text="Crédit : MRFF"/>
+            prefWidth="200"
+            prefHeight="45"
+            style="-fx-background-color: #D62246;
+                   -fx-text-fill: #FFFFFF;
+                   -fx-font-weight: bold;
+                   -fx-font-size: 13px;
+                   -fx-background-radius: 10;
+                   -fx-cursor: hand;
+                   -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 4, 0, 0, 3);"/>
 
+    <!-- Conteneur pour le réglage du volume (boîte translucide stylisée) -->
+    <VBox alignment="CENTER" spacing="10" maxWidth="240"
+          style="-fx-background-color: rgba(0, 0, 0, 0.35);
+                 -fx-background-radius: 12;
+                 -fx-padding: 15;
+                 -fx-border-color: rgba(226, 132, 19, 0.3);
+                 -fx-border-radius: 12;
+                 -fx-border-width: 1;">
+
+        <Label text="Volume de la Musique"
+               style="-fx-text-fill: #F5E6E8;
+                      -fx-font-size: 12px;
+                      -fx-font-weight: bold;"/>
+
+        <HBox alignment="CENTER" spacing="10">
+            <Label text="🔈" style="-fx-text-fill: #F1A139; -fx-font-size: 15px;"/>
+            <Slider fx:id="volume"
+                    min="0" max="100" value="50"
+                    HBox.hgrow="ALWAYS"
+                    style="-fx-cursor: hand;"/>
+            <Label text="🔊" style="-fx-text-fill: #F1A139; -fx-font-size: 15px;"/>
+        </HBox>
+    </VBox>
+
+    <!-- Espacement flexible pour pousser les crédits en bas -->
+    <Region VBox.vgrow="ALWAYS" />
+
+    <!-- Section Crédits en bas -->
+    <Label text="Crédit : MRFF"
+           style="-fx-text-fill: #A08084;
+                  -fx-font-size: 11px;
+                  -fx-font-style: italic;
+                  -fx-opacity: 0.8;"/>
 
 </VBox>
