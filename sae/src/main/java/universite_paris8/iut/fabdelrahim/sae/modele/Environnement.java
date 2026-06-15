@@ -72,8 +72,13 @@ public class Environnement {
     public void preparerNouvelleVague() {
         numeroVague.set(getNumeroVague() + 1);
         vagueEnCours.set(true);
-        zombiesRestantsASpawner = 10 * getNumeroVague();
-        delaiAvantProchainZombie = 0;
+        if(getNumeroVague() < 10) {
+            zombiesRestantsASpawner = 10 * getNumeroVague();
+            delaiAvantProchainZombie = 3;
+        }
+        else{
+            zombiesRestantsASpawner = 1;
+        }
     }
 
     public void ajouterTour(int pixelX, int pixelY, String type) {
@@ -240,7 +245,7 @@ public class Environnement {
         int vague = getNumeroVague();
 
         if(vague == 10){
-
+            return new Boss(x, y);
         }
 
         if (vague >= 5) {
