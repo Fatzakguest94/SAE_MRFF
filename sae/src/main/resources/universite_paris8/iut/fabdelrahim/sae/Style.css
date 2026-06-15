@@ -150,9 +150,24 @@
 .btn-vendre {
 
     -fx-pref-width: 160;
-    -fx-pref-height: 110;
+    -fx-pref-height: 90;
 
     -fx-background-color: linear-gradient(to bottom, #3498db, #2980b9);
+    -fx-text-fill: white;
+
+
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12;
+    -fx-cursor: hand;
+}
+
+.btn-ameliorer {
+
+    -fx-pref-width: 160;
+    -fx-pref-height: 90;
+
+    -fx-background-color: linear-gradient(to bottom, #f1c40f, #f39c12);
     -fx-text-fill: white;
 
 

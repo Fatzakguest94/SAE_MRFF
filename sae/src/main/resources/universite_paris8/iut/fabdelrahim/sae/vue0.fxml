@@ -90,7 +90,7 @@
             <!-- ESPACE -->
             <Region prefHeight="20" />
 
-            <HBox alignment="CENTER" spacing="10">
+
                 <Button text="Vendre"
                         onAction="#vendreT"
                         styleClass="btn-vendre"
@@ -102,7 +102,7 @@
                         styleClass="btn-ameliorer"
                         prefWidth="90"
                         prefHeight="40"/>
-            </HBox>
+
 
             <!-- CONTRÔLES DU JEU -->
             <Region VBox.vgrow="ALWAYS" />
