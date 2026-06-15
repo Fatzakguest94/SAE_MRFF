@@ -52,7 +52,7 @@ public class Environnement {
         this.projectiles = FXCollections.observableArrayList(); // CORRECTION ici aussi
 
         this.argent = new SimpleIntegerProperty(ArgentDepart);
-        this.numeroVague = new SimpleIntegerProperty(0);
+        this.numeroVague = new SimpleIntegerProperty(9);
         this.vagueEnCours = new SimpleBooleanProperty(false);
         this.temps = 0;
 
@@ -79,7 +79,7 @@ public class Environnement {
             delaiAvantProchainZombie = 0;
         }
         else{
-            zombiesRestantsASpawner = 1;
+            zombiesRestantsASpawner = 10;
         }
     }
 
@@ -158,7 +158,7 @@ public class Environnement {
         if (delaiAvantProchainZombie <= 0) {
             faireApparaitreZombie();
             zombiesRestantsASpawner--;
-            delaiAvantProchainZombie = Delaiavantaparition;
+            delaiAvantProchainZombie = Delaiavantaparition + 8;
         }
     }
 
@@ -247,7 +247,14 @@ public class Environnement {
         int vague = getNumeroVague();
         double hasard = Math.random();
         if(vague == 10){
-            return new Boss(x, y);
+            if (zombiesRestantsASpawner == 4) return new Boss(x, y);
+            if (hasard < 0.20) return new ZombieGros(x, y);
+            if (hasard < 0.40) return new ZombieFamille(x, y);
+            if (hasard < 0.50) return new ZombieRapide(x, y);
+            if (hasard < 0.55) return new ZombieNormal(x, y);
+
+
+            //return new Boss(x, y);
         }
 
         if (vague >= 5) {

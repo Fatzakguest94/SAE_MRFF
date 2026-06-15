@@ -36,18 +36,18 @@ public abstract class Projectile {
             return;
         }
 
-        //On récupère les coordonnées exactes de la cible
+        // 1. On récupère les coordonnées exactes de la cible
         double cibleX = this.cible.getX();
         double cibleY = this.cible.getY();
 
-        //On calcule la différence sur les axes
+        // 2. On calcule la différence sur les axes
         double dx = cibleX - this.x;
         double dy = cibleY - this.y;
 
-        //Théorème de Pythagore pour avoir la distance totale
+        // 3. Théorème de Pythagore pour avoir la distance totale
         double distance = Math.sqrt((dx * dx) + (dy * dy));
 
-        // Détection de collision (A-t-on touché la cible ?)
+        // 4. Détection de collision (A-t-on touché la cible ?)
         // Si la distance qui nous sépare est plus petite que notre vitesse,
         // cela veut dire que le prochain pas nous fera rentrer dans le zombie !
         if (distance <= this.vitesse) {
@@ -57,7 +57,7 @@ public abstract class Projectile {
             return;
         }
 
-        // Sinon, on avance d'un pas vers la cible (Normalisation du vecteur)
+        // 5. Sinon, on avance d'un pas vers la cible (Normalisation du vecteur)
         // On divise par la distance totale, et on multiplie par notre vitesse
         this.x += (dx / distance) * this.vitesse;
         this.y += (dy / distance) * this.vitesse;
