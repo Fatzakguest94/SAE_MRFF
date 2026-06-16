@@ -38,7 +38,7 @@ public class Controller implements Initializable {
     private EntiteVue entiteVue;
     private Timeline gameLoop;
     private Environnement env;
-    private String tourAcheteeEnCours = null; // Stocke l'action actuelle ("VENDRE", "AMELIORER" ou le type de tour)
+    private String tourAcheteeEnCours = null; // aucune tours n'est acheter actuellement
 
     @FXML private Label gameOverLabel;
     @FXML private Label winLabel;
@@ -48,7 +48,7 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if (map == null) return; // Sécurité FXML
+        if (map == null) return;
 
         this.env = new Environnement();
         GestionImage.loadAssets();
@@ -64,7 +64,7 @@ public class Controller implements Initializable {
         this.initJeu();
     }
 
-    // Centralisation de la configuration de la partie
+
     private void initJeu() {
         this.entiteVue = new EntiteVue(panneauJeu, env);
 
@@ -73,7 +73,7 @@ public class Controller implements Initializable {
             this.entiteVue.afficherComptoir(this.env.getBase());
         }
 
-        // Bindings
+
         if (this.labelArgent != null) {
             this.labelArgent.textProperty().bind(env.argentProperty().asString(" : %d"));
         }
@@ -87,7 +87,7 @@ public class Controller implements Initializable {
         this.initAnimation();
     }
 
-    // Boucle principale du jeu (Game Loop)
+    // Game Loop
     private void initAnimation() {
 
         this.gameLoop = new Timeline();
@@ -105,20 +105,20 @@ public class Controller implements Initializable {
                         this.labelVague.textProperty().unbind();
                         this.labelVague.setText("GAME OVER !");
                         if (this.gameOverLabel != null) this.gameOverLabel.setVisible(true);
-                        flouter(true); // ← AJOUTER
+                        flouter(true);
                     }
 
                     // V
                     if (this.env.toutesVaguesTerminees()) {
                         this.gameLoop.stop();
                         if (this.winLabel != null) this.winLabel.setVisible(true);
-                        flouter(true); // ← AJOUTER
+                        flouter(true);
                     }
 
                     if (this.env.getNumeroVague() != derniereVagueAffichee) {
                         derniereVagueAffichee = this.env.getNumeroVague();
                         afficherAnnonceVague(derniereVagueAffichee);
-                        flouter(true); // ← AJOUTER
+                        flouter(true);
                     }
                 }
         );
@@ -141,7 +141,7 @@ public class Controller implements Initializable {
             this.gameLoop.stop(); // On arrête l'ancienne boucle
         }
 
-        //Réinitialiser le modèle (Environnement recrée un nouvel état propre)
+
         this.env = new Environnement();
 
         //Nettoyer les anciennes vues des entités sur le panneau de jeu
@@ -279,7 +279,7 @@ public class Controller implements Initializable {
         vagueAnnonce.setVisible(true);
         compteARebours.setVisible(true);
 
-        // Compte à rebours 3...2...1...
+        // Compte à rebours
         Timeline compteDown = new Timeline(
                 new KeyFrame(Duration.seconds(0), e -> compteARebours.setText("3")),
                 new KeyFrame(Duration.seconds(1), e -> compteARebours.setText("2")),
@@ -287,13 +287,13 @@ public class Controller implements Initializable {
                 new KeyFrame(Duration.seconds(3), e -> compteARebours.setVisible(false))
         );
 
-        // Disparition de l'annonce après 5 secondes
+        // Disparaiy après 5 secondes
         Timeline disparition = new Timeline(
                 new KeyFrame(Duration.seconds(3), e -> {
                     vagueAnnonce.setVisible(false);
                     flouter(false);
 
-                    // ON RELANCE LE JEU ICI UNE FOIS L'ANIMATION TERMINÉE
+                    // relance
                     if (this.gameLoop != null) {
                         this.gameLoop.play();
                     }
