@@ -24,7 +24,7 @@ public class Environnement {
     // Gestion du temps et des vagues
     private static final int Delaiavantaparition = 10;
     private static final int DelaientreVague = 60;
-    private static final int paslogique = 5;
+    private static final int paslogique = 3;
 
     private final Terrain terrain;
     private final List<Point> chemin;

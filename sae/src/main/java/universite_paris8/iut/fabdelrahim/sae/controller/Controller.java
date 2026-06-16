@@ -17,7 +17,6 @@ import javafx.scene.layout.TilePane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import universite_paris8.iut.fabdelrahim.sae.modele.Environnement;
-import universite_paris8.iut.fabdelrahim.sae.modele.Tours.Tour;
 import universite_paris8.iut.fabdelrahim.sae.vue.TerrainVue;
 import universite_paris8.iut.fabdelrahim.sae.vue.EntiteVue;
 import universite_paris8.iut.fabdelrahim.sae.vue.GestionImage;
@@ -105,7 +104,7 @@ public class Controller implements Initializable {
                         this.labelVague.textProperty().unbind();
                         this.labelVague.setText("GAME OVER !");
                         if (this.gameOverLabel != null) this.gameOverLabel.setVisible(true);
-                        flouter(true); 
+                        flouter(true);
                     }
 
                     // V

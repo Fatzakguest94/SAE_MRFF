@@ -19,7 +19,7 @@ public class EntiteVue {
     public EntiteVue(Pane terrain, Environnement env) {
         this.panneauJeu = terrain;
 
-        // 1. Gestionnaire d'affichage des zombies (Ajout / Suppression)
+        //Gestionnaire d'affichage des zombies (Ajout / Suppression)
         env.getZombies().addListener((ListChangeListener<Enemie>) change -> {
             while (change.next()) {
                 if (change.wasAdded()) {
@@ -38,7 +38,7 @@ public class EntiteVue {
             }
         });
 
-        // 2. Gestionnaire d'affichage des tours posées et vendues
+        //Gestionnaire d'affichage des tours posées et vendues
         env.getTours().addListener((ListChangeListener<Tour>) change -> {
             while (change.next()) {
                 if (change.wasAdded()) {
@@ -57,7 +57,7 @@ public class EntiteVue {
             }
         });
 
-        // 3. NOUVEAU : Gestionnaire d'affichage des projectiles
+        //Gestionnaire d'affichage des projectiles
         env.getProjectiles().addListener((ListChangeListener<Projectile>) change -> {
             while (change.next()) {
                 if (change.wasAdded()) {
@@ -91,7 +91,7 @@ public class EntiteVue {
         this.panneauJeu.getChildren().add(imageView);
     }
 
-    // NOUVEAU : Crée le visuel du projectile sur la carte
+    //Crée le visuel du projectile sur la carte
     private void creerImageProjectile(Projectile p) {
         Image img = GestionImage.getImage(p.getIdentite()); // Ira chercher "Burger" ou "Frites"
         if (img == null) return;
@@ -116,7 +116,7 @@ public class EntiteVue {
             }
         }
 
-        // NOUVEAU : Mise à jour de la position des projectiles en plein vol
+        // Mise à jour de la position des projectiles en plein vol
         for (Projectile p : env.getProjectiles()) {
             Node imgView = this.panneauJeu.lookup("#" + p.getIdUnique());
             if (imgView != null) {
@@ -155,8 +155,5 @@ public class EntiteVue {
         this.panneauJeu.getChildren().add(this.imageComptoir);
     }
 
-    public void viderTout() {
-        this.panneauJeu.getChildren().clear();
-        this.imageComptoir = null;
-    }
+
 }

@@ -8,7 +8,7 @@ public abstract class Projectile {
     protected double y;
     protected double vitesse;
     protected int degats;
-    protected Enemie cible; //Le projectile doit retenir qui il chasse !
+    protected Enemie cible; //Le projectile doit retenir qui il chasse
     protected String identite;
     protected boolean aTouche; // Pour savoir quand le supprimer
     private static int compteurProj = 0;
@@ -47,9 +47,9 @@ public abstract class Projectile {
         //Théorème de Pythagore pour avoir la distance totale
         double distance = Math.sqrt((dx * dx) + (dy * dy));
 
-        // Détection de collision (est ce que on a touché la cible ?)
+        // Détection de collision (est ce que on a touché la cible )
         // Si la distance qui nous sépare est plus petite que notre vitesse,
-        // cela veut dire que le prochain pas nous fera rentrer dans le zombie !
+        // cela veut dire que le prochain pas nous fera rentrer dans le zombie
         if (distance <= this.vitesse) {
             this.x = cibleX;
             this.y = cibleY;
