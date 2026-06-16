@@ -16,7 +16,7 @@ import universite_paris8.iut.fabdelrahim.sae.modele.Zombies.*;
 
 public class Environnement {
 
-    // Paramètres d'équilibrage
+
     private static final int ArgentDepart = 100;
     private static final int RecompenseParZombie = 10;
     private static final int TailleCase = 36;
@@ -24,7 +24,7 @@ public class Environnement {
     // Gestion du temps et des vagues
     private static final int Delaiavantaparition = 10;
     private static final int DelaientreVague = 60;
-    private static final int PAS_LOGIQUE = 5;
+    private static final int paslogique = 5;
 
     private final Terrain terrain;
     private final List<Point> chemin;
@@ -49,7 +49,7 @@ public class Environnement {
         this.terrain = new Terrain();
         this.tours = FXCollections.observableArrayList();
         this.zombies = FXCollections.observableArrayList();
-        this.projectiles = FXCollections.observableArrayList(); // CORRECTION ici aussi
+        this.projectiles = FXCollections.observableArrayList();
 
         this.argent = new SimpleIntegerProperty(ArgentDepart);
         this.numeroVague = new SimpleIntegerProperty(0);
@@ -142,7 +142,7 @@ public class Environnement {
 
     public void unTourDeJeu() {
         temps++;
-        if (temps % PAS_LOGIQUE != 0) return;
+        if (temps % paslogique != 0) return;
 
         gererAparition();
         faireAttaquerLesTours();

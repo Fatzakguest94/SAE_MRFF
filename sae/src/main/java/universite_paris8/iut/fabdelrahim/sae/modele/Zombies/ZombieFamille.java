@@ -7,14 +7,11 @@ import java.util.List;
 
 public class ZombieFamille extends Enemie {
 
-    // Nombre de sous-zombies (enfants) à spawn au moment de la mort du parent
-    private static final int NB_ENFANTS = 4;
-
+    private static final int nbEnfants = 4;
     // Flag pour éviter les doubles triggers si la méthode est appelée plusieurs fois par cycle
     private boolean enfantsGeneres;
 
     public ZombieFamille(int x, int y) {
-        // Init du boss/parent : vitesse=2.0, hp=35, degat=5
         super(x, y, 2.0, 35, 5, "ZombieFamille");
         this.enfantsGeneres = false;
     }
@@ -26,7 +23,7 @@ public class ZombieFamille extends Enemie {
     public List<Enemie> genererEnfants(List<Point> chemin, int etapeParent) {
         List<Enemie> enfants = new ArrayList<>();
 
-        // ne spawn rien si le zombie est vivant ou si le split a déjà eu lieu
+        // ne spawn rien si le zombie est vivant ou si il a deja eu les enfants a déjà eu lieu
         if (!this.estMort() || this.enfantsGeneres) {
             return enfants;
         }
@@ -41,13 +38,13 @@ public class ZombieFamille extends Enemie {
                 {  8,   8 }
         };
 
-        for (int i = 0; i < NB_ENFANTS; i++) {
+        for (int i = 0; i < nbEnfants; i++) {
             ZombieNormal enfant = new ZombieNormal(
                     this.getX() + decalages[i][0],
                     this.getY() + decalages[i][1]
             );
 
-            // Transfert de la navigation : évite que les enfants ne re-swawn au point de départ (bug du chemin initial)
+            // évite que les enfants ne re-swawn au point de départ
             enfant.setChemin(chemin);
             enfant.setEtapeActuelle(etapeParent);
 
@@ -57,7 +54,5 @@ public class ZombieFamille extends Enemie {
         return enfants;
     }
 
-    public boolean isEnfantsGeneres() {
-        return this.enfantsGeneres;
-    }
+
 }

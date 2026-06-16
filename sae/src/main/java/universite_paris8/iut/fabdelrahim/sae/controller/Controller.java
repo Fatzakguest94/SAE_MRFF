@@ -105,20 +105,20 @@ public class Controller implements Initializable {
                         this.labelVague.textProperty().unbind();
                         this.labelVague.setText("GAME OVER !");
                         if (this.gameOverLabel != null) this.gameOverLabel.setVisible(true);
-                        flouter(true); // ← AJOUTER
+                        flouter(true); 
                     }
 
                     // V
                     if (this.env.toutesVaguesTerminees()) {
                         this.gameLoop.stop();
                         if (this.winLabel != null) this.winLabel.setVisible(true);
-                        flouter(true); // ← AJOUTER
+                        flouter(true);
                     }
 
                     if (this.env.getNumeroVague() != derniereVagueAffichee) {
                         derniereVagueAffichee = this.env.getNumeroVague();
                         afficherAnnonceVague(derniereVagueAffichee);
-                        flouter(true); // ← AJOUTER
+                        flouter(true);
                     }
                 }
         );
