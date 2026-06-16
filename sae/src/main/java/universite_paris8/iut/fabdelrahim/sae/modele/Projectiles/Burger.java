@@ -26,7 +26,7 @@ public class Burger extends Projectile {
                 double dy = z.getY() - impactY;
                 double distance = Math.sqrt((dx * dx) + (dy * dy));
 
-                // Si le zombie est à moins de 50 pixels de l'explosion, il prend les dégâts 
+                // Si le zombie est à moins de 50 pixels de l'explosion, il prend les dégâts
                 if (distance <= 50) {
                     z.recevoirDegats(this.degats);
                 }

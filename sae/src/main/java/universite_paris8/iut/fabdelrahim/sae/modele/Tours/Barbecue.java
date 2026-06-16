@@ -14,7 +14,7 @@ public class Barbecue extends Tour {
     protected void appliquerEffetImmediat(Enemie cible, List<Enemie> listeZombies) {
         System.out.println("Le Barbecue brûle les zombies à proximité !");
 
-        // Effet de zone : brûle et blesse tous les zombies sur le barbecue
+        // brûle et blesse tous les zombies sur le barbecue
         for (Enemie z : listeZombies) {
             if (!z.estMort()) {
                 // Utilisation de getX() et getY() pour extraire la valeur de la Property
