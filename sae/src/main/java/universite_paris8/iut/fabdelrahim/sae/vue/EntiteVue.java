@@ -12,7 +12,7 @@ import java.net.URL;
 public class EntiteVue {
 
     public EntiteVue() {
-        
+
     }
 
     public ImageView creerImageZombie(String identite, String idUnique) {
