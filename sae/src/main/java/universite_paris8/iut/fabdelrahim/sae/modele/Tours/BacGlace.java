@@ -18,8 +18,8 @@ public class BacGlace extends Tour {
         for (Enemie z : listeZombies) {
             if (!z.estMort()) {
                 //Utilisation de getX() et getY() pour extraire la valeur de la Property
-                double dx = z.getX() - this.getX();
-                double dy = z.getY() - this.getY();
+                double dx = (z.getX() + 18) - (this.getX() + 18);
+                double dy = (z.getY() + 18) - (this.getY() + 18);
                 double distance = Math.sqrt(dx * dx + dy * dy);
 
                 if (distance <= this.portee) {
