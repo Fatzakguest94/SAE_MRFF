@@ -1,7 +1,8 @@
 package universite_paris8.iut.fabdelrahim.sae.modele.Zombies;
 
 import universite_paris8.iut.fabdelrahim.sae.modele.Chemin.Point;
-
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import java.util.List;
 
 public class Enemie {
@@ -16,8 +17,8 @@ public class Enemie {
     private final int degat;
     private int hp;
 
-    private double x;
-    private double y;
+    private DoubleProperty x;
+    private DoubleProperty y;
 
     private List<Point> chemin;
     private int etapeActuelle;
@@ -28,8 +29,8 @@ public class Enemie {
     private boolean ralenti = false;
 
     public Enemie(int x, int y, double vitesse, int hp, int degat, String identite) {
-        this.x = x;
-        this.y = y;
+        this.x = new SimpleDoubleProperty(x);
+        this.y = new SimpleDoubleProperty(y);
         this.vitesse = vitesse;
         this.hp = hp;
         this.degat = degat;
@@ -55,10 +56,10 @@ public class Enemie {
             vitesseEffective = vitesseEffective / 2;
         }
 
-        x = approcherValeur(x, cibleX, vitesseEffective);
-        y = approcherValeur(y, cibleY, vitesseEffective);
+        this.x.set(approcherValeur(getX(), cibleX, vitesseEffective));
+        this.y.set(approcherValeur(getY(), cibleY, vitesseEffective));
 
-        if (x == cibleX && y == cibleY) {
+        if (getX() == cibleX && getY() == cibleY) {
             etapeActuelle++;
         }
 
@@ -109,8 +110,13 @@ public class Enemie {
         return chemin != null && etapeActuelle >= chemin.size();
     }
 
-    public int getX() { return (int) x; }
-    public int getY() { return (int) y; }
+    public double getX() { return this.x.get(); }
+    public double getY() { return this.y.get(); }
+    public void setX(double x) { this.x.set(x); }
+    public void setY(double y) { this.y.set(y); }
+    public DoubleProperty xProperty() { return this.x; }
+    public DoubleProperty yProperty() { return this.y; }
+
     public int getHp() { return hp; }
     public int getDegat() { return degat; }
     public double getVitesse() { return vitesse; }

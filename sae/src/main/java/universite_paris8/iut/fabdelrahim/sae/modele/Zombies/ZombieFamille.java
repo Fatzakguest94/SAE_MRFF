@@ -17,8 +17,8 @@ public class ZombieFamille extends Enemie {
     }
 
 
-     //Méthode appelée à la mort du zombie pour diviser l'entité en 4 sous-zombies.
-     //Les enfants récupèrent le chemin exact et l'état d'avancement (étape) du parent.
+    //Méthode appelée à la mort du zombie pour diviser l'entité en 4 sous-zombies.
+    //Les enfants récupèrent le chemin exact et l'état d'avancement (étape) du parent.
 
     public List<Enemie> genererEnfants(List<Point> chemin, int etapeParent) {
         List<Enemie> enfants = new ArrayList<>();
@@ -40,8 +40,8 @@ public class ZombieFamille extends Enemie {
 
         for (int i = 0; i < nbEnfants; i++) {
             ZombieNormal enfant = new ZombieNormal(
-                    this.getX() + decalages[i][0],
-                    this.getY() + decalages[i][1]
+                    (int) this.getX() + decalages[i][0],
+                    (int) this.getY() + decalages[i][1]
             );
 
             // évite que les enfants ne re-swawn au point de départ
@@ -53,6 +53,4 @@ public class ZombieFamille extends Enemie {
 
         return enfants;
     }
-
-
 }

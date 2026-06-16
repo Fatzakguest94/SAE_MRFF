@@ -13,9 +13,9 @@ public class Burger extends Projectile {
     public void appliquerEffet(Environnement env) {
         System.out.println("Le burger explose à l'impact !");
 
-        //Le centre de l'explosion, c'est là où le projectile s'est écrasé
-        double impactX = this.x;
-        double impactY = this.y;
+        // Le centre de l'explosion, c'est là où le projectile s'est écrasé (utilisation des getters)
+        double impactX = this.getX();
+        double impactY = this.getY();
 
         // on parcourt TOUS les zombies du jeu pour voir qui est touché par l'explosion
         for (Enemie z : env.getZombies()) {
@@ -26,7 +26,7 @@ public class Burger extends Projectile {
                 double dy = z.getY() - impactY;
                 double distance = Math.sqrt((dx * dx) + (dy * dy));
 
-                // Si le zombie est à moins de 50 pixels de l'explosion, il prend les dégâts !
+                // Si le zombie est à moins de 50 pixels de l'explosion, il prend les dégâts 
                 if (distance <= 50) {
                     z.recevoirDegats(this.degats);
                 }

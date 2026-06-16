@@ -17,8 +17,9 @@ public class BacGlace extends Tour {
         // on parcourt tous les zombies pour ralentir ceux à portée
         for (Enemie z : listeZombies) {
             if (!z.estMort()) {
-                double dx = z.getX() - this.x;
-                double dy = z.getY() - this.y;
+                //Utilisation de getX() et getY() pour extraire la valeur de la Property
+                double dx = z.getX() - this.getX();
+                double dy = z.getY() - this.getY();
                 double distance = Math.sqrt(dx * dx + dy * dy);
 
                 if (distance <= this.portee) {

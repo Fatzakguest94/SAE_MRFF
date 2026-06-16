@@ -17,7 +17,7 @@ import universite_paris8.iut.fabdelrahim.sae.modele.Zombies.*;
 public class Environnement {
 
 
-    private static final int ArgentDepart = 100;
+    private static final int ArgentDepart = 10000;
     private static final int RecompenseParZombie = 10;
     private static final int TailleCase = 36;
 
@@ -175,7 +175,7 @@ public class Environnement {
 
             p.avancer();
 
-            // Si le projectile a touché sa cible (ou que la cible a disparu)
+            // Si le projectile a touché sa cible (or que la cible a disparu)
             if (p.isATouche() || p.getCible() == null || p.getCible().estMort()) {
                 if (p.isATouche()) {
                     p.appliquerEffet(this); // Applique l'explosion ou les dégâts
@@ -254,7 +254,7 @@ public class Environnement {
             if (hasard < 0.55) return new ZombieNormal(x, y);
 
 
-            
+
         }
 
         if (vague >= 5) {

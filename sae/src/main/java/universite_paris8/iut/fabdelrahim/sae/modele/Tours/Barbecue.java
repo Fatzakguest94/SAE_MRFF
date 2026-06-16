@@ -17,8 +17,9 @@ public class Barbecue extends Tour {
         // Effet de zone : brûle et blesse tous les zombies sur le barbecue
         for (Enemie z : listeZombies) {
             if (!z.estMort()) {
-                double dx = z.getX() - this.x;
-                double dy = z.getY() - this.y;
+                // Utilisation de getX() et getY() pour extraire la valeur de la Property
+                double dx = z.getX() - this.getX();
+                double dy = z.getY() - this.getY();
                 double distance = Math.sqrt(dx * dx + dy * dy);
 
                 if (distance <= this.portee) {

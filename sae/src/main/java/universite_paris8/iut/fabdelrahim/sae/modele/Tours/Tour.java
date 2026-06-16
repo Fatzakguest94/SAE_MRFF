@@ -5,12 +5,14 @@ import universite_paris8.iut.fabdelrahim.sae.modele.Zombies.Enemie;
 import universite_paris8.iut.fabdelrahim.sae.modele.Environnement;
 import universite_paris8.iut.fabdelrahim.sae.modele.Projectiles.Burger;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import java.util.List;
 
 
 public class Tour {
-    protected int x;
-    protected int y;
+    protected IntegerProperty x;
+    protected IntegerProperty y;
     protected int portee;
     protected int degats;
     protected int cooldown;
@@ -22,8 +24,8 @@ public class Tour {
     private String idUnique;
 
     public Tour(int x, int y, int portee, int degats, int vitesseTir, String identite) {
-        this.x = x;
-        this.y = y;
+        this.x = new SimpleIntegerProperty(x);
+        this.y = new SimpleIntegerProperty(y);
         this.portee = portee;
         this.degats = degats;
         this.cooldown = 0;
@@ -69,8 +71,8 @@ public class Tour {
 
             if (!zombie.estMort()) {
                 // Calcul de la distance entre le centre de la tour (36x36) et le centre du zombie (36x36)
-                double centreTourX = this.x + 18;
-                double centreTourY = this.y + 18;
+                double centreTourX = this.getX() + 18;
+                double centreTourY = this.getY() + 18;
                 double centreZombieX = zombie.getX() + 18;
                 double centreZombieY = zombie.getY() + 18;
 
@@ -96,8 +98,8 @@ public class Tour {
 
     protected void gererActionTour(Enemie cible, Environnement env) {
         // Point de départ centré pour les projectiles visuels (16x16)
-        double departX = this.x + 10;
-        double departY = this.y + 10;
+        double departX = this.getX() + 10;
+        double departY = this.getY() + 10;
 
         if (this.identite.equals("LanceBurger")) {
             // Le projectile récupère directement les dégâts mis à jour de la tour
@@ -122,8 +124,12 @@ public class Tour {
     }
 
     // Getters standard
-    public int getX() { return this.x; }
-    public int getY() { return this.y; }
+    public int getX() { return this.x.get(); }
+    public int getY() { return this.y.get(); }
+    public void setX(int x) { this.x.set(x); }
+    public void setY(int y) { this.y.set(y); }
+    public IntegerProperty xProperty() { return this.x; }
+    public IntegerProperty yProperty() { return this.y; }
     public String getIdUnique() { return this.idUnique; }
     public String getIdentite() { return this.identite; }
     public int getNiveau() { return this.niveau; } // NOUVEAU

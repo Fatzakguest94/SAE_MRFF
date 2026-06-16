@@ -2,21 +2,27 @@ package universite_paris8.iut.fabdelrahim.sae.controller;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.effect.GaussianBlur;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import universite_paris8.iut.fabdelrahim.sae.modele.Environnement;
+import universite_paris8.iut.fabdelrahim.sae.modele.Projectiles.Projectile;
+import universite_paris8.iut.fabdelrahim.sae.modele.Tours.Tour;
+import universite_paris8.iut.fabdelrahim.sae.modele.Zombies.Enemie;
 import universite_paris8.iut.fabdelrahim.sae.vue.TerrainVue;
 import universite_paris8.iut.fabdelrahim.sae.vue.EntiteVue;
 import universite_paris8.iut.fabdelrahim.sae.vue.GestionImage;
@@ -65,11 +71,20 @@ public class Controller implements Initializable {
 
     // Centralisation de la configuration de la partie
     private void initJeu() {
-        this.entiteVue = new EntiteVue(panneauJeu, env);
+        this.entiteVue = new EntiteVue();
+
+        this.initEcouteurs();
 
         // Affichage du comptoir de départ
         if (this.env.getBase() != null) {
-            this.entiteVue.afficherComptoir(this.env.getBase());
+            ImageView imageComptoir = this.entiteVue.creerImageComptoir(
+                    this.env.getBase().getIdentite(),
+                    this.env.getBase().getX(),
+                    this.env.getBase().getY()
+            );
+            if (imageComptoir != null) {
+                this.panneauJeu.getChildren().add(imageComptoir);
+            }
         }
 
         // Bindings
@@ -86,6 +101,83 @@ public class Controller implements Initializable {
         this.initAnimation();
     }
 
+    // Configuration des écouteurs de listes et des liaisons de propriétés (Bindings)
+    private void initEcouteurs() {
+        //Gestionnaire d'affichage des zombies (Ajout / Suppression)
+        this.env.getZombies().addListener((ListChangeListener<Enemie>) change -> {
+            while (change.next()) {
+                if (change.wasAdded()) {
+                    for (Enemie nouveauZombie : change.getAddedSubList()) {
+                        ImageView iv = this.entiteVue.creerImageZombie(nouveauZombie.getIdentite(), nouveauZombie.getIdUnique());
+                        if (iv != null) {
+                            iv.layoutXProperty().bind(nouveauZombie.xProperty());
+                            iv.layoutYProperty().bind(nouveauZombie.yProperty());
+                            this.panneauJeu.getChildren().add(iv);
+                        }
+                    }
+                }
+                if (change.wasRemoved()) {
+                    for (Enemie zombieMort : change.getRemoved()) {
+                        Node imgView = this.panneauJeu.lookup("#" + zombieMort.getIdUnique());
+                        if (imgView != null) {
+                            this.panneauJeu.getChildren().remove(imgView);
+                        }
+                    }
+                }
+            }
+        });
+
+        //Gestionnaire d'affichage des tours posées et vendues
+        this.env.getTours().addListener((ListChangeListener<Tour>) change -> {
+            while (change.next()) {
+                if (change.wasAdded()) {
+                    for (Tour nouvelleTour : change.getAddedSubList()) {
+                        if (this.panneauJeu.lookup("#" + nouvelleTour.getIdUnique()) != null) continue;
+
+                        ImageView iv = this.entiteVue.creerImageTour(nouvelleTour.getIdentite(), nouvelleTour.getIdUnique());
+                        if (iv != null) {
+                            iv.layoutXProperty().bind(nouvelleTour.xProperty());
+                            iv.layoutYProperty().bind(nouvelleTour.yProperty());
+                            this.panneauJeu.getChildren().add(iv);
+                        }
+                    }
+                }
+                if (change.wasRemoved()) {
+                    for (Tour tourRetiree : change.getRemoved()) {
+                        Node imgView = this.panneauJeu.lookup("#" + tourRetiree.getIdUnique());
+                        if (imgView != null) {
+                            this.panneauJeu.getChildren().remove(imgView);
+                        }
+                    }
+                }
+            }
+        });
+
+        //Gestionnaire d'affichage des projectiles
+        this.env.getProjectiles().addListener((ListChangeListener<Projectile>) change -> {
+            while (change.next()) {
+                if (change.wasAdded()) {
+                    for (Projectile nouveauProj : change.getAddedSubList()) {
+                        ImageView iv = this.entiteVue.creerImageProjectile(nouveauProj.getIdentite(), nouveauProj.getIdUnique());
+                        if (iv != null) {
+                            iv.layoutXProperty().bind(nouveauProj.xProperty());
+                            iv.layoutYProperty().bind(nouveauProj.yProperty());
+                            this.panneauJeu.getChildren().add(iv);
+                        }
+                    }
+                }
+                if (change.wasRemoved()) {
+                    for (Projectile projDetruit : change.getRemoved()) {
+                        Node imgView = this.panneauJeu.lookup("#" + projDetruit.getIdUnique());
+                        if (imgView != null) {
+                            this.panneauJeu.getChildren().remove(imgView);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
     // Boucle principale du jeu (Game Loop)
     private void initAnimation() {
 
@@ -96,7 +188,6 @@ public class Controller implements Initializable {
                 Duration.seconds(0.017),
                 ev -> {
                     this.env.unTourDeJeu();
-                    this.entiteVue.mettreAJourAffichage(this.env);
 
                     // D
                     if (this.env.getBase() != null && this.env.getBase().estDetruit()) {
