@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      alignment="CENTER"
+      spacing="2"
+      translateY="-12">
+
+    <Label fx:id="labelNiveau"
+           text="Nv. 1"
+           style="-fx-font-family: 'Arial'; -fx-font-weight: bold; -fx-font-size: 10px; -fx-text-fill: white; -fx-background-color: rgba(0, 0, 0, 0.6); -fx-background-radius: 3; -fx-padding: 1 4 1 4;" />
+
+    <ImageView fx:id="imageTour"
+               fitWidth="36.0"
+               fitHeight="36.0"
+               preserveRatio="true" />
+
+</VBox>

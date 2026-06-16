@@ -1,20 +1,18 @@
 package universite_paris8.iut.fabdelrahim.sae.vue;
 
-import javafx.geometry.Pos;
-import javafx.scene.Node;
+import javafx.beans.property.IntegerProperty;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import universite_paris8.iut.fabdelrahim.sae.modele.Tours.Tour;
+import java.io.IOException;
+import java.net.URL;
 
 public class EntiteVue {
 
     public EntiteVue() {
-        // Constructeur vide, les fabrications se font à la demande via les méthodes ci-dessous
+        
     }
 
     public ImageView creerImageZombie(String identite, String idUnique) {
@@ -29,42 +27,47 @@ public class EntiteVue {
         return imageView;
     }
 
-    //Crée le visuel du projectile sur la carte
     public ImageView creerImageProjectile(String identite, String idUnique) {
-        Image img = GestionImage.getImage(identite); // Ira chercher "Burger" ou "Frites"
+        Image img = GestionImage.getImage(identite);
         if (img == null) return null;
 
         ImageView imageView = new ImageView(img);
-        imageView.setFitWidth(16);  // Plus petit qu'un zombie (ex: 16x16 pixels)
+        imageView.setFitWidth(16);
         imageView.setFitHeight(16);
         imageView.setId(idUnique);
 
         return imageView;
     }
 
-    public Node creerImageTour(Tour tour) {
-        Image img = GestionImage.getImage(tour.getIdentite());
-        if (img == null) return null;
 
-        ImageView imageView = new ImageView(img);
-        imageView.setFitWidth(36);
-        imageView.setFitHeight(36);
+    public VBox creerImageTour(String identite, String idUnique, IntegerProperty niveauProperty) {
+        try {
+            URL fxmlUrl = getClass().getResource("/universite_paris8/iut/fabdelrahim/sae/barreniv.fxml");
+            if (fxmlUrl == null) return null;
 
-        Label labelNiveau = new Label();
-        labelNiveau.setFont(Font.font("Arial", FontWeight.BOLD, 10));
-        labelNiveau.setTextFill(Color.WHITE);
-        labelNiveau.setStyle("-fx-background-color: rgba(0, 0, 0, 0.6); -fx-background-radius: 3; -fx-padding: 1 4 1 4;");
+            FXMLLoader loader = new FXMLLoader(fxmlUrl);
+            VBox conteneurTour = loader.load();
 
-        labelNiveau.textProperty().bind(tour.niveauProperty().asString("Nv. %d"));
+            Label labelNiveau = (Label) loader.getNamespace().get("labelNiveau");
+            ImageView imageTour = (ImageView) loader.getNamespace().get("imageTour");
 
-        VBox conteneurTour = new VBox(2);
-        conteneurTour.setAlignment(Pos.CENTER);
-        conteneurTour.setId(tour.getIdUnique());
-        conteneurTour.getChildren().addAll(labelNiveau, imageView);
+            Image img = GestionImage.getImage(identite);
+            if (img != null && imageTour != null) {
+                imageTour.setImage(img);
+            }
 
-        conteneurTour.setTranslateY(-12);
+            conteneurTour.setId(idUnique);
 
-        return conteneurTour;
+            if (labelNiveau != null && niveauProperty != null) {
+                labelNiveau.textProperty().bind(niveauProperty.asString("Nv. %d"));
+            }
+
+            return conteneurTour;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public ImageView creerImageComptoir(String identite, int x, int y) {

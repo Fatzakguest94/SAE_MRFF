@@ -16,7 +16,6 @@ import universite_paris8.iut.fabdelrahim.sae.modele.Zombies.*;
 
 public class Environnement {
 
-
     private static final int ArgentDepart = 150;
     private static final int RecompenseParZombie = 10;
     private static final int TailleCase = 36;
@@ -25,6 +24,7 @@ public class Environnement {
     private static final int Delaiavantaparition = 10;
     private static final int DelaientreVague = 60;
     private static final int paslogique = 3;
+    private static final int NombreVaguesMax = 10;
 
     private final Terrain terrain;
     private final List<Point> chemin;
@@ -43,8 +43,6 @@ public class Environnement {
     private int tempsAvantProchaineVague;
     private int compteurToursSurChemin = 0;
 
-    private static final int NombreVaguesMax = 10;
-
     public Environnement() {
         this.terrain = new Terrain();
         this.tours = FXCollections.observableArrayList();
@@ -61,7 +59,7 @@ public class Environnement {
         this.chemin = Bfs.bfs(terrain.grille, debut, arrivee);
 
         if (chemin.isEmpty()) {
-            System.err.println("Aucun chemin valide trouvé !");
+            System.err.println("Aucun chemin valide trouvé ");
         }
 
         this.base = new Comptoir(
@@ -74,12 +72,11 @@ public class Environnement {
     public void preparerNouvelleVague() {
         numeroVague.set(getNumeroVague() + 1);
         vagueEnCours.set(true);
-        if(getNumeroVague() < 10) {
+        if (getNumeroVague() < NombreVaguesMax) {
             zombiesRestantsASpawner = 10 * getNumeroVague();
             delaiAvantProchainZombie = 0;
-        }
-        else{
-            zombiesRestantsASpawner = 10 * (getNumeroVague()/2);
+        } else {
+            zombiesRestantsASpawner = 10 * (getNumeroVague() / 2);
         }
     }
 
@@ -99,12 +96,10 @@ public class Environnement {
         if (estTourSpeciale) {
             if (idTuile == 1 || idTuile == 100) {
                 if (compteurToursSurChemin >= 6) return;
-            }
-            else if (idTuile != 0) {
+            } else if (idTuile != 0) {
                 return;
             }
-        }
-        else {
+        } else {
             if (idTuile != 0) return;
         }
 
@@ -164,23 +159,20 @@ public class Environnement {
 
     private void faireAttaquerLesTours() {
         for (Tour t : tours) {
-            t.attaquer(this); // On passe l'environnement lui-même
+            t.attaquer(this);
         }
     }
 
-    //Gère le déplacement et l'impact des projectiles
     private void mettreAJourProjectiles() {
         for (int i = projectiles.size() - 1; i >= 0; i--) {
             Projectile p = projectiles.get(i);
-
             p.avancer();
 
-            // Si le projectile a touché sa cible (or que la cible a disparu)
             if (p.isATouche() || p.getCible() == null || p.getCible().estMort()) {
                 if (p.isATouche()) {
-                    p.appliquerEffet(this); // Applique l'explosion ou les dégâts
+                    p.appliquerEffet(this);
                 }
-                projectiles.remove(i); // Retiré du modèle -> Retiré de la vue automatiquement
+                projectiles.remove(i);
             }
         }
     }
@@ -246,19 +238,16 @@ public class Environnement {
     private Enemie creerZombieSelonVague(int x, int y) {
         int vague = getNumeroVague();
         double hasard = Math.random();
-        if(vague == 10){
+
+        if (vague == NombreVaguesMax) {
             if (zombiesRestantsASpawner == 25) return new Boss(x, y);
             if (hasard < 0.20) return new ZombieGros(x, y);
             if (hasard < 0.40) return new ZombieFamille(x, y);
             if (hasard < 0.50) return new ZombieRapide(x, y);
             if (hasard < 0.55) return new ZombieNormal(x, y);
-
-
-
         }
 
         if (vague >= 5) {
-
             if (hasard < 0.20) return new ZombieGros(x, y);
             if (hasard < 0.40) return new ZombieFamille(x, y);
             if (hasard < 0.70) return new ZombieRapide(x, y);
@@ -274,7 +263,6 @@ public class Environnement {
             return new ZombieNormal(x, y);
         }
         return new ZombieNormal(x, y);
-
     }
 
     public void vendreTour(int pixelX, int pixelY) {
@@ -303,7 +291,6 @@ public class Environnement {
             tours.remove(tourATrouver);
             System.out.println("Tour vendue ! Recrédité de : " + remboursement + " Tickets.");
         }
-
     }
 
     public void ameliorerTour(int pixelX, int pixelY) {
@@ -318,7 +305,6 @@ public class Environnement {
         if (tourATrouver != null) {
             int cout = tourATrouver.getPrixAmelioration();
 
-            // Vérification du solde du joueur
             if (payerAchat(cout)) {
                 tourATrouver.ameliorer();
                 System.out.println("Tour améliore au niveau " + tourATrouver.getNiveau() + " ! Cost: " + cout);
@@ -331,8 +317,6 @@ public class Environnement {
     public boolean toutesVaguesTerminees() {
         return getNumeroVague() >= NombreVaguesMax && !vagueEnCours.get() && zombies.isEmpty();
     }
-
-
 
     public ObservableList<Enemie> getZombies() { return zombies; }
     public ObservableList<Tour> getTours() { return tours; }
