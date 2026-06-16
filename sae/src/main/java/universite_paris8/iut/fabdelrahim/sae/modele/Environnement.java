@@ -17,7 +17,7 @@ import universite_paris8.iut.fabdelrahim.sae.modele.Zombies.*;
 public class Environnement {
 
     // Paramètres d'équilibrage
-    private static final int ArgentDepart = 10000;
+    private static final int ArgentDepart = 100;
     private static final int RecompenseParZombie = 10;
     private static final int TailleCase = 36;
 
@@ -52,7 +52,7 @@ public class Environnement {
         this.projectiles = FXCollections.observableArrayList(); // CORRECTION ici aussi
 
         this.argent = new SimpleIntegerProperty(ArgentDepart);
-        this.numeroVague = new SimpleIntegerProperty(9);
+        this.numeroVague = new SimpleIntegerProperty(0);
         this.vagueEnCours = new SimpleBooleanProperty(false);
         this.temps = 0;
 

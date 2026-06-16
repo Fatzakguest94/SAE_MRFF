@@ -33,12 +33,11 @@ public class Tour {
         this.idUnique = "tour_" + compteur++;
     }
 
-    // Méthode pour appliquer l'amélioration des stats
+
     public void ameliorer() {
         this.niveau++;
-        // Augmentation progressive : +50% de dégâts et +15% de portée par niveau
         this.degats = (int) (this.degats * 1.5);
-        this.portee = (int) (this.portee * 1.15);
+        this.vitesseTir = (int) (this.vitesseTir * 0.75);
     }
 
     // Calcule le coût selon le type et le niveau visé

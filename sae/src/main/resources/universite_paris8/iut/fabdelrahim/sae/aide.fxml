@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--
-    Fichier de vue pour l'interface de guide/aide sans barres de défilement inutiles.
--->
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
@@ -14,90 +10,143 @@
            fx:controller="universite_paris8.iut.fabdelrahim.sae.controller.Controller"
            prefWidth="1377"
            prefHeight="856"
-           style="-fx-background-color: #4a151b;">
+           style="-fx-background-color: linear-gradient(to bottom right, #200508, #0f0203, #2a0a0e);">
 
-    <VBox alignment="CENTER" spacing="35">
+    <VBox alignment="CENTER" spacing="30" maxWidth="1300">
         <padding>
-            <Insets top="40" right="60" bottom="40" left="60"/>
+            <Insets top="30" right="40" bottom="30" left="40"/>
         </padding>
 
-        <!-- Titre principal épuré -->
-        <Label text="PIZZATTACK - GUIDE DU JEU"
-               style="-fx-font-size: 42px; -fx-font-weight: bold; -fx-text-fill: #e87800; -fx-letter-spacing: 2px;"/>
+        <VBox alignment="CENTER" spacing="5">
+            <Label text="PIZZATTACK"
+                   style="-fx-font-size: 56px; -fx-font-weight: 900; -fx-text-fill: #e87800; -fx-letter-spacing: 6px; -fx-effect: dropshadow(three-pass-box, #ff4500, 15, 0.3, 0, 0);"/>
+            <Label text="MANUEL DE SURVIE DU CHEF CUISTOT"
+                   style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #ded0b6; -fx-letter-spacing: 4px;"/>
+            <Region prefHeight="10"/>
+        </VBox>
 
-        <!-- Grille principale sur deux colonnes de tailles égales -->
-        <HBox spacing="30" alignment="CENTER" VBox.vgrow="ALWAYS" maxWidth="1260">
+        <HBox spacing="25" alignment="CENTER" VBox.vgrow="ALWAYS">
 
-            <!-- PANNEAU GAUCHE : CONTEXTE ET HISTOIRE (FIXE SANS BARRE DE DEFILEMENT) -->
-            <VBox spacing="20" prefWidth="610"
-                  style="-fx-background-color: #2b1114; -fx-padding: 30px; -fx-background-radius: 6px;">
+            <VBox spacing="20" prefWidth="410" minWidth="380" maxHeight="560"
+                  style="-fx-background-color: rgba(30, 8, 11, 0.85); -fx-padding: 25px; -fx-background-radius: 16px; -fx-border-color: rgba(232, 120, 0, 0.3); -fx-border-width: 1.5px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 10, 0, 0, 0);">
 
-                <Label text="L'Univers"
-                       style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #e87800; -fx-border-color: transparent transparent #e87800 transparent; -fx-border-width: 0 0 2px 0; -fx-padding: 0 0 5px 0;"/>
+                <Label text="L'HISTOIRE" style="-fx-font-size: 18px; -fx-font-weight: 900; -fx-text-fill: #e87800; -fx-letter-spacing: 1px;"/>
 
-                <!-- Le texte est posé directement ici, ce qui supprime l'effet "glisser" -->
-                <TextFlow lineSpacing="8.0">
+                <TextFlow lineSpacing="6.0" VBox.vgrow="ALWAYS">
                     <children>
-                        <Text text="L'histoire se déroule dans un monde frappé par le désespoir. Du jour au lendemain, toute la nourriture sur Terre perdit son goût, devenant une bouillie fade à en mourir. Privée de saveurs, la population a perdu la tête et s'est transformée en zombies. En effet, leur seule obsession est de retrouver la moindre sensation gustative.&#10;&#10;" style="-fx-fill: #ded0b6; -fx-font-size: 15px;"/>
-                        <Text text="Malheureusement pour vous, l'odeur de votre four à bois les a attirés. Vous incarnez donc les chefs cuistots de la pizzeria Hechik, l'unique pizzeria au monde à avoir conservé le secret des saveurs. Vous allez ainsi devoir affronter des hordes de zombies-clients affamés qui s'introduisent dans le restaurant et avancent vers les cuisines.&#10;&#10;" style="-fx-fill: #ded0b6; -fx-font-size: 15px;"/>
-                        <Text text="Vous devez empêcher les zombies d'atteindre le bout de la salle pour dévorer vos pizzas. Pour cela, vous devrez utiliser des objets et placer de manière stratégique des tours et des pièges sur leur passage pour les repousser." style="-fx-fill: #e87800; -fx-font-size: 15px; -fx-font-weight: bold;"/>
+                        <Text text="Le monde a sombré. Toute la nourriture a perdu son goût, transformant la population en zombies obsédés par la moindre sensation gustative.&#10;&#10;" style="-fx-fill: #ded0b6; -fx-font-size: 14px;"/>
+                        <Text text="L'odeur de votre four à bois les a attirés vers la pizzeria Hechik, unique gardienne des saveurs. Défendez vos cuisines face aux vagues de clients affamés !&#10;&#10;" style="-fx-fill: #ded0b6; -fx-font-size: 14px;"/>
+                        <Text text="Placez vos défenses pour les empêcher d'atteindre vos précieuses pizzas." style="-fx-fill: #ffaa44; -fx-font-size: 14px; -fx-font-weight: bold;"/>
                     </children>
                 </TextFlow>
+
+                <Region style="-fx-background-color: rgba(232, 120, 0, 0.2); -fx-min-height: 1px;"/>
+
+                <Label text="RÈGLES D'OR" style="-fx-font-size: 16px; -fx-font-weight: 900; -fx-text-fill: #ff8c00;"/>
+                <VBox spacing="10">
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label  style="-fx-font-size: 16px;"/>
+                        <Label text="+10 Tickets par élimination" style="-fx-text-fill: #ded0b6; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+                    </HBox>
+
+                </VBox>
             </VBox>
 
-            <!-- PANNEAU DROITE : FICHES DE GAMEPLAY (ONGLETS) -->
-            <VBox spacing="20" prefWidth="610"
-                  style="-fx-background-color: #2b1114; -fx-padding: 30px; -fx-background-radius: 6px;">
+            <VBox spacing="15" prefWidth="430" minWidth="400" maxHeight="560"
+                  style="-fx-background-color: rgba(30, 8, 11, 0.85); -fx-padding: 25px; -fx-background-radius: 16px; -fx-border-color: #e87800; -fx-border-width: 2px; -fx-effect: dropshadow(three-pass-box, rgba(232,120,0,0.15), 15, 0, 0, 0);">
 
-                <Label text="Comment Jouer ?"
-                       style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #e87800; -fx-border-color: transparent transparent #e87800 transparent; -fx-border-width: 0 0 2px 0; -fx-padding: 0 0 5px 0;"/>
+                <Label text="VOTRE ARSENAL" style="-fx-font-size: 18px; -fx-font-weight: 900; -fx-text-fill: #e87800; -fx-letter-spacing: 1px;"/>
 
-                <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS"
-                         style="-fx-tab-min-width: 160px; -fx-tab-max-width: 160px; -fx-tab-min-height: 35px; -fx-background-color: transparent;">
-                    <tabs>
+                <VBox spacing="14" VBox.vgrow="ALWAYS">
+                    <VBox spacing="2" style="-fx-background-color: rgba(255,255,255,0.03); -fx-padding: 8px 12px; -fx-background-radius: 6px;">
+                        <HBox alignment="CENTER_LEFT">
+                            <Label text="MITRAILLETTE FRITE" style="-fx-text-fill: #ffaa44; -fx-font-weight: bold; -fx-font-size: 14px;"/>
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Label text="Cadence Max" style="-fx-text-fill: #857e72; -fx-font-size: 11px;"/>
+                        </HBox>
+                        <Label text="Portée : 150 | Dégâts : 4 | Cadence ultra-rapide (Vitesse 4)." style="-fx-text-fill: #ded0b6; -fx-font-size: 13px;" wrapText="true"/>
+                    </VBox>
+                    <VBox spacing="2" style="-fx-background-color: rgba(255,255,255,0.03); -fx-padding: 8px 12px; -fx-background-radius: 6px;">
+                        <HBox alignment="CENTER_LEFT">
+                            <Label text="LANCE-BURGER" style="-fx-text-fill: #ffaa44; -fx-font-weight: bold; -fx-font-size: 14px;"/>
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Label text="Artillerie" style="-fx-text-fill: #857e72; -fx-font-size: 11px;"/>
+                        </HBox>
+                        <Label text="Portée : 180 | Dégâts : 15 | Impact lourd mais très lent (Vitesse 60)." style="-fx-text-fill: #ded0b6; -fx-font-size: 13px;" wrapText="true"/>
+                    </VBox>
+                    <VBox spacing="2" style="-fx-background-color: rgba(255,255,255,0.03); -fx-padding: 8px 12px; -fx-background-radius: 6px;">
+                        <HBox alignment="CENTER_LEFT">
+                            <Label text="BARBECUE (PIÈGE)" style="-fx-text-fill: #ffaa44; -fx-font-weight: bold; -fx-font-size: 14px;"/>
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Label text="Zone au Sol" style="-fx-text-fill: #857e72; -fx-font-size: 11px;"/>
+                        </HBox>
+                        <Label text="Portée : 12 | Dégâts : 1 | Brûle les ennemis et applique des dégâts continus." style="-fx-text-fill: #ded0b6; -fx-font-size: 13px;" wrapText="true"/>
+                    </VBox>
+                    <VBox spacing="2" style="-fx-background-color: rgba(255,255,255,0.03); -fx-padding: 8px 12px; -fx-background-radius: 6px;">
+                        <HBox alignment="CENTER_LEFT">
+                            <Label text="BAC À GLACE (PIÈGE)" style="-fx-text-fill: #ffaa44; -fx-font-weight: bold; -fx-font-size: 14px;"/>
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Label text="Contrôle" style="-fx-text-fill: #857e72; -fx-font-size: 11px;"/>
+                        </HBox>
+                        <Label text="Portée : 12 | Dégâts : 0 | Réduit instantanément de moitié la vitesse des clients." style="-fx-text-fill: #ded0b6; -fx-font-size: 13px;" wrapText="true"/>
+                    </VBox>
+                </VBox>
+            </VBox>
 
-                        <!-- CATEGORIE DEFENSES -->
-                        <Tab text="Nos Défenses" style="-fx-background-color: #3d1a1e; -fx-text-base-color: #ded0b6;">
-                            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;" hbarPolicy="NEVER">
-                                <VBox spacing="14" style="-fx-padding: 20px 5px 10px 5px;">
-                                    <Text text="• Mitrafrite (100) : Tourelle de base, tire très vite avec une portée équilibrée mais de faibles dégâts (1 PV)." style="-fx-fill: #ded0b6; -fx-font-size: 14px;"/>
-                                    <Text text="• Lance-Burger (150) : Envoie des burgers explosifs. Gros dégâts de zone (10 PV) mais cadence lente." style="-fx-fill: #ded0b6; -fx-font-size: 14px;"/>
-                                    <Text text="• Barbecue (200) : Piège au sol. Brûle les zombies qui marchent dessus (2 PV/sec)." style="-fx-fill: #ded0b6; -fx-font-size: 14px;"/>
-                                    <Text text="• Bac à glace (300) : Portée très limitée mais ralentit fortement les ennemis." style="-fx-fill: #ded0b6; -fx-font-size: 14px;"/>
-                                </VBox>
-                            </ScrollPane>
-                        </Tab>
+            <VBox spacing="15" prefWidth="430" minWidth="400" maxHeight="560"
+                  style="-fx-background-color: rgba(30, 8, 11, 0.85); -fx-padding: 25px; -fx-background-radius: 16px; -fx-border-color: rgba(232, 120, 0, 0.3); -fx-border-width: 1.5px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 10, 0, 0, 0);">
 
-                        <!-- CATEGORIE ENNEMIS -->
-                        <Tab text="Les Clients" style="-fx-background-color: #3d1a1e; -fx-text-base-color: #ded0b6;">
-                            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;" hbarPolicy="NEVER">
-                                <VBox spacing="14" style="-fx-padding: 20px 5px 10px 5px;">
-                                    <Text text="• Client de base : Vie faible (10 PV), vitesse normale. Fait perdre 1 PV à la base." style="-fx-fill: #ded0b6; -fx-font-size: 14px;"/>
-                                    <Text text="• L'Affamé : Court très vite (vitesse double). Enlève 2 PV s'il passe." style="-fx-fill: #ded0b6; -fx-font-size: 14px;"/>
-                                    <Text text="• Le Gourmand : Un vrai tank (25 PV) mais très lent. Enlève 5 PV à la base." style="-fx-fill: #ded0b6; -fx-font-size: 14px;"/>
-                                    <Text text="• La Famille : Se divise en 3 petits zombies rapides (7 PV chacun) à sa mort." style="-fx-fill: #ded0b6; -fx-font-size: 14px;"/>
-                                </VBox>
-                            </ScrollPane>
-                        </Tab>
+                <Label text="LES CLIENTS HOSTILES" style="-fx-font-size: 18px; -fx-font-weight: 900; -fx-text-fill: #e87800; -fx-letter-spacing: 1px;"/>
 
-                        <!-- CATEGORIE EVOLUTION ET RESSOURCES -->
-                        <Tab text="Bonus et Argent" style="-fx-background-color: #3d1a1e; -fx-text-base-color: #ded0b6;">
-                            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;" hbarPolicy="NEVER">
-                                <VBox spacing="14" style="-fx-padding: 20px 5px 10px 5px;">
-                                    <Text text="• Économie : Tuer des zombies gagne des Tickets Restaurant. Utilisez ce budget pour poser des défenses ou réadapter votre stratégie." style="-fx-fill: #ded0b6; -fx-font-size: 14px;"/>
-                                    <Text text="• Rouleau à pizza : Objet bonus (5% de chance de drop). Il booste les dégâts de toutes tes tours de 20% pendant 30 secondes !" style="-fx-fill: #e87800; -fx-font-size: 14px; -fx-font-weight: bold;"/>
-                                </VBox>
-                            </ScrollPane>
-                        </Tab>
-                    </tabs>
-                </TabPane>
+                <VBox spacing="10" VBox.vgrow="ALWAYS">
+                    <HBox spacing="10" style="-fx-background-color: rgba(0,0,0,0.2); -fx-padding: 8px; -fx-background-radius: 6px;" alignment="CENTER_LEFT">
+                        <Label  style="-fx-font-size: 20px;"/>
+                        <VBox HBox.hgrow="ALWAYS">
+                            <Label text="ZOMBIE NORMAL" style="-fx-text-fill: #ded0b6; -fx-font-weight: bold; -fx-font-size: 13px;"/>
+                            <Label text="20 PV | Vitesse : 2.0 | Dégâts Cuisine : 2" style="-fx-text-fill: #857e72; -fx-font-size: 12px;"/>
+                        </VBox>
+                    </HBox>
+                    <HBox spacing="10" style="-fx-background-color: rgba(0,0,0,0.2); -fx-padding: 8px; -fx-background-radius: 6px;" alignment="CENTER_LEFT">
+                        <Label  style="-fx-font-size: 20px;"/>
+                        <VBox HBox.hgrow="ALWAYS">
+                            <Label text="ZOMBIE RAPIDE" style="-fx-text-fill: #ffaa44; -fx-font-weight: bold; -fx-font-size: 13px;"/>
+                            <Label text="15 PV | Vitesse éclair : 4.0 | Dégâts Cuisine : 3" style="-fx-text-fill: #857e72; -fx-font-size: 12px;"/>
+                        </VBox>
+                    </HBox>
+                    <HBox spacing="10" style="-fx-background-color: rgba(0,0,0,0.2); -fx-padding: 8px; -fx-background-radius: 6px;" alignment="CENTER_LEFT">
+                        <Label  style="-fx-font-size: 20px;"/>
+                        <VBox HBox.hgrow="ALWAYS">
+                            <Label text="ZOMBIE GROS" style="-fx-text-fill: #ded0b6; -fx-font-weight: bold; -fx-font-size: 13px;"/>
+                            <Label text="70 PV | Vitesse : 1.0 | Dégâts Cuisine : 10" style="-fx-text-fill: #857e72; -fx-font-size: 12px;"/>
+                        </VBox>
+                    </HBox>
+                    <HBox spacing="10" style="-fx-background-color: rgba(0,0,0,0.2); -fx-padding: 8px; -fx-background-radius: 6px;" alignment="CENTER_LEFT">
+                        <Label style="-fx-font-size: 20px;"/>
+                        <VBox HBox.hgrow="ALWAYS">
+                            <Label text="ZOMBIE FAMILLE" style="-fx-text-fill: #ded0b6; -fx-font-weight: bold; -fx-font-size: 13px;"/>
+                            <Label text="35 PV | À sa mort, il se divise en 4 Zombies Normaux !" style="-fx-text-fill: #857e72; -fx-font-size: 12px;" wrapText="true"/>
+                        </VBox>
+                    </HBox>
+                    <HBox spacing="10" style="-fx-background-color: rgba(232,120,0,0.08); -fx-padding: 8px; -fx-background-radius: 6px; -fx-border-color: rgba(232,120,0,0.3); -fx-border-width: 1px;" alignment="CENTER_LEFT">
+                        <Label  style="-fx-font-size: 20px;"/>
+                        <VBox HBox.hgrow="ALWAYS">
+                            <Label text="LE BOSS" style="-fx-text-fill: #ff4500; -fx-font-weight: 900; -fx-font-size: 13px;"/>
+                            <Label text="1000 PV | Vitesse : 4.0 | Dégâts Cuisine : 100" style="-fx-text-fill: #ffaa44; -fx-font-size: 12px;"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
             </VBox>
         </HBox>
 
-        <!-- Bouton de validation épuré -->
+        <Region prefHeight="5"/>
+
         <Button fx:id="nextBtn"
-                text="COMMENCER LE COMBAT"
+                text="OUVRIR LE RESTAURANT"
                 onAction="#aide"
-                style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-background-color: #e87800; -fx-text-fill: #2b1114; -fx-padding: 15px 60px; -fx-cursor: hand; -fx-background-radius: 4px;" />
+                style="-fx-font-size: 20px; -fx-font-weight: 900; -fx-text-fill: #0f0203; -fx-padding: 18px 80px; -fx-cursor: hand; -fx-background-radius: 10px;
+                       -fx-background-color: ${nextBtn.hover ? '#ff8c00' : '#e87800'};
+                       -fx-scale-x: ${nextBtn.hover ? 1.03 : 1.0};
+                       -fx-scale-y: ${nextBtn.hover ? 1.03 : 1.0};
+                       -fx-effect: ${nextBtn.hover ? 'dropshadow(three-pass-box, #ff4500, 20, 0, 0, 0)' : 'dropshadow(three-pass-box, rgba(232,120,0,0.4), 15, 0, 0, 0)'};" />
     </VBox>
 </StackPane>

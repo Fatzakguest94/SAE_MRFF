@@ -7,7 +7,6 @@ import java.util.List;
 public class Barbecue extends Tour {
 
     public Barbecue(int x, int y) {
-        // portee: 20, degats: 1, vitesseTir: 12
         super(x, y, 20, 1, 12, "Barbecue");
     }
 
