@@ -134,7 +134,7 @@ public class Controller implements Initializable {
                     for (Tour nouvelleTour : change.getAddedSubList()) {
                         if (this.panneauJeu.lookup("#" + nouvelleTour.getIdUnique()) != null) continue;
 
-                        ImageView iv = this.entiteVue.creerImageTour(nouvelleTour.getIdentite(), nouvelleTour.getIdUnique());
+                        Node iv = this.entiteVue.creerImageTour(nouvelleTour);
                         if (iv != null) {
                             iv.layoutXProperty().bind(nouvelleTour.xProperty());
                             iv.layoutYProperty().bind(nouvelleTour.yProperty());

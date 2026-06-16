@@ -17,7 +17,7 @@ import universite_paris8.iut.fabdelrahim.sae.modele.Zombies.*;
 public class Environnement {
 
 
-    private static final int ArgentDepart = 10000;
+    private static final int ArgentDepart = 150;
     private static final int RecompenseParZombie = 10;
     private static final int TailleCase = 36;
 

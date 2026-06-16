@@ -1,7 +1,15 @@
 package universite_paris8.iut.fabdelrahim.sae.vue;
 
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import universite_paris8.iut.fabdelrahim.sae.modele.Tours.Tour;
 
 public class EntiteVue {
 
@@ -34,16 +42,29 @@ public class EntiteVue {
         return imageView;
     }
 
-    public ImageView creerImageTour(String identite, String idUnique) {
-        Image img = GestionImage.getImage(identite);
+    public Node creerImageTour(Tour tour) {
+        Image img = GestionImage.getImage(tour.getIdentite());
         if (img == null) return null;
 
         ImageView imageView = new ImageView(img);
         imageView.setFitWidth(36);
         imageView.setFitHeight(36);
-        imageView.setId(idUnique);
 
-        return imageView;
+        Label labelNiveau = new Label();
+        labelNiveau.setFont(Font.font("Arial", FontWeight.BOLD, 10));
+        labelNiveau.setTextFill(Color.WHITE);
+        labelNiveau.setStyle("-fx-background-color: rgba(0, 0, 0, 0.6); -fx-background-radius: 3; -fx-padding: 1 4 1 4;");
+
+        labelNiveau.textProperty().bind(tour.niveauProperty().asString("Nv. %d"));
+
+        VBox conteneurTour = new VBox(2);
+        conteneurTour.setAlignment(Pos.CENTER);
+        conteneurTour.setId(tour.getIdUnique());
+        conteneurTour.getChildren().addAll(labelNiveau, imageView);
+
+        conteneurTour.setTranslateY(-12);
+
+        return conteneurTour;
     }
 
     public ImageView creerImageComptoir(String identite, int x, int y) {

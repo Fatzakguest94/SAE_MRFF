@@ -18,7 +18,7 @@ public class Tour {
     protected int cooldown;
     protected int vitesseTir;
     protected String identite;
-    protected int niveau;
+    protected IntegerProperty niveau;
 
     private static int compteur = 0;
     private String idUnique;
@@ -31,13 +31,13 @@ public class Tour {
         this.cooldown = 0;
         this.vitesseTir = vitesseTir;
         this.identite = identite;
-        this.niveau = 1; // Initialisation au niveau 1
         this.idUnique = "tour_" + compteur++;
+        this.niveau = new SimpleIntegerProperty(1);
     }
 
 
     public void ameliorer() {
-        this.niveau++;
+        this.niveau.set(this.getNiveau() + 1);
         this.degats = (int) (this.degats * 1.5);
         this.vitesseTir = (int) (this.vitesseTir * 0.75);
     }
@@ -132,5 +132,6 @@ public class Tour {
     public IntegerProperty yProperty() { return this.y; }
     public String getIdUnique() { return this.idUnique; }
     public String getIdentite() { return this.identite; }
-    public int getNiveau() { return this.niveau; } // NOUVEAU
+    public int getNiveau() { return this.niveau.get(); }
+    public IntegerProperty niveauProperty() { return this.niveau; }
 }
