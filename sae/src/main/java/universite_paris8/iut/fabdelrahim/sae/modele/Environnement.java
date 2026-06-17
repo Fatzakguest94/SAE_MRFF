@@ -16,18 +16,15 @@ import universite_paris8.iut.fabdelrahim.sae.modele.Zombies.*;
 
 public class Environnement {
 
-    // Paramètres d'équilibrage généraux
     private static final int ArgentDepart = 150;
     private static final int RecompenseParZombie = 10;
     private static final int TailleCase = 36;
 
-    // Gestion du temps et des vagues
     private static final int Delaiavantaparition = 10;
     private static final int DelaientreVague = 60;
     private static final int PAS_LOGIQUE = 3;
     private static final int NombreVaguesMax = 10;
 
-    // Éléments du jeu
     private final Terrain terrain;
     private final List<Point> chemin;
     private final Comptoir base;
@@ -35,22 +32,18 @@ public class Environnement {
     private final ObservableList<Enemie> zombies;
     private final ObservableList<Projectile> projectiles;
 
-    // Propriétés observables pour la vue
     private final IntegerProperty argent;
     private final IntegerProperty numeroVague;
     private final BooleanProperty vagueEnCours;
 
-    // Propriété observable pour la jauge de l'interface (Objet Rouleau)
     private final IntegerProperty tempsbonus;
 
-    // Variables d'état
     private int temps;
     private int zombiesRestantsASpawner;
     private int delaiAvantProchainZombie;
     private int tempsAvantProchaineVague;
     private int compteurToursSurChemin = 0;
 
-    // Objet logique sur le terrain
     private Objet objdrop = null;
 
     public Environnement() {
@@ -105,6 +98,7 @@ public class Environnement {
         boolean estTourSpeciale = type.equals("BacGlace") || type.equals("Barbecue");
 
         if (estTourSpeciale) {
+            // Les tours de type zone/ralentissement se placent sur le chemin (id 1 ou 100), max 6 au total
             if (idTuile == 1 || idTuile == 100) {
                 if (compteurToursSurChemin >= 6) return;
             } else if (idTuile != 0) {
@@ -148,6 +142,7 @@ public class Environnement {
 
     public void unTourDeJeu() {
         temps++;
+        // Permet d'alléger les calculs en limitant la mise à jour logique à une frame sur trois
         if (temps % PAS_LOGIQUE != 0) return;
 
         gererAparition();
@@ -156,7 +151,6 @@ public class Environnement {
         mettreAJourZombies();
         gererTransitionVague();
 
-        // Gestion du compte à rebours de l'objet au sol
         if (objdrop != null) {
             objdrop.agir();
         }
@@ -180,6 +174,7 @@ public class Environnement {
     }
 
     private void mettreAJourProjectiles() {
+        // Parcours inversé indispensable pour éviter les erreurs de modification de liste pendant la suppression
         for (int i = projectiles.size() - 1; i >= 0; i--) {
             Projectile p = projectiles.get(i);
             p.avancer();
@@ -194,6 +189,7 @@ public class Environnement {
     }
 
     private void mettreAJourZombies() {
+        // Boucle à rebours pour nettoyer la liste et injecter des enfants à la volée sans casser l'index
         for (int i = zombies.size() - 1; i >= 0; i--) {
             Enemie z = zombies.get(i);
             z.avancer();
@@ -208,12 +204,12 @@ public class Environnement {
 
             if (z instanceof ZombieFamille zf) {
                 if (zf.estMort()) {
+                    // Les sous-unités apparaissent sur la case exacte du parent pour suivre la suite du chemin
                     List<Enemie> enfants = zf.genererEnfants(chemin, zf.getEtapeActuelle());
                     zombies.addAll(enfants);
                 }
             }
 
-            // Tirage au sort de l'objet au moment de la mort d'un zombie
             if (z.estMort() && this.objdrop == null && Objet.lacher()) {
                 this.objdrop = new Objet(z.getX(), z.getY(), this);
             }
@@ -256,6 +252,7 @@ public class Environnement {
         zombies.add(zombie);
     }
 
+    // Algorithme de sélection probabiliste et cyclique des types d'ennemis selon la difficulté
     private Enemie creerZombieSelonVague(int x, int y) {
         int vague = getNumeroVague();
         double hasard = Math.random();
@@ -314,7 +311,7 @@ public class Environnement {
         }
     }
 
-    public void ameliorerTour(int pixelX, int pixelY) {
+    public void SystemAmeliorerTour(int pixelX, int pixelY) {
         Tour tourATrouver = null;
         for (Tour t : tours) {
             if (t.getX() == pixelX && t.getY() == pixelY) {
@@ -335,12 +332,10 @@ public class Environnement {
         }
     }
 
-    // Condition de victoire
     public boolean toutesVaguesTerminees() {
         return getNumeroVague() >= NombreVaguesMax && !vagueEnCours.get() && zombies.isEmpty();
     }
 
-    // --- Getters et Propriétés ---
     public ObservableList<Enemie> getZombies() { return zombies; }
     public ObservableList<Tour> getTours() { return tours; }
     public ObservableList<Projectile> getProjectiles() { return this.projectiles; }
@@ -356,7 +351,6 @@ public class Environnement {
 
     public Objet getObjdrop() { return this.objdrop; }
 
-    // Getters et Setters pour la jauge Bonus (Objet Rouleau)
     public IntegerProperty tempsbonusProperty() { return this.tempsbonus; }
     public int getTempsbonus() { return this.tempsbonus.get(); }
     public void setTempsbonus(int temps) { this.tempsbonus.set(temps); }
