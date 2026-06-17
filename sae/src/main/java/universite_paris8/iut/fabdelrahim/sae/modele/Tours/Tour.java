@@ -38,9 +38,9 @@ public class Tour {
     // Appliquer l'amélioration des stats (Fusion des deux versions)
     public void ameliorer() {
         this.niveau.set(this.getNiveau() + 1);
-        this.degats = (int) (this.degats * 1.5);        // Dégâts +50%
-        this.portee = (int) (this.portee * 1.15);       // Portée +15%
-        this.vitesseTir = (int) (this.vitesseTir * 0.75); // Vitesse de tir plus rapide
+        this.degats = (int) (this.degats * 1.5);        
+        this.portee = (int) (this.portee * 1.15);       
+        this.vitesseTir = (int) (this.vitesseTir * 0.75); 
     }
 
     // Calcule le coût selon le type et le niveau visé
@@ -127,7 +127,7 @@ public class Tour {
     protected void appliquerEffetImmediat(Enemie cible, List<Enemie> listeZombies) {
     }
 
-    // --- Getters et Setters ---
+    //Getters et Setters
 
     public int getX() { return this.x.get(); }
     public int getY() { return this.y.get(); }
