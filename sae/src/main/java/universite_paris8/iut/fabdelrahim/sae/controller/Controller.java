@@ -17,9 +17,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import universite_paris8.iut.fabdelrahim.sae.modele.Environnement;
+import universite_paris8.iut.fabdelrahim.sae.modele.Objet;
 import universite_paris8.iut.fabdelrahim.sae.modele.Projectiles.Projectile;
 import universite_paris8.iut.fabdelrahim.sae.modele.Tours.Tour;
 import universite_paris8.iut.fabdelrahim.sae.modele.Zombies.Enemie;
@@ -33,16 +35,24 @@ import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
 
+    // --- FXML Champs (UI) ---
     @FXML private TilePane map;
     @FXML private Pane panneauJeu;
     @FXML private Label labelArgent;
     @FXML private Label labelVague;
     @FXML private ProgressBar pv;
+
+    // UI d'État (Game Over, Win, Annonces)
     @FXML private Label gameOverLabel;
     @FXML private Label winLabel;
     @FXML private Label vagueAnnonce;
     @FXML private Label compteARebours;
 
+    // UI Bonus (Objet Rouleau)
+    @FXML private ProgressBar barrebonus;
+    @FXML private VBox bonuseffet;
+
+    // --- Attributs Techniques ---
     private TerrainVue terrainVue;
     private EntiteVue entiteVue;
     private Timeline gameLoop;
@@ -72,6 +82,7 @@ public class Controller implements Initializable {
     private void initJeu() {
         this.entiteVue = new EntiteVue();
 
+        // Configuration des écouteurs MVC (BUT 1)
         this.initEcouteurs();
 
         // Affichage du comptoir de départ
@@ -86,7 +97,9 @@ public class Controller implements Initializable {
             }
         }
 
-        // Bindings de l'UI
+        // --- Bindings et Configuration de l'UI ---
+
+        // Argent, Vague, PV Base (Bindings simples)
         if (this.labelArgent != null) {
             this.labelArgent.textProperty().bind(env.argentProperty().asString(" : %d"));
         }
@@ -97,26 +110,49 @@ public class Controller implements Initializable {
             this.pv.progressProperty().bind(this.env.getBase().hpProperty().divide(100.0));
         }
 
+        // Configuration Jauge Bonus (Binding + Listener conditionnel BUT 1)
+        if (this.env != null && this.barrebonus != null && this.bonuseffet != null) {
+            // Liaison mathématique (Temps / Total)
+            this.barrebonus.progressProperty().bind(this.env.tempsbonusProperty().divide(600.0));
+
+            // État initial caché
+            this.bonuseffet.setVisible(false);
+
+            // Listener pour gérer la visibilité (Lambda BUT 1)
+            this.env.tempsbonusProperty().addListener((observable, ancienneValeur, nouvelleval) -> {
+                if ((int) nouvelleval > 0) { // On affiche la boîte si le temps est sup à 0
+                    this.bonuseffet.setVisible(true);
+                } else {
+                    this.bonuseffet.setVisible(false);
+                }
+            });
+        }
+
+        // Démarrage de la boucle de jeu
         this.initAnimation();
     }
 
-    // Configuration des écouteurs de listes et des liaisons de propriétés (Bindings)
+    // Configuration des écouteurs de listes pour l'affichage dynamique (MVC PUR)
     private void initEcouteurs() {
-        // Gestionnaire d'affichage des zombies (Ajout / Suppression)
+        // Gestionnaire d'affichage des zombies (Ajout / Suppression dans le panneau)
         this.env.getZombies().addListener((ListChangeListener<Enemie>) change -> {
             while (change.next()) {
                 if (change.wasAdded()) {
                     for (Enemie nouveauZombie : change.getAddedSubList()) {
+                        // Création de l'image via la vue
                         ImageView iv = this.entiteVue.creerImageZombie(nouveauZombie.getIdentite(), nouveauZombie.getIdUnique());
                         if (iv != null) {
+                            // Liaison des coordonnées View <-> Model (Property Binding)
                             iv.layoutXProperty().bind(nouveauZombie.xProperty());
                             iv.layoutYProperty().bind(nouveauZombie.yProperty());
+                            // Ajout physique à l'écran
                             this.panneauJeu.getChildren().add(iv);
                         }
                     }
                 }
                 if (change.wasRemoved()) {
                     for (Enemie zombieMort : change.getRemoved()) {
+                        // Recherche de l'image par son ID unique pour la supprimer
                         Node imgView = this.panneauJeu.lookup("#" + zombieMort.getIdUnique());
                         if (imgView != null) {
                             this.panneauJeu.getChildren().remove(imgView);
@@ -131,13 +167,15 @@ public class Controller implements Initializable {
             while (change.next()) {
                 if (change.wasAdded()) {
                     for (Tour nouvelleTour : change.getAddedSubList()) {
+                        // Sécurité pour éviter les doublons d'affichage
                         if (this.panneauJeu.lookup("#" + nouvelleTour.getIdUnique()) != null) continue;
-
-                        // CORRIGÉ MVC : On extrait uniquement les primitives / propriétés observables pour la vue
+                        
+                        // Création du Node (VBox avec image + label niveau)
+                        // On extrait uniquement les primitives / propriétés observables pour la vue
                         Node iv = this.entiteVue.creerImageTour(
                                 nouvelleTour.getIdentite(),
                                 nouvelleTour.getIdUnique(),
-                                nouvelleTour.niveauProperty()
+                                nouvelleTour.niveauProperty() // MVC : On passe la propriété, pas la valeur fixe
                         );
 
                         if (iv != null) {
@@ -189,30 +227,41 @@ public class Controller implements Initializable {
         this.gameLoop.setCycleCount(Timeline.INDEFINITE);
 
         KeyFrame kf = new KeyFrame(
-                Duration.seconds(0.017),
+                Duration.seconds(0.017), // Environ 60 FPS
                 ev -> {
+                    // 1. Mise à jour Logique du Modèle
                     this.env.unTourDeJeu();
 
-                    // Game Over
-                    if (this.env.getBase() != null && this.env.getBase().estDetruit()) {
-                        this.gameLoop.stop();
-                        this.labelVague.textProperty().unbind();
-                        this.labelVague.setText("GAME OVER !");
-                        if (this.gameOverLabel != null) this.gameOverLabel.setVisible(true);
-                        flouter(true);
+                    // 2. Gestion spécifique de l'Objet au Sol (Rouleau)
+                    Objet obj = this.env.getObjdrop();
+                    // Si un objet logique existe, n'est pas encore affiché et n'est pas ramassé
+                    if (obj != null && !obj.isDejaAffiche() && !obj.isRamasse()){
+                        faireApparaitreObjet(obj); // On crée son ImageView
+                        obj.setDejaAffiche(true);  // Sécurité MVC pour ne pas recréer l'image au prochain tick
                     }
 
-                    // Victoire
+                    // 3. Gestion des États de Jeu (Game Over, Win, Vagues)
+
+                    // Condition de défaite
+                    if (this.env.getBase() != null && this.env.getBase().estDetruit()) {
+                        this.gameLoop.stop();
+                        this.labelVague.textProperty().unbind(); // MVC : On coupe le lien
+                        this.labelVague.setText("GAME OVER !");
+                        if (this.gameOverLabel != null) this.gameOverLabel.setVisible(true);
+                        flouter(true); // Effet visuel
+                    }
+
+                    // Condition de Victoire
                     if (this.env.toutesVaguesTerminees()) {
                         this.gameLoop.stop();
                         if (this.winLabel != null) this.winLabel.setVisible(true);
                         flouter(true);
                     }
 
-                    // Changement de vague
+                    // Détection de Changement de vague (Annonces)
                     if (this.env.getNumeroVague() != derniereVagueAffichee) {
                         derniereVagueAffichee = this.env.getNumeroVague();
-                        afficherAnnonceVague(derniereVagueAffichee);
+                        afficherAnnonceVague(derniereVagueAffichee); // Pause + Décompte visuel
                         flouter(true);
                     }
                 }
@@ -220,9 +269,38 @@ public class Controller implements Initializable {
         this.gameLoop.getKeyFrames().add(kf);
     }
 
+    /**
+     * Crée et gère l'ImageView physique de l'objet au sol.
+     * Inclut la gestion du clic pour le ramassage.
+     */
+    public void faireApparaitreObjet(Objet objet){
+        // Récupération de l'image préchargée
+        ImageView vueObjet = new ImageView(GestionImage.getImage("Rouleau"));
+
+        // Taille visuelle
+        vueObjet.setFitWidth(30);
+        vueObjet.setFitHeight(30);
+
+        // Positionnement physique initial (MVC : pas de binding ici car on le supprime au clic)
+        vueObjet.setTranslateX(objet.getX());
+        vueObjet.setTranslateY(objet.getY());
+
+        // Gestionnaire de CLIC sur l'objet (Lambda BUT 1)
+        vueObjet.setOnMouseClicked(event -> {
+            objet.ramasser(); // Action logique sur le modèle
+            this.panneauJeu.getChildren().remove(vueObjet); // Action physique sur la vue
+        });
+
+        // Ajout physique au panneau de jeu
+        this.panneauJeu.getChildren().add(vueObjet);
+    }
+
+    // --- Actions UI (Boutons, Clics) ---
+
     @FXML
     public void lancerJeu(ActionEvent event) {
         if (this.gameLoop != null && this.gameLoop.getStatus() != Timeline.Status.RUNNING) {
+            // Si la partie n'a pas commencé, on prépare la vague 1
             if (this.env.getNumeroVague() == 0) {
                 this.env.preparerNouvelleVague();
             }
@@ -232,24 +310,40 @@ public class Controller implements Initializable {
 
     @FXML
     public void recommencerJeu(ActionEvent event) {
+        // 1. Arrêt net de la boucle
         if (this.gameLoop != null) {
             this.gameLoop.stop();
         }
 
+        // 2. Réinitialisation complète du Modèle
         this.env = new Environnement();
 
+        // 3. Nettoyage complet de la Vue
         if (this.panneauJeu != null) {
-            this.panneauJeu.getChildren().clear();
+            this.panneauJeu.getChildren().clear(); // Supprime toutes les images
         }
 
         if (this.map != null) {
-            this.map.getChildren().clear();
+            this.map.getChildren().clear(); // Supprime les tuiles de carte
+            // Reconstruction de la carte
             this.terrainVue = new TerrainVue(env.getTerrain(), map);
             this.terrainVue.creerTerrain();
         }
 
+        // 4. Reset des variables d'état du contrôleur
+        this.tourAcheteeEnCours = null;
+        this.derniereVagueAffichee = 0;
+
+        // 5. Reset UI d'état (cachées)
+        if (this.gameOverLabel != null) this.gameOverLabel.setVisible(false);
+        if (this.winLabel != null) this.winLabel.setVisible(false);
+        if (this.vagueAnnonce != null) this.vagueAnnonce.setVisible(false);
+        if (this.compteARebours != null) this.compteARebours.setVisible(false);
+        flouter(false);
+
+        // 6. Relancement de la configuration initiale
         this.initJeu();
-        this.lancerJeu(null);
+        this.lancerJeu(null); // Démarre automatiquement
 
         System.out.println("La partie a été réinitialisée avec succès !");
     }
@@ -261,9 +355,11 @@ public class Controller implements Initializable {
         }
     }
 
+    // Gestionnaire de Navigation (Fênetres externes)
+
     @FXML
     public void reglage(ActionEvent event) throws IOException {
-        if (gameLoop != null) gameLoop.stop();
+        if (gameLoop != null) gameLoop.stop(); // Sécurité : pause pendant navigation
 
         Stage stage = new Stage();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/universite_paris8/iut/fabdelrahim/sae/reglage.fxml"));
@@ -277,14 +373,17 @@ public class Controller implements Initializable {
         try {
             Button boutonClique = (Button) event.getSource();
 
+            // Fermeture de la fenêtre d'aide (détection par l'ID du bouton dans aide.fxml)
             if (boutonClique.getId() != null && boutonClique.getId().equals("nextBtn")) {
                 Stage stageAide = (Stage) boutonClique.getScene().getWindow();
                 if (stageAide != null) {
                     stageAide.close();
                 }
-                this.lancerJeu(null);
-            } else {
-                if (gameLoop != null) gameLoop.pause();
+                this.lancerJeu(null); // Reprend le jeu
+            }
+            // Ouverture de la fenêtre d'aide
+            else {
+                if (gameLoop != null) gameLoop.pause(); // Pause obligatoire
 
                 Stage stage = new Stage();
                 stage.setTitle("Pizzattack - L'Histoire & Règles");
@@ -299,7 +398,7 @@ public class Controller implements Initializable {
         }
     }
 
-    // Boutique : Choix des tours
+    // Boutique : Choix des tours (Configuration de l'état d'achat)
     @FXML
     public void clicBoutonMitrailletteFrite(ActionEvent event) {
         this.tourAcheteeEnCours = "MitrailletteFrite";
@@ -332,33 +431,47 @@ public class Controller implements Initializable {
         System.out.println("Mode amélioration activé : cliquez sur une tour pour augmenter ses stats.");
     }
 
+    // Gestion de l'action sur le terrain (Clic de souris)
     @FXML
     public void clicSurTerrain(MouseEvent event) {
-        if (this.tourAcheteeEnCours == null) return;
+        if (this.tourAcheteeEnCours == null) return; // Si aucune tour choisie, on ne fait rien
 
+        // MVC BUT 1 : Ajustement des coordonnées sur la grille (36x36) pour le Modèle
         int xAjuste = ((int) event.getX() / 36) * 36;
         int yAjuste = ((int) event.getY() / 36) * 36;
 
+        // Action selon l'état actuel de tourAcheteeEnCours
         if (this.tourAcheteeEnCours.equals("VENDRE")) {
-            this.env.vendreTour(xAjuste, yAjuste);
+            this.env.vendreTour(xAjuste, yAjuste); // Appelle la logique dans le modèle
         } else if (this.tourAcheteeEnCours.equals("AMELIORER")) {
             this.env.ameliorerTour(xAjuste, yAjuste);
         } else {
+            // Pose d'une tour classique
             this.env.ajouterTour(xAjuste, yAjuste, this.tourAcheteeEnCours);
         }
 
-        this.tourAcheteeEnCours = null; // Réinitialisation de l'action après exécution
+        // Réinitialisation de l'action de la boutique après exécution
+        this.tourAcheteeEnCours = null;
     }
 
+    // --- Utilitaires Visuels (Annonces et Effets) ---
+
+    /**
+     * Affiche l'annonce textuelle et fait le décompte visuel avant la vague.
+     * Met le jeu en pause.
+     */
     private void afficherAnnonceVague(int numeroVague) {
+        // Pause Logique
         if (this.gameLoop != null) {
             this.gameLoop.pause();
         }
 
+        // Configuration UI de l'annonce
         vagueAnnonce.setText("VAGUE " + numeroVague);
         vagueAnnonce.setVisible(true);
         compteARebours.setVisible(true);
 
+        // Timeline pour le décompte (KeyFrames BUT 1)
         Timeline compteDown = new Timeline(
                 new KeyFrame(Duration.seconds(0), e -> compteARebours.setText("3")),
                 new KeyFrame(Duration.seconds(1), e -> compteARebours.setText("2")),
@@ -366,11 +479,13 @@ public class Controller implements Initializable {
                 new KeyFrame(Duration.seconds(3), e -> compteARebours.setVisible(false))
         );
 
+        // Timeline pour la disparition et reprise
         Timeline disparition = new Timeline(
                 new KeyFrame(Duration.seconds(3), e -> {
                     vagueAnnonce.setVisible(false);
-                    flouter(false);
+                    flouter(false); // MVC : On enlève le flou
 
+                    // Reprise Logique
                     if (this.gameLoop != null) {
                         this.gameLoop.play();
                     }
@@ -381,6 +496,9 @@ public class Controller implements Initializable {
         disparition.play();
     }
 
+    /**
+     * Applique ou désactive un effet de flou sur le panneau de jeu.
+     */
     private void flouter(boolean actif) {
         if (actif) {
             map.setEffect(new GaussianBlur(10));

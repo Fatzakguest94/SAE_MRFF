@@ -16,16 +16,18 @@ import universite_paris8.iut.fabdelrahim.sae.modele.Zombies.*;
 
 public class Environnement {
 
-    private static final int ArgentDepart = 10000;
+    // Paramètres d'équilibrage généraux
+    private static final int ArgentDepart = 150;
     private static final int RecompenseParZombie = 10;
     private static final int TailleCase = 36;
 
     // Gestion du temps et des vagues
     private static final int Delaiavantaparition = 10;
     private static final int DelaientreVague = 60;
-    private static final int paslogique = 3;
+    private static final int PAS_LOGIQUE = 3;
     private static final int NombreVaguesMax = 10;
 
+    // Éléments du jeu
     private final Terrain terrain;
     private final List<Point> chemin;
     private final Comptoir base;
@@ -33,15 +35,23 @@ public class Environnement {
     private final ObservableList<Enemie> zombies;
     private final ObservableList<Projectile> projectiles;
 
+    // Propriétés observables pour la vue
     private final IntegerProperty argent;
     private final IntegerProperty numeroVague;
     private final BooleanProperty vagueEnCours;
 
+    // Propriété observable pour la jauge de l'interface (Objet Rouleau)
+    private final IntegerProperty tempsbonus;
+
+    // Variables d'état
     private int temps;
     private int zombiesRestantsASpawner;
     private int delaiAvantProchainZombie;
     private int tempsAvantProchaineVague;
     private int compteurToursSurChemin = 0;
+
+    // Objet logique sur le terrain
+    private Objet objdrop = null;
 
     public Environnement() {
         this.terrain = new Terrain();
@@ -50,8 +60,9 @@ public class Environnement {
         this.projectiles = FXCollections.observableArrayList();
 
         this.argent = new SimpleIntegerProperty(ArgentDepart);
-        this.numeroVague = new SimpleIntegerProperty(9);
+        this.numeroVague = new SimpleIntegerProperty(0);
         this.vagueEnCours = new SimpleBooleanProperty(false);
+        this.tempsbonus = new SimpleIntegerProperty(0);
         this.temps = 0;
 
         Point debut = terrain.trouverEntree();
@@ -59,7 +70,7 @@ public class Environnement {
         this.chemin = Bfs.bfs(terrain.grille, debut, arrivee);
 
         if (chemin.isEmpty()) {
-            System.err.println("Aucun chemin valide trouvé ");
+            System.err.println("Aucun chemin valide trouvé !");
         }
 
         this.base = new Comptoir(
@@ -137,13 +148,18 @@ public class Environnement {
 
     public void unTourDeJeu() {
         temps++;
-        if (temps % paslogique != 0) return;
+        if (temps % PAS_LOGIQUE != 0) return;
 
         gererAparition();
         faireAttaquerLesTours();
         mettreAJourProjectiles();
         mettreAJourZombies();
         gererTransitionVague();
+
+        // Gestion du compte à rebours de l'objet au sol
+        if (objdrop != null) {
+            objdrop.agir();
+        }
     }
 
     private void gererAparition() {
@@ -195,6 +211,11 @@ public class Environnement {
                     List<Enemie> enfants = zf.genererEnfants(chemin, zf.getEtapeActuelle());
                     zombies.addAll(enfants);
                 }
+            }
+
+            // Tirage au sort de l'objet au moment de la mort d'un zombie
+            if (z.estMort() && this.objdrop == null && Objet.lacher()) {
+                this.objdrop = new Objet(z.getX(), z.getY(), this);
             }
 
             if (z.estMort() || z.estArrive()) {
@@ -314,18 +335,29 @@ public class Environnement {
         }
     }
 
+    // Condition de victoire
     public boolean toutesVaguesTerminees() {
         return getNumeroVague() >= NombreVaguesMax && !vagueEnCours.get() && zombies.isEmpty();
     }
 
+    // --- Getters et Propriétés ---
     public ObservableList<Enemie> getZombies() { return zombies; }
     public ObservableList<Tour> getTours() { return tours; }
     public ObservableList<Projectile> getProjectiles() { return this.projectiles; }
     public Terrain getTerrain() { return terrain; }
     public Comptoir getBase() { return base; }
+
     public int getArgent() { return argent.get(); }
     public IntegerProperty argentProperty() { return argent; }
+
     public int getNumeroVague() { return numeroVague.get(); }
     public IntegerProperty numeroVagueProperty() { return numeroVague; }
     public BooleanProperty vagueEnCoursProperty() { return vagueEnCours; }
+
+    public Objet getObjdrop() { return this.objdrop; }
+
+    // Getters et Setters pour la jauge Bonus (Objet Rouleau)
+    public IntegerProperty tempsbonusProperty() { return this.tempsbonus; }
+    public int getTempsbonus() { return this.tempsbonus.get(); }
+    public void setTempsbonus(int temps) { this.tempsbonus.set(temps); }
 }

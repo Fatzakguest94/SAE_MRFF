@@ -12,7 +12,7 @@ public class ZombieFamille extends Enemie {
     private boolean enfantsGeneres;
 
     public ZombieFamille(int x, int y) {
-        super(x, y, 2.0, 35, 5, "ZombieFamille");
+        super(x, y, 1.5, 35, 5, "ZombieFamille");
         this.enfantsGeneres = false;
     }
 

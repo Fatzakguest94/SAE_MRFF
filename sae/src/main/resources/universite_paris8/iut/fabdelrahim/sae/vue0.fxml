@@ -22,7 +22,6 @@
 
             <Button fx:id="renomer" styleClass="title" text="Tours" />
 
-            <!-- TOURS -->
             <HBox alignment="CENTER" spacing="15">
                 <VBox alignment="CENTER" spacing="5">
                     <Button contentDisplay="top" onAction="#clicBoutonMitrailletteFrite" prefHeight="70" prefWidth="70" styleClass="tower-button" text="100✉︎">
@@ -57,16 +56,15 @@
                 <VBox alignment="CENTER" spacing="5">
                     <Button contentDisplay="top" onAction="#clicBoutonLanceBurger" prefHeight="70" prefWidth="70" styleClass="tower-button" text="200✉︎">
                         <graphic>
-                            <ImageView fitHeight="65" fitWidth="65">
+                            <ImageView fitHeight="65" fitWidth="65" scaleX="1.5" scaleY="1.5">
                                 <image>
-                                    <Image url="@vue/burger.png" />
+                                    <Image url="@vue/roquete.png" />
                                 </image>
                             </ImageView>
                         </graphic>
                     </Button>
                     <Label text="Lance-Burger" />
                 </VBox>
-
 
                 <VBox alignment="CENTER" spacing="5">
                     <Button contentDisplay="top" onAction="#clicBoutonBarbecue" prefHeight="70" prefWidth="70" styleClass="tower-button" text="300✉︎">
@@ -87,24 +85,20 @@
 
             </HBox>
 
-            <!-- ESPACE -->
             <Region prefHeight="20" />
 
+            <Button text="Vendre"
+                    onAction="#vendreT"
+                    styleClass="btn-vendre"
+                    prefWidth="90"
+                    prefHeight="40"/>
 
-                <Button text="Vendre"
-                        onAction="#vendreT"
-                        styleClass="btn-vendre"
-                        prefWidth="90"
-                        prefHeight="40"/>
+            <Button text="Améliorer"
+                    onAction="#ameliorerT"
+                    styleClass="btn-ameliorer"
+                    prefWidth="90"
+                    prefHeight="40"/>
 
-                <Button text="Améliorer"
-                        onAction="#ameliorerT"
-                        styleClass="btn-ameliorer"
-                        prefWidth="90"
-                        prefHeight="40"/>
-
-
-            <!-- CONTRÔLES DU JEU -->
             <Region VBox.vgrow="ALWAYS" />
             <HBox alignment="CENTER" spacing="20">
                 <padding>
@@ -135,34 +129,29 @@
     </right>
 
     <center>
-
         <Pane>
-
             <TilePane fx:id="map" styleClass="map" />
 
             <Pane fx:id="panneauJeu" onMouseClicked="#clicSurTerrain" style="-fx-background-color: transparent;" />
-            <!-- Annonce de vague -->
+
             <Label fx:id="vagueAnnonce"
                    text="VAGUE 1"
                    visible="false"
                    layoutX="330" layoutY="280"
                    style="-fx-font-size: 72px; -fx-text-fill: white; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, black, 10, 0.5, 2, 2);" />
 
-            <!-- Compte à rebours -->
             <Label fx:id="compteARebours"
                    text="3"
                    visible="false"
                    layoutX="530" layoutY="370"
                    style="-fx-font-size: 96px; -fx-text-fill: orange; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, black, 10, 0.5, 2, 2);" />
 
-            <!-- GAME OVER -->
             <Label fx:id="gameOverLabel"
                    text="GAME OVER"
                    visible="false"
                    layoutX="270" layoutY="300"
                    style="-fx-font-size: 72px; -fx-text-fill: red; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, black, 10, 0.5, 2, 2);" />
 
-            <!-- WIN -->
             <Label fx:id="winLabel"
                    text="YOU WIN !"
                    visible="false"
@@ -200,11 +189,15 @@
                 <ProgressBar fx:id="pv" prefWidth="350" prefHeight="25" style="-fx-accent: #FFCC00; -fx-control-inner-background: #2b1114;"/>
             </VBox>
 
+            <VBox fx:id="bonuseffet" alignment="CENTER" spacing="1">
+                <Label text="Dégâts Bonus" style="-fx-text-fill: orange; -fx-font-weight: bold;"/>
+                <ProgressBar fx:id="barrebonus" prefWidth="150" prefHeight="15" style="-fx-accent: #FF8C00;"/>
+            </VBox>
+
             <Region HBox.hgrow="ALWAYS" />
 
             <Button onAction="#reglage" styleClass="btn" text="Réglages" />
             <Button onAction="#aide" styleClass="btn" text="Aide?" />
-
 
         </HBox>
     </bottom>
