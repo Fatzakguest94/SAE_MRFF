@@ -16,7 +16,7 @@ import universite_paris8.iut.fabdelrahim.sae.modele.Zombies.*;
 
 public class Environnement {
 
-    private static final int ArgentDepart = 10000;
+    private static final int ArgentDepart = 150;
     private static final int RecompenseParZombie = 10;
     private static final int TailleCase = 36;
 
@@ -50,7 +50,7 @@ public class Environnement {
         this.projectiles = FXCollections.observableArrayList();
 
         this.argent = new SimpleIntegerProperty(ArgentDepart);
-        this.numeroVague = new SimpleIntegerProperty(9);
+        this.numeroVague = new SimpleIntegerProperty(0);
         this.vagueEnCours = new SimpleBooleanProperty(false);
         this.temps = 0;
 
