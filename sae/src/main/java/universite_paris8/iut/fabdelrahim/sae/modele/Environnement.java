@@ -311,7 +311,7 @@ public class Environnement {
         }
     }
 
-    public void SystemAmeliorerTour(int pixelX, int pixelY) {
+    public void ameliorerTour(int pixelX, int pixelY) {
         Tour tourATrouver = null;
         for (Tour t : tours) {
             if (t.getX() == pixelX && t.getY() == pixelY) {
