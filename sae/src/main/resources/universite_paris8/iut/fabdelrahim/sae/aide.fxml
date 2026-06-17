@@ -110,28 +110,28 @@
                         <Label  style="-fx-font-size: 20px;"/>
                         <VBox HBox.hgrow="ALWAYS">
                             <Label text="ZOMBIE RAPIDE" style="-fx-text-fill: #ffaa44; -fx-font-weight: bold; -fx-font-size: 13px;"/>
-                            <Label text="15 PV | Vitesse éclair : 4.0 | Dégâts Cuisine : 3" style="-fx-text-fill: #857e72; -fx-font-size: 12px;"/>
+                            <Label text="15 PV | Vitesse éclair : 4.5 | Dégâts Cuisine : 3" style="-fx-text-fill: #857e72; -fx-font-size: 12px;"/>
                         </VBox>
                     </HBox>
                     <HBox spacing="10" style="-fx-background-color: rgba(0,0,0,0.2); -fx-padding: 8px; -fx-background-radius: 6px;" alignment="CENTER_LEFT">
                         <Label  style="-fx-font-size: 20px;"/>
                         <VBox HBox.hgrow="ALWAYS">
                             <Label text="ZOMBIE GROS" style="-fx-text-fill: #ded0b6; -fx-font-weight: bold; -fx-font-size: 13px;"/>
-                            <Label text="70 PV | Vitesse : 1.0 | Dégâts Cuisine : 10" style="-fx-text-fill: #857e72; -fx-font-size: 12px;"/>
+                            <Label text="130 PV | Vitesse : 1.5 | Dégâts Cuisine : 15" style="-fx-text-fill: #857e72; -fx-font-size: 12px;"/>
                         </VBox>
                     </HBox>
                     <HBox spacing="10" style="-fx-background-color: rgba(0,0,0,0.2); -fx-padding: 8px; -fx-background-radius: 6px;" alignment="CENTER_LEFT">
                         <Label style="-fx-font-size: 20px;"/>
                         <VBox HBox.hgrow="ALWAYS">
                             <Label text="ZOMBIE FAMILLE" style="-fx-text-fill: #ded0b6; -fx-font-weight: bold; -fx-font-size: 13px;"/>
-                            <Label text="35 PV | À sa mort, il se divise en 4 Zombies Normaux !" style="-fx-text-fill: #857e72; -fx-font-size: 12px;" wrapText="true"/>
+                            <Label text="40 PV | À sa mort, il se divise en 4 Zombies Normaux !" style="-fx-text-fill: #857e72; -fx-font-size: 12px;" wrapText="true"/>
                         </VBox>
                     </HBox>
                     <HBox spacing="10" style="-fx-background-color: rgba(232,120,0,0.08); -fx-padding: 8px; -fx-background-radius: 6px; -fx-border-color: rgba(232,120,0,0.3); -fx-border-width: 1px;" alignment="CENTER_LEFT">
                         <Label  style="-fx-font-size: 20px;"/>
                         <VBox HBox.hgrow="ALWAYS">
                             <Label text="LE BOSS" style="-fx-text-fill: #ff4500; -fx-font-weight: 900; -fx-font-size: 13px;"/>
-                            <Label text="1000 PV | Vitesse : 4.0 | Dégâts Cuisine : 100" style="-fx-text-fill: #ffaa44; -fx-font-size: 12px;"/>
+                            <Label text="2000 PV | Vitesse : 3.0 | Dégâts Cuisine : 100" style="-fx-text-fill: #ffaa44; -fx-font-size: 12px;"/>
                         </VBox>
                     </HBox>
                 </VBox>

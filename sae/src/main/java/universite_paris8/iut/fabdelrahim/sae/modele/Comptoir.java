@@ -7,14 +7,14 @@ public class Comptoir {
     private int x;
     private int y;
     private String identite;
-    //PROPERTY
+    
     private IntegerProperty hp;
 
     public Comptoir(int x, int y, String identite) {
         this.x = x;
         this.y = y;
         this.identite = identite;
-        // Initialisation de la Property à 100 PV
+        // Initialisation de la Property à 100 Pv
         this.hp = new SimpleIntegerProperty(100);
     }
 
