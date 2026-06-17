@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="856.0"
+            prefWidth="1377.0"
+            styleClass="root"
+            xmlns="http://javafx.com/javafx/8.0.40"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="universite_paris8.iut.fabdelrahim.sae.controller.Controller">
+
+    <stylesheets>
+        <URL value="@Style.css"/>
+    </stylesheets>
+
+    <right>
+        <VBox alignment="TOP_CENTER"
+              prefWidth="225.0"
+              prefHeight="620.0"
+              spacing="15"
+              styleClass="sidebar">
+
+            <padding>
+                <Insets top="20" right="15" bottom="20" left="15"/>
+            </padding>
+
+            <Button fx:id="renomer" onMouseClicked="#rename" styleClass="title" text="Tours" />
+
+            <!-- TOURS -->
+            <HBox alignment="CENTER" spacing="15">
+                <VBox alignment="CENTER" spacing="5">
+                    <Button prefWidth="70" prefHeight="70"
+                            text="100"
+                            styleClass="tower-button"
+                            onAction="#clicBoutonMitrailletteFrite"/>
+                    <Label text="Mitra-Frites"/>
+                </VBox>
+
+                <VBox alignment="CENTER" spacing="5">
+                    <Button prefWidth="70" prefHeight="70"
+                            text="150"
+                            styleClass="tower-button"
+                            onAction="#clicBoutonLanceBurger"/>
+                    <Label text="Lance-Burger"/>
+                </VBox>
+            </HBox>
+
+            <HBox alignment="CENTER" spacing="15">
+                <VBox alignment="CENTER" spacing="5">
+                    <Button prefWidth="70" prefHeight="70"
+                            text="200"
+                            styleClass="tower-button"
+                            onAction="#clicBoutonBarbecue"/>
+                    <Label text="Barbecue"/>
+                </VBox>
+
+                <VBox alignment="CENTER" spacing="5">
+                    <Button prefWidth="70" prefHeight="70"
+                            text="300"
+                            styleClass="tower-button"
+                            onAction="#clicBoutonBacGlace"/>
+                    <Label text="BacGlace"/>
+                </VBox>
+            </HBox>
+
+            <!-- ESPACE -->
+            <Region prefHeight="10"/>
+
+            <!-- CONTRÔLES DU JEU -->
+            <Button text="Lancer"
+                    onAction="#lancerJeu"
+                    styleClass="btn-play-big"
+                    prefWidth="180"
+                    prefHeight="120"/>
+
+            <Button text="Arrêter"
+                    onAction="#arreterJeu"
+                    styleClass="btn-stop"
+                    prefWidth="180"
+                    prefHeight="40"/>
+
+            <Button text="Recommencer"
+                    onAction="#recommencerJeu"
+                    styleClass="btn-restart"
+                    prefWidth="180"
+                    prefHeight="40"/>
+
+            <!-- ESPACE BAS -->
+            <Region VBox.vgrow="ALWAYS"/>
+        </VBox>
+    </right>
+
+    <center>
+
+        <Pane>
+
+            <TilePane fx:id="map" styleClass="map"/>
+
+            <Pane fx:id="panneauJeu"
+                  onMouseClicked="#clicSurTerrain"
+                  style="-fx-background-color: transparent;" />
+        </Pane>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER_LEFT"
+              prefHeight="100"
+              spacing="40"
+              styleClass="bottom-bar">
+
+            <padding>
+                <Insets top="10" right="20" bottom="10" left="20"/>
+            </padding>
+
+            <Label fx:id="labelHpBase"  styleClass="info-label"/>
+
+            <Label fx:id="labelArgent"  styleClass="info-label"/>
+
+            <Label fx:id="labelVague"  styleClass="info-label"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Button text="Réglages" onAction="#reglage" styleClass="btn"/>
+            <Button onAction="#aide" styleClass="btn" text="Aide?" />
+
+
+        </HBox>
+    </bottom>
+
+</BorderPane>
