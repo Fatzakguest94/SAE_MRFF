@@ -35,11 +35,12 @@ public class Tour {
         this.niveau = new SimpleIntegerProperty(1);
     }
 
-
+    // Appliquer l'amélioration des stats (Fusion des deux versions)
     public void ameliorer() {
         this.niveau.set(this.getNiveau() + 1);
-        this.degats = (int) (this.degats * 1.5);
-        this.vitesseTir = (int) (this.vitesseTir * 0.75);
+        this.degats = (int) (this.degats * 1.5);        // Dégâts +50%
+        this.portee = (int) (this.portee * 1.15);       // Portée +15%
+        this.vitesseTir = (int) (this.vitesseTir * 0.75); // Vitesse de tir plus rapide
     }
 
     // Calcule le coût selon le type et le niveau visé
@@ -52,7 +53,7 @@ public class Tour {
             case "Barbecue": coutBase = 250; break;
             default: coutBase = 100;
         }
-        // a chaque fois en fait +100 pour le prix
+        // A chaque amélioration, le prix augmente de 100
         return coutBase + 100 * getNiveau();
     }
 
@@ -95,7 +96,11 @@ public class Tour {
         }
     }
 
-
+    /**
+     * Oriente l'action de la tour selon sa nature :
+     * - Crée un projectile mobile pour les tours d'attaque à distance.
+     * - Applique un effet de zone direct pour les pièges environnementaux.
+     */
     protected void gererActionTour(Enemie cible, Environnement env) {
         // Point de départ centré pour les projectiles visuels (16x16)
         double departX = this.getX() + 10;
@@ -118,20 +123,26 @@ public class Tour {
         }
     }
 
-
+    // Comportement vide par défaut pour les tours à projectiles classiques
     protected void appliquerEffetImmediat(Enemie cible, List<Enemie> listeZombies) {
-        // Comportement vide par défaut pour les tours à projectiles classiques
     }
 
-    // Getters standard
+    // --- Getters et Setters ---
+
     public int getX() { return this.x.get(); }
     public int getY() { return this.y.get(); }
     public void setX(int x) { this.x.set(x); }
     public void setY(int y) { this.y.set(y); }
     public IntegerProperty xProperty() { return this.x; }
     public IntegerProperty yProperty() { return this.y; }
+
     public String getIdUnique() { return this.idUnique; }
     public String getIdentite() { return this.identite; }
+
     public int getNiveau() { return this.niveau.get(); }
     public IntegerProperty niveauProperty() { return this.niveau; }
+
+    // Ajout indispensable pour l'objet Rouleau (bonus de dégâts)
+    public int getDegats(){ return this.degats; }
+    public void setDegats(int degats){ this.degats = degats; }
 }

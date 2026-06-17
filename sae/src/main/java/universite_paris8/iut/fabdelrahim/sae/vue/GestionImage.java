@@ -22,7 +22,7 @@ public class GestionImage {
         sprites.put("Barbecue", new Image(GestionImage.class.getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/soda.png")));
 
         sprites.put("Boss", new Image(GestionImage.class.getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/boss.png")));
-
+        sprites.put("Rouleau", new Image(GestionImage.class.getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/rouleau1.png")));
         sprites.put("Frite", new Image(GestionImage.class.getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/tefri.png")));
         sprites.put("Burger", new Image(GestionImage.class.getResourceAsStream("/universite_paris8/iut/fabdelrahim/sae/vue/balleb.png")));
     }
