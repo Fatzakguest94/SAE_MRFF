@@ -169,8 +169,9 @@ public class Controller implements Initializable {
                     for (Tour nouvelleTour : change.getAddedSubList()) {
                         // Sécurité pour éviter les doublons d'affichage
                         if (this.panneauJeu.lookup("#" + nouvelleTour.getIdUnique()) != null) continue;
-
+                        
                         // Création du Node (VBox avec image + label niveau)
+                        // On extrait uniquement les primitives / propriétés observables pour la vue
                         Node iv = this.entiteVue.creerImageTour(
                                 nouvelleTour.getIdentite(),
                                 nouvelleTour.getIdUnique(),

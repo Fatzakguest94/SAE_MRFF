@@ -21,7 +21,7 @@ public class Objet {
 
     // Drop
     public static boolean lacher(){
-        return Math.random()<=1.0; //5% de chance
+        return Math.random()<=0.05; //5% de chance
     }
 
     // Utilisateur clique sur l'item

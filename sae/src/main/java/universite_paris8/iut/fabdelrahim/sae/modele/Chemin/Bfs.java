@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Bfs {
 
-    private static final int[][] direction = {
+    public static final int[][] direction = {
             {1, 0}, //bas
             {-1, 0},//haut
             {0, 1},//droite
@@ -57,7 +57,7 @@ public class Bfs {
         return new ArrayList<>();
     }
 
-    private static boolean estTraversable(int valeur) {
+    public static boolean estTraversable(int valeur) {
 
         return valeur == 1 ||
                 valeur == 100 ||
@@ -65,7 +65,7 @@ public class Bfs {
                 valeur == 4;
     }
 
-    private static List<Point> reconstruireChemin(Point[][] parent, Point end) {
+    public static List<Point> reconstruireChemin(Point[][] parent, Point end) {
 
         List<Point> chemin = new ArrayList<>();
 
