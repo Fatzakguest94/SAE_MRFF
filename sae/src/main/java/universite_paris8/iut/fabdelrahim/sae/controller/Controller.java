@@ -133,7 +133,7 @@ public class Controller implements Initializable {
                     for (Tour nouvelleTour : change.getAddedSubList()) {
                         if (this.panneauJeu.lookup("#" + nouvelleTour.getIdUnique()) != null) continue;
 
-                        // CORRIGÉ MVC : On extrait uniquement les primitives / propriétés observables pour la vue
+                        // On extrait uniquement les primitives / propriétés observables pour la vue
                         Node iv = this.entiteVue.creerImageTour(
                                 nouvelleTour.getIdentite(),
                                 nouvelleTour.getIdUnique(),
